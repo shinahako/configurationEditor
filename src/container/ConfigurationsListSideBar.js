@@ -5,7 +5,6 @@ import {bindActionCreators} from "redux";
 import {
   initializeConfigurationToSchemaMap,
   openRelevantRecipe,
-  createConfigToSchemaMap,
   fetchData
 } from '../actions/mainActions'
 import {connect} from "react-redux";
@@ -69,7 +68,6 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     openRelevantRecipe,
     initializeConfigurationToSchemaMap,
-    createConfigToSchemaMap,
     fetchData
   }, dispatch)
 };

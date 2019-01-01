@@ -1,5 +1,9 @@
 
 .container {
   margin-left: 315px;
+  padding-top: 50px;
   position: absolute;
+  width: 40%;
+  background-color: aliceblue;
+  height: 100%;
 }

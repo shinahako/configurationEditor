@@ -140,100 +140,29 @@ function createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults) {
         jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"] = "";
         for (let index in dicEntity[i]["links"]) {
           if (dicEntity[i]["links"][index].rel === "Default Settings") {
-            jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"] = dicEntity[i]["links"][index].href
+            getDataFromApi(dicEntity[i]["links"][index].href).then(response => {
+              jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"] = response.data.entity;
+            });
           }
           else if (dicEntity[i]["links"][index].rel
               === "Default Settings JSON Schema") {
-            jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"] = dicEntity[i]["links"][index].href
+            getDataFromApi(dicEntity[i]["links"][index].href).then(response => {
+              jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"] =  JSON.parse(response.data.entity);
+            });
           }
         }
-
       }
     }
   }
 }
 
-function getExistingConfigurationsWithAdditionalData(map, configuration,
-    dictionary) {
-  if (configuration != null) {
-    for (let index in configuration) {
-      if (configuration[index]["elementName"] != null) {
-        map[configuration[index]["elementName"]] = [];
-        map[configuration[index]["elementName"]]["currentConfig"] = []
-        map[configuration[index]["elementName"]]["currentConfig"] = configuration[index]["elementSettings"];
-        map[configuration[index]["elementName"]]["elementName"] = configuration[index]["elementName"];
-        map[configuration[index]["elementName"]]["class"] = configuration[index]["@class"];
-        map[configuration[index]["elementName"]]["index"] = index;
-      }
-    }
-
-  }
+function getDataFromApi(link) {
+  return axios.get(link)
+  .then(response => {
+    return response;
+  })
 }
 
-/*function extractNames(configuration,configurationsMap,dictionary) {
-  if (etlData != null) {
-    if (etlData.data.entity != null) {
-      for (let key in etlData.data.entity) {
-        if (key.includes("Name")) {
-          configurationsMap[key] = etlData.data.entity[key];
-        }
-      }
-    }
-  }
-}*/
-
-export function createConfigToSchemaMap(etlName) {
-  axios.all([getDataOfEtl(), getDictionary()])
-  .then(axios.spread(function (etlData, dictionary) {
-
-    console.log("etlData", etlData);
-    console.log("dictionary", dictionary);
-    let etlDataLocal = getEtlLocal();
-    // Both requests are now complete
-    let configurationsMap = [];
-    if (etlDataLocal != null) {
-      if (etlDataLocal.data.entity != null) {
-        for (let key in etlDataLocal.data.entity) {
-          if (key.includes("Configuration")) {
-            configurationsMap[key] = etlDataLocal.data.entity[key];
-          }
-        }
-      }
-    }
-    return configurationsMap;
-  }));
-
-  /*
-  let configurationsMap = [];
-  configurationsMap = getDataOfEtl(etlName).then((resEtl) => {
-    if (resEtl != null) {
-      if (resEtl.entity != null) {
-        for (let key in resEtl.entity) {
-          if (key.includes("Configuration")) {
-            configurationsMap[key] = resEtl.entity[key];
-          }
-        }
-      }
-    }
-    return configurationsMap;
-    console.log("configurationsMap", configurationsMap);
-  }).catch(err => console.log("Axios err: ", err));
-  
-*/
-  /*  axios.get("http://etlexporter.vip.qa.ebay.com/v1/enrichers/getAll").then(
-        res => {
-          if (res.data.entity != null) {
-            for (var k in res.data.entity) {
-              //console.log(res.data.entity[k].elementName)
-  
-            }
-          }
-        }, err => {
-          alert("Server rejected response with: " + err);
-        });*/
-  /*
-    return configurationsMap;*/
-}
 
 function getDataOfEtl() {
   let etlName = "Comics%20US";
