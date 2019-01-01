@@ -21,11 +21,17 @@ class SidebarUpperLinkGroup extends Component {
     //}
   }
 
+  openConfiguration = ()=>  {
+    
+    this.props.text;
+  };
+
+
   render() {
     return (
           <li>
-            <a href="" >
-              <span style={{fontSize:"15px"}} className="submenu"> {this.props.index}</span>
+            <a onClick={this.openConfiguration}>
+              <span style={{fontSize:"15px"}} className="fa"> {this.props.index}</span>
               <span className="nav-text">
                 {this.props.text}
               </span>
