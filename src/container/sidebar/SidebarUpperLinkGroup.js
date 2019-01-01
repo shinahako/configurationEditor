@@ -37,6 +37,7 @@ class SidebarUpperLinkGroup extends Component {
             </li>
               {this.props.configurations.map((item, index) => (
                   <SidebarUpperLinkChild text={this.props.configurations[index].elementName}
+                                         index={index}
                                          schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
                                          defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
                   />

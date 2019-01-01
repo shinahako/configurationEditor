@@ -146,7 +146,6 @@ function createAMapOfJsonSchemaAndDefaults(dictionary,jsonSchemaAndDefaults) {
     if (dictionary.data.entity != null) {
       let dicEntity = dictionary.data.entity;
       for(let i=0;i<dicEntity.length;i++) {
-        debugger;
         jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]=[];
         jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"]="";
         jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"]="";
@@ -167,7 +166,6 @@ function createAMapOfJsonSchemaAndDefaults(dictionary,jsonSchemaAndDefaults) {
 
 
 function getExistingConfigurationsWithAdditionalData(map,configuration,dictionary) {
-  debugger;
   if (configuration != null) {
     for (let index in configuration)
         if (configuration[index]["elementName"]!=null) {

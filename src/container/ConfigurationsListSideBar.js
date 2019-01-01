@@ -11,20 +11,25 @@ import {
 import {connect} from "react-redux";
 import SidebarUpperLinkGroup from "./sidebar/SidebarUpperLinkGroup";
 import SidebarLowerLink from "./sidebar/SidebarLowerLink";
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
+import GeneralUtils from "../GeneralUtils";
+
 
 class ConfigurationsListSideBar extends Component {
   constructor(props) {
     super(props);
   }
-
+  
   render() {
     console.log("this.props.configurationsMap", this.props.configurationsMap);
+    if(GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap))
     return (
         <div>
           <div className="area"></div>
           <nav className="main-menu">
+     
             {(() => {
-              var indents = [];
+              let indents = [];
               for (let configuration in this.props.configurationsMap) {
                 if (Array.isArray(
                     this.props.configurationsMap[configuration])) {
@@ -42,6 +47,7 @@ class ConfigurationsListSideBar extends Component {
           </nav>
         </div>
     );
+    else return <span/>
   }
 }
 
@@ -60,5 +66,8 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch)
 };
 
+
+
 export default connect(mapStateToProps, mapDispatchToProps)(
     ConfigurationsListSideBar);
+

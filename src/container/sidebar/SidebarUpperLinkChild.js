@@ -25,7 +25,7 @@ class SidebarUpperLinkGroup extends Component {
     return (
           <li>
             <a href="" >
-              <i style={{fontSize:"10px"}} className="fa fa-circle"></i>
+              <span style={{fontSize:"15px"}} className="submenu"> {this.props.index}</span>
               <span className="nav-text">
                 {this.props.text}
               </span>
