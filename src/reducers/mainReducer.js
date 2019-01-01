@@ -43,11 +43,11 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
     case mainActions.INITIALIZE_CONFIGURATION_DATA_MAP:
       return {
         ...state,
-        configToSchemaMap: action.configToSchemaMap
+        configurationsMap: action.configurationsMap
       };
       return Object.assign({}, state, {
         ...state,
-        configToSchemaMap: action.configToSchemaMap
+        configurationsMap: action.configurationsMap
       });
     default:
       return state

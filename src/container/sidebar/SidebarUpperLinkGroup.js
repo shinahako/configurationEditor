@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import '../../css/App.css';
 import '../../css/SidebarMenu.css';
 import {bindActionCreators} from "redux";
 import {
@@ -19,12 +18,13 @@ class SidebarUpperLinkGroup extends Component {
 
   componentDidUpdate() {
     //if(this.props.configToSchemaMap.size>0){
-    console.log("this.props.configToSchemaMap", this.props.configToSchemaMap);
+    console.log("aaaaaaaaaaaaaaa", this.props.configurations);
     //}
   }
   
   render() {
-    if(GeneralUtils.checkIfMapIsNotEmpty(this.props.configToSchemaMap)) {
+    console.log("aaaaaaaaaaaaaaa", this.props.configurations);
+    if(GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap)) {
       return (
           <ul>
             <li>
@@ -35,14 +35,12 @@ class SidebarUpperLinkGroup extends Component {
               </span>
               </a>
             </li>
-            {(() => {
-              for (let configuration in this.props.configToSchemaMap[this.props.text]) {
-                return <SidebarUpperLinkChild text={configuration}
-                                              schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
-                                              defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
-                />
-              }
-            })()}
+              {this.props.configurations.map((item, index) => (
+                  <SidebarUpperLinkChild text={this.props.configurations[index].elementName}
+                                         schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
+                                         defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
+                  />
+              ))}
           </ul>
       );
     }
@@ -52,7 +50,7 @@ class SidebarUpperLinkGroup extends Component {
 
 function mapStateToProps(state) {
   return {
-    configToSchemaMap: state.mainReducer.configToSchemaMap
+    configurationsMap: state.mainReducer.configurationsMap
   };
 }
 

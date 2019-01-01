@@ -17,34 +17,39 @@ class ConfigurationsListSideBar extends Component {
     super(props);
   }
 
-  componentDidUpdate(){
-    //if(this.props.configToSchemaMap.size>0){
-      console.log("this.props.configToSchemaMap",this.props.configToSchemaMap);
-    //}
-  }
-  
-
   render() {
+    console.log("this.props.configurationsMap", this.props.configurationsMap);
     return (
         <div>
-        <div className="area"></div>
-        <nav className="main-menu">
-          <SidebarUpperLinkGroup text={"enricherConfigurations"} schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"} defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
-/>
-<SidebarLowerLink/>
-        </nav>
+          <div className="area"></div>
+          <nav className="main-menu">
+            {(() => {
+              var indents = [];
+              for (let configuration in this.props.configurationsMap) {
+                if (Array.isArray(
+                    this.props.configurationsMap[configuration])) {
+                  indents.push(<SidebarUpperLinkGroup text={configuration}
+                                                      configurations={this.props.configurationsMap[configuration]}
+                                                      schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
+                                                      defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
+                  />);
+                }
+              }
+              return indents;
+            })()}
+
+            <SidebarLowerLink/>
+          </nav>
         </div>
     );
   }
 }
 
-
 function mapStateToProps(state) {
   return {
-    configToSchemaMap: state.mainReducer.configToSchemaMap
+    configurationsMap: state.mainReducer.configurationsMap
   };
 }
-
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
@@ -55,5 +60,5 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch)
 };
 
-
-export default connect(mapStateToProps, mapDispatchToProps) (ConfigurationsListSideBar);
+export default connect(mapStateToProps, mapDispatchToProps)(
+    ConfigurationsListSideBar);

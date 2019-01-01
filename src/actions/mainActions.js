@@ -34,7 +34,8 @@ let initialState = {
       }
     ]
   },
-  configToSchemaMap:[]
+  configurationsMap:[],
+  jsonSchemaAndDefaults:[] 
 };
 export const addTodo = text => ({
   type: 'ADD_TODO',
@@ -69,10 +70,18 @@ export const openRelevantRecipe = (recipeId) => ({
 });
 
 export const INITIALIZE_CONFIGURATION_DATA_MAP = 'INITIALIZE_CONFIGURATION_DATA_MAP';
-export const initializeConfigurationDataMap = (configToSchemaMap) => ({
+export const initializeConfigurationDataMap = (configurationsMap) => ({
   type: OPEN_RELEVANT_RECIPE,
-  configToSchemaMap
+  configurationsMap
 });
+
+
+export const INITIALIZE_JSON_SCHEMA_AND_DEFAULT = 'INITIALIZE_JSON_SCHEMA_AND_DEFAULT';
+export const initializeJsonSchemaAndDefault = (jsonSchemaAndDefaults) => ({
+  type: OPEN_RELEVANT_RECIPE,
+  jsonSchemaAndDefaults
+});
+
 
 /*
 export const selectOrder = (id, selectedTab) => {
@@ -100,10 +109,19 @@ export const fetchData = () => {
       console.log("etlDataLocal", etlDataLocal);
       // Both requests are now complete
 
-      let configToSchemaMap = [];
+      let configurationsMap = [];
+      let jsonSchemaAndDefaults = [];
 
-      getAllConfigurationGroups(etlDataLocal,configToSchemaMap,dictionary);
-      dispatch(initializeConfigurationDataMap(configToSchemaMap));
+      getAllConfigurationGroups(etlDataLocal,configurationsMap);
+      
+      console.log("configurationsMap",configurationsMap);
+      dispatch(initializeConfigurationDataMap(configurationsMap));
+
+      createAMapOfJsonSchemaAndDefaults(dictionary,jsonSchemaAndDefaults);
+      console.log("jsonSchemaAndDefaults",jsonSchemaAndDefaults);
+      dispatch(initializeConfigurationDataMap(configurationsMap));
+      
+      
     }))
     .catch(error => {
       throw(error);
@@ -111,15 +129,37 @@ export const fetchData = () => {
   };
 };
 
-
-function getAllConfigurationGroups(etlData,configToSchemaMap,dictionary) {
+function getAllConfigurationGroups(etlData,configurationsMap) {
   if (etlData != null) {
     if (etlData.data.entity != null) {
       for (let key in etlData.data.entity) {
         if (key.includes("Configuration")) {
-          configToSchemaMap[key]=[];
-          getExistingConfigurationsWithAdditionalData(configToSchemaMap[key],etlData.data.entity[key],dictionary);
+          configurationsMap[key]=etlData.data.entity[key];
         }
+      }
+    }
+  }
+}
+
+function createAMapOfJsonSchemaAndDefaults(dictionary,jsonSchemaAndDefaults) {
+  if (dictionary != null) {
+    if (dictionary.data.entity != null) {
+      let dicEntity = dictionary.data.entity;
+      for(let i=0;i<dicEntity.length;i++) {
+        debugger;
+        jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]=[];
+        jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"]="";
+        jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"]="";
+        for (let index in dicEntity[i]["links"]){
+          if (dicEntity[i]["links"][index].rel==="Default Settings"){
+            jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"]=dicEntity[i]["links"][index].href
+          }
+          else if (dicEntity[i]["links"][index].rel==="Default Settings JSON Schema"){
+            jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"]=dicEntity[i]["links"][index].href
+          }
+        }
+        
+        
       }
     }
   }
@@ -136,17 +176,18 @@ function getExistingConfigurationsWithAdditionalData(map,configuration,dictionar
           map[configuration[index]["elementName"]]["currentConfig"]=configuration[index]["elementSettings"];
           map[configuration[index]["elementName"]]["elementName"]=configuration[index]["elementName"];
           map[configuration[index]["elementName"]]["class"]=configuration[index]["@class"];
+          map[configuration[index]["elementName"]]["index"]=index;
         }
       
   }
 }
 
-/*function extractNames(configuration,configToSchemaMap,dictionary) {
+/*function extractNames(configuration,configurationsMap,dictionary) {
   if (etlData != null) {
     if (etlData.data.entity != null) {
       for (let key in etlData.data.entity) {
         if (key.includes("Name")) {
-          configToSchemaMap[key] = etlData.data.entity[key];
+          configurationsMap[key] = etlData.data.entity[key];
         }
       }
     }
@@ -162,33 +203,33 @@ export function createConfigToSchemaMap(etlName) {
     console.log("dictionary", dictionary);
     let etlDataLocal  = getEtlLocal();
     // Both requests are now complete
-    let configToSchemaMap = [];
+    let configurationsMap = [];
     if (etlDataLocal != null) {
       if (etlDataLocal.data.entity != null) {
         for (let key in etlDataLocal.data.entity) {
           if (key.includes("Configuration")) {
-            configToSchemaMap[key] = etlDataLocal.data.entity[key];
+            configurationsMap[key] = etlDataLocal.data.entity[key];
           }
         }
       }
     }
-    return configToSchemaMap;
+    return configurationsMap;
   }));
   
   /*
-  let configToSchemaMap = [];
-  configToSchemaMap = getDataOfEtl(etlName).then((resEtl) => {
+  let configurationsMap = [];
+  configurationsMap = getDataOfEtl(etlName).then((resEtl) => {
     if (resEtl != null) {
       if (resEtl.entity != null) {
         for (let key in resEtl.entity) {
           if (key.includes("Configuration")) {
-            configToSchemaMap[key] = resEtl.entity[key];
+            configurationsMap[key] = resEtl.entity[key];
           }
         }
       }
     }
-    return configToSchemaMap;
-    console.log("configToSchemaMap", configToSchemaMap);
+    return configurationsMap;
+    console.log("configurationsMap", configurationsMap);
   }).catch(err => console.log("Axios err: ", err));
   
 */
@@ -204,7 +245,7 @@ export function createConfigToSchemaMap(etlName) {
           alert("Server rejected response with: " + err);
         });*/
   /*
-    return configToSchemaMap;*/
+    return configurationsMap;*/
 }
 
 function getDataOfEtl() {
