@@ -19,7 +19,14 @@ class ConfigurationsListSideBar extends Component {
   constructor(props) {
     super(props);
   }
-  
+
+  componentDidUpdate() {
+    //if(this.props.configToSchemaMap.size>0){
+    console.log("bbbbbbb", this.props.currentConfiguration);
+    //}
+  }
+
+
   render() {
     console.log("this.props.configurationsMap", this.props.configurationsMap);
     if(GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap))
@@ -53,7 +60,8 @@ class ConfigurationsListSideBar extends Component {
 
 function mapStateToProps(state) {
   return {
-    configurationsMap: state.mainReducer.configurationsMap
+    configurationsMap: state.mainReducer.configurationsMap,
+    currentConfiguration: state.mainReducer.currentConfiguration
   };
 }
 

@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import '../../css/App.css';
 import '../../css/SidebarMenu.css';
+import '../../css/Editor.css';
 import {bindActionCreators} from "redux";
 import {
   changeCurrentConfigurationEdit
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 
-class SidebarUpperLinkGroup extends Component {
+class Editor extends Component {
   constructor(props) {
     super(props);
   }
@@ -21,14 +22,9 @@ class SidebarUpperLinkGroup extends Component {
 
   render() {
     return (
-          <li>
-            <a onClick={this.openConfiguration}>
-              <span style={{fontSize:"15px"}} className="fa"> {this.props.index}</span>
-              <span className="nav-text">
-                {this.props.text}
-              </span>
-            </a>
-          </li>
+<div className={"container"} style={{backgroundColor:'blue'}}>
+  asassasasasa
+</div>
       
     );
   }
@@ -46,4 +42,4 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch)
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarUpperLinkGroup);
+export default connect(mapStateToProps, mapDispatchToProps)(Editor);
