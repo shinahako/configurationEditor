@@ -1,0 +1,124 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.Main2{
+  background-color: #ededed;
+}
+
+.RecipeCard{
+  background-color: white;
+  margin-top: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.RecipeCardImg{
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.ProfilePictureOnCard{
+  
+}
+
+.ProfilePictureOnCardImg{
+  
+}
+
+#octagon {
+  width: 100px;
+  height: 100px;
+  background: red;
+  position: relative;
+}
+
+#octagon:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-bottom: 29px solid red;
+  border-left: 29px solid #eee;
+  border-right: 29px solid #eee;
+  width: 42px;
+  height: 0;
+  object-fit: cover;
+  background: url("http://www.italianmade.com/ca/wp-content/uploads/2015/05/Rob-Gentile-Buca.jpg");
+  background-size: cover;
+}
+
+#octagon:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-top: 29px solid red;
+  border-left: 29px solid #eee;
+  border-right: 29px solid #eee;
+  width: 42px;
+  height: 0;
+}
+
+#circle {
+  background: url("http://www.italianmade.com/ca/wp-content/uploads/2015/05/Rob-Gentile-Buca.jpg");
+  background-size: cover;
+  border-radius:50% 50% 50% 50%;
+  width:100px;
+  height:100px;
+}
+
+
+.checked {
+  color: orange;
+}
+
+.Rating{
+  font-size: 15px;
+  color: #525252;
+  text-align: left;
+  padding-bottom: 5px;
+}
+.NavigationBar{
+  width: 100%;
+  margin-bottom: -20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 1;
+}
+.NavigationBar .nav>li {
+  display: inline-block;
+  width: calc(98%/3);
+}
+
+.NavigationBar .nav-pills>li>a {
+  border-radius: 0px;
+}
