@@ -1,7 +1,11 @@
 class GeneralUtils {
 
   static checkIfMapIsNotEmpty(arr) {
-    return Object.keys(arr).length>0;
+    try{
+    return Object.keys(arr).length>0;}
+    catch(err){
+      return false;
+    }
   }
   
 }

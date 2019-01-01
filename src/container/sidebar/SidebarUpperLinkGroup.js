@@ -24,7 +24,6 @@ class SidebarUpperLinkGroup extends Component {
   }
   
   render() {
-    debugger;
     if(GeneralUtils.checkIfMapIsNotEmpty(this.props.configToSchemaMap)) {
       return (
           <ul>
