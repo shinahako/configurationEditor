@@ -113,9 +113,24 @@ export const initializeConfigurationToSchemaMap = () => {
 export const fetchData = (etlName) => {
   etlName="sdsd"; //should be removed
   return (dispatch) => {
+    let currentStateOfData={
+      "catalog": "string",
+      "creationDate": "yyyy-MM-dd@HH:mm:ss.SSSZ",
+      "description": "string",
+      "etlName": "string",
+      "lastUpdateDate": "2019-01-02T10:29:09.819Z",
+      "locale": "string",
+      "status": "string",
+      "updatedBy": "string",
+      "versionId": "string"
+    };
+    
     if (!etlName || etlName === "" || typeof etlName === 'undefined') {
-      dispatch(initializeConfigurationDataMap([],
-          []));
+      let etlDataLocal=[];
+      let configurationsMap=[];
+      dispatch(initializeConfigurationDataMap(etlDataLocal,
+          configurationsMap));
+      dispatch(initializeCurrentStateOfData(etlDataLocal,configurationsMap,currentStateOfData));
     }
 
     else {
@@ -135,10 +150,15 @@ export const fetchData = (etlName) => {
 
         getAllConfigurationGroups(etlDataLocal, configurationsMap);
         createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults);
+        //initializeCurrentStateOfData(configurationsMap,currentStateOfData);
+debugger;
+        currentStateOfData.push(configurationsMap);
+        
         console.log("configurationsMap", configurationsMap);
         console.log("jsonSchemaAndDefaults", jsonSchemaAndDefaults);
         dispatch(initializeConfigurationDataMap(configurationsMap,
             jsonSchemaAndDefaults));
+        dispatch(saveCurrentStateOfData(currentStateOfData));
 
       }))
       .catch(error => {
@@ -149,15 +169,24 @@ export const fetchData = (etlName) => {
   };
 };
 
-function getAllConfigurationGroups(etlData, configurationsMap) {
+function getAllConfigurationGroups(etlData, configurationsMap,currentStateOfData) {
   if (etlData != null) {
     if (etlData.data.entity != null) {
       for (let key in etlData.data.entity) {
         if (key.includes("Configuration")) {
           configurationsMap[key] = etlData.data.entity[key];
+          //configGroup, configNameToAdd, configSettings,
+          //     currentStateOfData
         }
       }
     }
+  }
+}
+
+function initializeCurrentStateOfData(configurationsMap,currentStateOfData){
+  return (dispatch) => {
+    currentStateOfData.push(configurationsMap);
+    dispatch(saveCurrentStateOfData(currentStateOfData));
   }
 }
 
@@ -234,7 +263,6 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
     let configurationGroup = currentStateOfData[configGroup];
     if (configurationGroup !== null) {
       arrayMove(configurationGroup, newIndex, oldIndex);
-      dispatch(postNewConfiguration(currentStateOfData));
       dispatch(saveCurrentStateOfData(currentStateOfData));
     }
   }}
@@ -260,7 +288,6 @@ export const changeConfig = (configGroup, configNameToChange, configSettings,
         if (configurationGroup[index] != null) {
           if (configurationGroup[index].enricherName === configNameToChange) {
             configurationGroup[index].settings = configSettings;
-            dispatch(postNewConfiguration(currentStateOfData));
             dispatch(saveCurrentStateOfData(currentStateOfData));
           }
         }
@@ -282,7 +309,6 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
       configurationGroup[index].enricherName = configNameToAdd;
       configurationGroup[index].settings = configSettings;
       console.log("currentStateOfData", currentStateOfData);
-      dispatch(postNewConfiguration(currentStateOfData));
       dispatch(saveCurrentStateOfData(currentStateOfData));
     }
   }

@@ -7,7 +7,7 @@ import {
   setIfChangeOrderModeIsOn
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
-import {Col} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 
 class SidebarUpperLinkGroup extends Component {
   constructor(props) {
@@ -18,44 +18,59 @@ class SidebarUpperLinkGroup extends Component {
       showArrows: false
     }
   }
-  
-  openConfiguration = ()=>  {
-    this.props.changeCurrentConfigurationEdit(this.props.text);
-};
 
-  handleButtonPress () {
-    if(!this.props.changeOrderModeIsOn) {
-      this.setState({
-        showArrows: true
-      });
-      this.props.setIfChangeOrderModeIsOn(true);
-      this.buttonPressTimer = setTimeout(() => alert('long press activated'),
+  openConfiguration = () => {
+    if (!this.props.changeOrderModeIsOn) {
+      this.props.changeCurrentConfigurationEdit(this.props.text);
+    }
+  };
+
+  handleButtonPress = () => {
+    if (!this.props.changeOrderModeIsOn) {
+      this.buttonPressTimer = setTimeout(
+          () => this.setChangeOrderModeToOn(),
           500);
     }
-  }
+  };
 
-  handleButtonRelease () {
+  setChangeOrderModeToOn = () => {
+    this.props.setIfChangeOrderModeIsOn(true);
+    this.setState({
+      showArrows: true
+    });
+  };
+
+  handleButtonRelease = () => {
     clearTimeout(this.buttonPressTimer);
-  }
-
+  };
 
   render() {
     return (
-          <li className={"child-link"}>
-            <Col>
-            <  onClick={this.openConfiguration}  onTouchStart={this.handleButtonPress} onTouchEnd={this.handleButtonRelease} onMouseDown={this.handleButtonPress} onMouseUp={this.handleButtonRelease}>
-              <span style={{fontSize:"15px"}} className="fa"> {this.props.index}</span>
-              <span className="nav-text">
+        <li className={"child-link"}>
+          <a onClick={this.openConfiguration}
+             onTouchStart={this.handleButtonPress}
+             onTouchEnd={this.handleButtonRelease}
+             onMouseDown={this.handleButtonPress}
+             onMouseUp={this.handleButtonRelease}>
+                <span style={{fontSize: "15px"}}
+                      className="fa"> {this.props.index}</span>
+            <span className="nav-text three-dots-text">
                 {this.props.text}
               </span>
-            </Col>
-              <i className="fa fa-arrow-up" aria-hidden="true"></i>
-              <i className="fa fa-arrow-down" aria-hidden="true"></i>
-            </a>
+            {(() => {
+              if (this.state.showArrows) {
+                return <i className="fa fa-arrow-up" aria-hidden="true" />
+              }
+            })()}
+            {(() => {
+              if (this.state.showArrows) {
+                return <i className="fa fa-arrow-down" aria-hidden="true"/>
+              }
+            })()}
 
-            
-          </li>
-      
+          </a>
+        </li>
+
     );
   }
 }
@@ -74,4 +89,5 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch)
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarUpperLinkGroup);
+export default connect(mapStateToProps, mapDispatchToProps)(
+    SidebarUpperLinkGroup);

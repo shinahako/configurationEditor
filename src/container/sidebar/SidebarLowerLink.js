@@ -14,36 +14,65 @@ class SidebarLowerLink extends Component {
     super(props);
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     //if(this.props.configToSchemaMap.size>0){
-      console.log("this.props.configToSchemaMap",this.props.configToSchemaMap);
+    console.log("this.props.configToSchemaMap", this.props.configToSchemaMap);
     //}
   }
-  
 
   render() {
     return (
         <ul className="logout">
-          <li>
-            <a href="#">
-              <i className="fa fa-floppy-o fa-2x"></i>
-              <span className="nav-text">
-                            Save work
+          {(() => {
+            if (this.props.changeOrderModeIsOn) {
+              return <span>
+                           <li>                 
+                      <span>
+                    <a href="#">
+                      <i className="fa fa-floppy-o fa-2x"/>
+                      <span className="nav-text">
+                            Cancel
                         </span>
-            </a>
-          </li>
+                    </a>
+                    </span>
+              </li>
+                <li>                 
+                      <span>
+                    <a href="#">
+                      <i className="fa fa-floppy-o fa-2x"/>
+                      <span className="nav-text">
+                            Save changes to order
+                        </span>
+                    </a>
+                    </span>
+              </li>
+   
+              </span>
+            }
+            else {
+              return <li>
+                 <span>
+                    <a href="#">
+                      <i className="fa fa-floppy-o fa-2x"/>
+                      <span className="nav-text">
+                            Save all work
+                        </span>
+                    </a>
+                    </span>
+              </li>
+            }
+          })()}
         </ul>
     );
   }
 }
 
-
 function mapStateToProps(state) {
   return {
-    configToSchemaMap: state.mainReducer.configToSchemaMap
+    configToSchemaMap: state.mainReducer.configToSchemaMap,
+    changeOrderModeIsOn: state.mainReducer.changeOrderModeIsOn
   };
 }
-
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
@@ -53,5 +82,4 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch)
 };
 
-
-export default connect(mapStateToProps, mapDispatchToProps) (SidebarLowerLink);
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarLowerLink);

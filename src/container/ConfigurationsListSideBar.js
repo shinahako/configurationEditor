@@ -21,6 +21,7 @@ class ConfigurationsListSideBar extends Component {
   componentDidUpdate() {
     //if(this.props.configToSchemaMap.size>0){
     console.log("bbbbbbb", this.props.currentConfiguration);
+    console.log("current state", this.props.currentStateOfData);
     //}
   }
 

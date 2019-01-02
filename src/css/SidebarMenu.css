@@ -18,6 +18,16 @@
   padding-left: 10px;
 }
 
+.three-dots-text{
+  display: inline-block;
+  width: 180px !important;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  display: block !important;
+  padding-top: 7px;
+}
+
 .search-string{
   padding-top: 17px;
   padding-left: 29px;
