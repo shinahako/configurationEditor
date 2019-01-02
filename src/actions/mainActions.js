@@ -58,11 +58,29 @@ let initialState = {
     "validatorConfigurations": [],
     "versionId": "string"
   },
-  orderChangerConfig:{
+  originalStateOfData: {
+    "catalog": "string",
+    "creationDate": "yyyy-MM-dd@HH:mm:ss.SSSZ",
+    "description": "string",
+    "dispatcherConfiguration": {
+      "dispatcherSettings": {},
+      "dispatcherType": "CRUD"
+    },
+    "enricherConfigurations": [],
+    "etlName": "string",
+    "lastUpdateDate": "2019-01-02T10:29:09.819Z",
+    "locale": "string",
+    "readerConfiguration": {},
+    "status": "string",
+    "updatedBy": "string",
+    "validatorConfigurations": [],
+    "versionId": "string"
+  },
+  orderChangerConfig: {
     changeOrderModeIsOn: false,
-    configGroupName:"",
-    configName:"",
-    currentIndex:null
+    configGroupName: "",
+    configName: "",
+    currentIndex: null
   }
 };
 
@@ -129,6 +147,20 @@ export const setIfChangeOrderModeIsOn = (isChangeOrderModeOn) => (
       isChangeOrderModeOn
     });
 
+export const SAVE_CHANGES_TO_ORIGINAL_DATA = 'SAVE_CHANGES_TO_ORIGINAL_DATA';
+export const saveChangesToOriginalData = (currentStateOfData) => (
+    {
+      type: SAVE_CHANGES_TO_ORIGINAL_DATA,
+      currentStateOfData
+    });
+
+export const CANCEL_CHANGES_TO_ORIGINAL_DATA = 'CANCEL_CHANGES_TO_ORIGINAL_DATA';
+export const cancelChangesToOriginalData = (originalStateOfData) => (
+    {
+      type: CANCEL_CHANGES_TO_ORIGINAL_DATA,
+      originalStateOfData
+    });
+
 export const initializeConfigurationToSchemaMap = () => {
 
 };
@@ -172,7 +204,8 @@ export const fetchData = (etlName) => {
         let configurationsMap = [];
         let jsonSchemaAndDefaults = [];
         if (etlDataLocal != null) {
-          ConfigurationMapUtils.getAllConfigurationGroups(etlDataLocal.data.entity, configurationsMap);
+          ConfigurationMapUtils.getAllConfigurationGroups(
+              etlDataLocal.data.entity, configurationsMap);
         }
 
         createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults);
@@ -185,6 +218,7 @@ export const fetchData = (etlName) => {
         dispatch(initializeConfigurationDataMap(configurationsMap,
             jsonSchemaAndDefaults));
         dispatch(saveCurrentStateOfData(currentStateOfData));
+        dispatch(saveChangesToOriginalData(currentStateOfData));
 
       }))
       .catch(error => {
@@ -267,33 +301,49 @@ function getAllDictionary() {
 export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
     newIndex, oldIndex) => {
   return (dispatch) => {
+    debugger;
     if (configGroup && configNameToChange) {
       let configurationGroup = currentStateOfData[configGroup];
       if (configurationGroup !== null) {
-        debugger;
-        configGroup = arrayMove(configurationGroup, newIndex, oldIndex);
+        ConfigurationMapUtils.arrayMove(configurationGroup, newIndex, oldIndex);
+        dispatch(orderChangerConfig(true,
+            configGroup, configNameToChange, newIndex));
+        dispatch(saveToCurrentState(currentStateOfData));
 
-        dispatch(saveCurrentStateOfData(currentStateOfData));
-        if (currentStateOfData != null) {
-          let configurationsMap=[];
-          ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData, configurationsMap);
-          dispatch(setConfigurationsMap(configurationsMap));
-        }
       }
     }
   }
 };
 
-function arrayMove(arr, newIndex, oldIndex) {
-  if (newIndex >= arr.length) {
-    let k = newIndex - arr.length + 1;
-    while (k--) {
-      arr.push(undefined);
-    }
+
+export const saveToCurrentState = (currentStateOfData) => {
+  return (dispatch) => {
+        dispatch(saveCurrentStateOfData(currentStateOfData));
+        let configurationsMap = [];
+        ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
+            configurationsMap);
+        dispatch(setConfigurationsMap(configurationsMap));
   }
-  arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
-  return arr;
-}
+};
+
+
+export const cancelChanges = (originalStateOfData) => {
+  return (dispatch) => {
+    debugger;
+    let configurationsMap = [];
+    ConfigurationMapUtils.getAllConfigurationGroups(originalStateOfData,
+        configurationsMap);
+    dispatch(setConfigurationsMap(configurationsMap));
+    dispatch(cancelChangesToOriginalData(originalStateOfData));
+  }
+};
+
+
+export const saveAllOrderChanges = (currentStateOfData) => {
+  return (dispatch) => {
+    dispatch(saveToCurrentState(currentStateOfData));
+  }
+};
 
 export const changeConfig = (configGroup, configNameToChange, configSettings,
     currentStateOfData, index) => {

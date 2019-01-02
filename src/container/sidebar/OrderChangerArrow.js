@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import '../../css/App.css';
 import '../../css/SidebarMenu.css';
 import {bindActionCreators} from "redux";
-import {changeOrder,setIfChangeOrderModeIsOn} from '../../actions/mainActions'
+import {changeOrder,setIfChangeOrderModeIsOn,orderChangerConfig} from '../../actions/mainActions'
 import {connect} from "react-redux";
 
 class OrderChangerArrow extends Component {
@@ -12,10 +12,10 @@ class OrderChangerArrow extends Component {
   
   changeOrder= (newIndex) => {
     let configGroupName = this.props.configGroupName;
-    let configNameToChange = this.props.configName;
+    let configName = this.props.configName;
     let currentStateOfData = this.props.currentStateOfData;
     let oldIndex = this.props.index;
-    this.props.changeOrder(configGroupName, configNameToChange,
+    this.props.changeOrder(configGroupName, configName,
         currentStateOfData,
         newIndex, oldIndex);
   };
@@ -41,7 +41,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     changeOrder,
-    setIfChangeOrderModeIsOn
+    setIfChangeOrderModeIsOn,
+    orderChangerConfig
   }, dispatch)
 };
 

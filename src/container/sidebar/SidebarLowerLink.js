@@ -5,7 +5,9 @@ import {bindActionCreators} from "redux";
 import {
   initializeConfigurationToSchemaMap,
   openRelevantRecipe,
-  fetchData
+  fetchData,
+  saveAllOrderChanges,
+  cancelChanges
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 
@@ -15,10 +17,15 @@ class SidebarLowerLink extends Component {
   }
 
   componentDidUpdate() {
-    //if(this.props.configToSchemaMap.size>0){
-    console.log("this.props.configToSchemaMap", this.props.configToSchemaMap);
-    //}
   }
+
+  saveChangesToOrder = () => {
+//this.props.saveAllOrderChanges(this.props.currentStateOfData);
+  };
+
+  cancelChangesToOrder = () => {
+    this.props.cancelChanges(this.props.originalStateOfData);
+  };
 
   render() {
     return (
@@ -28,7 +35,7 @@ class SidebarLowerLink extends Component {
               return <span>
                            <li>                 
                       <span>
-                    <a href="#">
+                    <a onClick={() => {this.cancelChangesToOrder()}}>
                       <i className="fa fa-floppy-o fa-2x"/>
                       <span className="nav-text">
                             Cancel
@@ -37,14 +44,14 @@ class SidebarLowerLink extends Component {
                     </span>
               </li>
                 <li>                 
-                      <span>
-                    <a href="#">
+                   <span>
+                    <a onClick={() => {this.saveChangesToOrder()}}>
                       <i className="fa fa-floppy-o fa-2x"/>
                       <span className="nav-text">
-                            Save changes to order
+                           Accept Changes
                         </span>
                     </a>
-                    </span>
+                   </span>
               </li>
    
               </span>
@@ -69,8 +76,10 @@ class SidebarLowerLink extends Component {
 
 function mapStateToProps(state) {
   return {
-    configToSchemaMap: state.mainReducer.configToSchemaMap,
-    changeOrderModeIsOn: state.mainReducer.changeOrderModeIsOn
+    changeOrderModeIsOn: state.mainReducer.changeOrderModeIsOn,
+    currentStateOfData: state.mainReducer.currentStateOfData,
+    originalStateOfData: state.mainReducer.originalStateOfData
+    
   };
 }
 
@@ -78,7 +87,9 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     openRelevantRecipe,
     initializeConfigurationToSchemaMap,
-    fetchData
+    fetchData,
+    saveAllOrderChanges,
+    cancelChanges
   }, dispatch)
 };
 

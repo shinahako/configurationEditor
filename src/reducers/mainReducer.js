@@ -35,7 +35,6 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
         changeOrderModeIsOn: action.isChangeOrderModeOn
       });
     case mainActions.ORDER_CHANGER_CONFIG:
-      debugger;
       return Object.assign({}, state, {
         ...state,
         orderChangerConfig: {
@@ -50,6 +49,24 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
       return Object.assign({}, state, {
         ...state,
         configurationsMap: action.configurationsMap
+      });    
+      case mainActions.SAVE_CHANGES_TO_ORIGINAL_DATA:
+        debugger;
+      return Object.assign({}, state, {
+        ...state,
+        originalStateOfData: action.currentStateOfData
+      });
+    case mainActions.CANCEL_CHANGES_TO_ORIGINAL_DATA:
+      debugger;
+      return Object.assign({}, state, {
+        ...state,
+        currentStateOfData: action.originalStateOfData,
+        orderChangerConfig:{
+          changeOrderModeIsOn: false,
+          configGroupName:"",
+          configName:"",
+          currentIndex:null
+        }
       });
     default:
       return state

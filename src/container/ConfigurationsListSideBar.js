@@ -22,6 +22,7 @@ class ConfigurationsListSideBar extends Component {
     //if(this.props.configToSchemaMap.size>0){
     console.log("bbbbbbb", this.props.currentActiveConfiguration);
     console.log("current state", this.props.currentStateOfData);
+    console.log("this.props.originalStateOfData",this.props.originalStateOfData);
     //}
   }
 
@@ -58,7 +59,8 @@ function mapStateToProps(state) {
   return {
     configurationsMap: state.mainReducer.configurationsMap,
     currentActiveConfiguration: state.mainReducer.currentActiveConfiguration,
-    currentStateOfData: state.mainReducer.currentStateOfData
+    currentStateOfData: state.mainReducer.currentStateOfData,
+    originalStateOfData: state.mainReducer.originalStateOfData
     
   };
 }

@@ -43,6 +43,7 @@ class SidebarUpperLinkGroup extends Component {
                         configGroupName={this.props.configGroupName}
                         configName={this.props.configurations[index].elementName}
                         index={index}
+                        lengthOfConfigurations={this.props.configurations.length}
                         schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
                         defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
                     />

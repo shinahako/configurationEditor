@@ -50,7 +50,6 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   render() {
-    console.log("this.props.configGroupName", this.props.configGroupName);
     return (
         <li className={"child-link"}>
           <a onClick={this.openConfiguration}
@@ -64,7 +63,8 @@ class SidebarUpperLinkGroup extends Component {
                 {this.props.configName}
               </span>
             {(() => {
-              if (this.props.showArrows) {
+            
+              if (this.props.showArrows && this.props.index>0) {
                 return <OrderChangerArrow direction={"up"}
                                           index={this.props.index}
                                           configGroupName={this.props.configGroupName}
@@ -72,7 +72,7 @@ class SidebarUpperLinkGroup extends Component {
               }
             })()}
             {(() => {
-              if (this.props.showArrows) {
+              if (this.props.showArrows && this.props.index < this.props.lengthOfConfigurations-1) {
                 return <OrderChangerArrow direction={"down"}
                                           index={this.props.index}
                                           configGroupName={this.props.configGroupName}
@@ -88,13 +88,13 @@ class SidebarUpperLinkGroup extends Component {
 }
 
 function mapStateToProps(state,ownProps) {
-  debugger;
+  //console.log("state.mainReducer.orderChangerConfig",state.mainReducer.orderChangerConfig);
   return {
-    configToSchemaMap: state.mainReducer.configToSchemaMap,
     changeOrderModeIsOn: state.mainReducer.orderChangerConfig.changeOrderModeIsOn,
     currentStateOfData: state.mainReducer.currentStateOfData,
     showArrows: state.mainReducer.orderChangerConfig.changeOrderModeIsOn 
     && state.mainReducer.orderChangerConfig.configGroupName===ownProps.configGroupName
+    && state.mainReducer.orderChangerConfig.configName===ownProps.configName
     && state.mainReducer.orderChangerConfig.currentIndex===ownProps.index
   };
 }
