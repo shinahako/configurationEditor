@@ -7,7 +7,7 @@ import {
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import SidebarUpperLinkChild from "./SidebarUpperLinkChild";
-import GeneralUtils from "../../GeneralUtils";
+import GeneralUtils from "../../Utils/GeneralUtils";
 
 class SidebarUpperLinkGroup extends Component {
   constructor(props) {
@@ -30,9 +30,9 @@ class SidebarUpperLinkGroup extends Component {
           <ul>
             <li>
               <a onClick={this.changeVisibilityOfChildren}>
-                <i className="fa fa-folder fa-2x"></i>
+                <i className="fa fa-folder fa-2x"/>
                 <span className="nav-text">
-                {this.props.text}
+                {this.props.configGroupName}
               </span>
               </a>
             </li>
@@ -40,7 +40,8 @@ class SidebarUpperLinkGroup extends Component {
               if (this.state.showChildren) {
                 return this.props.configurations.map((item, index) => (
                     <SidebarUpperLinkChild
-                        text={this.props.configurations[index].elementName}
+                        configGroupName={this.props.configGroupName}
+                        configName={this.props.configurations[index].elementName}
                         index={index}
                         schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
                         defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}

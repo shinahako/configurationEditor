@@ -4,19 +4,19 @@ import '../../css/SidebarMenu.css';
 import {bindActionCreators} from "redux";
 import {
   changeCurrentConfigurationEdit,
-  setIfChangeOrderModeIsOn
+  changeOrder,
+  setIfChangeOrderModeIsOn,
+  orderChangerConfig
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
-import {Col, Row} from "react-bootstrap";
+import OrderChangerArrow from "./OrderChangerArrow";
 
 class SidebarUpperLinkGroup extends Component {
   constructor(props) {
     super(props);
     this.handleButtonPress = this.handleButtonPress.bind(this);
     this.handleButtonRelease = this.handleButtonRelease.bind(this);
-    this.state = {
-      showArrows: false
-    }
+
   }
 
   openConfiguration = () => {
@@ -34,10 +34,15 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   setChangeOrderModeToOn = () => {
+    let changeOrderModeIsOn=true;
+    let configGroupName = this.props.configGroupName;
+    let configName = this.props.configName;
+    let currentIndex = this.props.index;
+    this.props.orderChangerConfig(changeOrderModeIsOn,
+        configGroupName, configName, currentIndex);
     this.props.setIfChangeOrderModeIsOn(true);
-    this.setState({
-      showArrows: true
-    });
+  
+
   };
 
   handleButtonRelease = () => {
@@ -45,6 +50,7 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   render() {
+    console.log("this.props.configGroupName", this.props.configGroupName);
     return (
         <li className={"child-link"}>
           <a onClick={this.openConfiguration}
@@ -55,16 +61,22 @@ class SidebarUpperLinkGroup extends Component {
                 <span style={{fontSize: "15px"}}
                       className="fa"> {this.props.index}</span>
             <span className="nav-text three-dots-text">
-                {this.props.text}
+                {this.props.configName}
               </span>
             {(() => {
-              if (this.state.showArrows) {
-                return <i className="fa fa-arrow-up" aria-hidden="true" />
+              if (this.props.showArrows) {
+                return <OrderChangerArrow direction={"up"}
+                                          index={this.props.index}
+                                          configGroupName={this.props.configGroupName}
+                                          configName={this.props.configName}/>
               }
             })()}
             {(() => {
-              if (this.state.showArrows) {
-                return <i className="fa fa-arrow-down" aria-hidden="true"/>
+              if (this.props.showArrows) {
+                return <OrderChangerArrow direction={"down"}
+                                          index={this.props.index}
+                                          configGroupName={this.props.configGroupName}
+                                          configName={this.props.configName}/>
               }
             })()}
 
@@ -75,17 +87,24 @@ class SidebarUpperLinkGroup extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state,ownProps) {
+  debugger;
   return {
     configToSchemaMap: state.mainReducer.configToSchemaMap,
-    changeOrderModeIsOn: state.mainReducer.changeOrderModeIsOn
+    changeOrderModeIsOn: state.mainReducer.orderChangerConfig.changeOrderModeIsOn,
+    currentStateOfData: state.mainReducer.currentStateOfData,
+    showArrows: state.mainReducer.orderChangerConfig.changeOrderModeIsOn 
+    && state.mainReducer.orderChangerConfig.configGroupName===ownProps.configGroupName
+    && state.mainReducer.orderChangerConfig.currentIndex===ownProps.index
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     changeCurrentConfigurationEdit,
-    setIfChangeOrderModeIsOn
+    setIfChangeOrderModeIsOn,
+    changeOrder, orderChangerConfig
+
   }, dispatch)
 };
 

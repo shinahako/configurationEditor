@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {properties} from "../properties";
+import ConfigurationMapUtils from "../Utils/ConfigurationMapUtils";
 
 let nextTodoId = 0;
 let initialState = {
@@ -37,7 +38,7 @@ let initialState = {
   },
   configurationsMap: [],
   jsonSchemaAndDefaults: [],
-  currentConfiguration: "",
+  currentActiveConfiguration: "",
   currentEtl: "Comics%20US",
   currentStateOfData: {
     "catalog": "string",
@@ -57,7 +58,12 @@ let initialState = {
     "validatorConfigurations": [],
     "versionId": "string"
   },
-  changeOrderModeIsOn: false
+  orderChangerConfig:{
+    changeOrderModeIsOn: false,
+    configGroupName:"",
+    configName:"",
+    currentIndex:null
+  }
 };
 
 export const initialData = {
@@ -76,6 +82,12 @@ export const initializeConfigurationDataMap = (configurationsMap,
   type: INITIALIZE_CONFIGURATION_DATA_MAP,
   configurationsMap,
   jsonSchemaAndDefaults
+});
+
+export const SET_CONFIGURATIONS_MAP = 'SET_CONFIGURATIONS_MAP';
+export const setConfigurationsMap = (configurationsMap) => ({
+  type: SET_CONFIGURATIONS_MAP,
+  configurationsMap
 });
 
 export const CHANGE_CURRENT_CONFIGURATION_EDIT = 'CHANGE_CURRENT_CONFIGURATION_EDIT';
@@ -97,6 +109,17 @@ export const saveCurrentStateOfData = (newStateOfData) => (
     {
       type: SAVE_CURRENT_STATE_OF_DATA,
       newStateOfData
+    });
+
+export const ORDER_CHANGER_CONFIG = 'ORDER_CHANGER_CONFIG';
+export const orderChangerConfig = (changeOrderModeIsOn,
+    configGroupName, configName, currentIndex) => (
+    {
+      type: ORDER_CHANGER_CONFIG,
+      changeOrderModeIsOn,
+      configGroupName,
+      configName,
+      currentIndex
     });
 
 export const CHANGE_ORDER_MODE_IS_ON = 'CHANGE_ORDER_MODE_IS_ON';
@@ -148,10 +171,13 @@ export const fetchData = (etlName) => {
 
         let configurationsMap = [];
         let jsonSchemaAndDefaults = [];
+        if (etlDataLocal != null) {
+          ConfigurationMapUtils.getAllConfigurationGroups(etlDataLocal.data.entity, configurationsMap);
+        }
 
-        getAllConfigurationGroups(etlDataLocal, configurationsMap);
         createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults);
-        currentStateOfData = initializeCurrentStateOfData(configurationsMap, currentStateOfData);
+        currentStateOfData = initializeCurrentStateOfData(configurationsMap,
+            currentStateOfData);
 
         console.log("configurationsMap", configurationsMap);
         console.log("jsonSchemaAndDefaults", jsonSchemaAndDefaults);
@@ -168,21 +194,6 @@ export const fetchData = (etlName) => {
     }
   };
 };
-
-function getAllConfigurationGroups(etlData, configurationsMap,
-    currentStateOfData) {
-  if (etlData != null) {
-    if (etlData.data.entity != null) {
-      for (let key in etlData.data.entity) {
-        if (key.includes("Configuration")) {
-          configurationsMap[key] = etlData.data.entity[key];
-          //configGroup, configNameToAdd, configSettings,
-          //     currentStateOfData
-        }
-      }
-    }
-  }
-}
 
 function initializeCurrentStateOfData(configurationsMap, currentStateOfData) {
   for (let configGroup in configurationsMap) {
@@ -243,10 +254,6 @@ function getDataOfEtl(etlName) {
       + etlName);
 }
 
-function getDictionary() {
-  return axios.get("http://etlexporter.vip.qa.ebay.com/v1/enrichers/getAll");
-}
-
 function getAllDictionary() {
 
 //  let linksArr = ['https://jsonplaceholder.typicode.com/posts', 'https://jsonplaceholder.typicode.com/comments'];
@@ -263,8 +270,15 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
     if (configGroup && configNameToChange) {
       let configurationGroup = currentStateOfData[configGroup];
       if (configurationGroup !== null) {
-        arrayMove(configurationGroup, newIndex, oldIndex);
+        debugger;
+        configGroup = arrayMove(configurationGroup, newIndex, oldIndex);
+
         dispatch(saveCurrentStateOfData(currentStateOfData));
+        if (currentStateOfData != null) {
+          let configurationsMap=[];
+          ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData, configurationsMap);
+          dispatch(setConfigurationsMap(configurationsMap));
+        }
       }
     }
   }

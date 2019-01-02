@@ -10,7 +10,7 @@ import {
 import {connect} from "react-redux";
 import SidebarUpperLinkGroup from "./sidebar/SidebarUpperLinkGroup";
 import SidebarLowerLink from "./sidebar/SidebarLowerLink";
-import GeneralUtils from "../GeneralUtils";
+import GeneralUtils from "../Utils/GeneralUtils";
 import SidebarUpperSearchBar from "./sidebar/SidebarUpperSearchBar";
 
 class ConfigurationsListSideBar extends Component {
@@ -20,14 +20,13 @@ class ConfigurationsListSideBar extends Component {
 
   componentDidUpdate() {
     //if(this.props.configToSchemaMap.size>0){
-    console.log("bbbbbbb", this.props.currentConfiguration);
+    console.log("bbbbbbb", this.props.currentActiveConfiguration);
     console.log("current state", this.props.currentStateOfData);
     //}
   }
 
 
   render() {
-    console.log("this.props.configurationsMap", this.props.configurationsMap);
     return (
         <div>
           <div className="area"/>
@@ -35,11 +34,11 @@ class ConfigurationsListSideBar extends Component {
      <SidebarUpperSearchBar/>
             {(() => {
               let indents = [];
-              for (let configuration in this.props.configurationsMap) {
+              for (let configGroupName in this.props.configurationsMap) {
                 if (Array.isArray(
-                    this.props.configurationsMap[configuration])) {
-                  indents.push(<SidebarUpperLinkGroup text={configuration}
-                                                      configurations={this.props.configurationsMap[configuration]}
+                    this.props.configurationsMap[configGroupName])) {
+                  indents.push(<SidebarUpperLinkGroup configGroupName={configGroupName}
+                                                      configurations={this.props.configurationsMap[configGroupName]}
                                                       schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
                                                       defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
                   />);
@@ -58,7 +57,7 @@ class ConfigurationsListSideBar extends Component {
 function mapStateToProps(state) {
   return {
     configurationsMap: state.mainReducer.configurationsMap,
-    currentConfiguration: state.mainReducer.currentConfiguration,
+    currentActiveConfiguration: state.mainReducer.currentActiveConfiguration,
     currentStateOfData: state.mainReducer.currentStateOfData
     
   };
