@@ -58,7 +58,9 @@ class ConfigurationsListSideBar extends Component {
 function mapStateToProps(state) {
   return {
     configurationsMap: state.mainReducer.configurationsMap,
-    currentConfiguration: state.mainReducer.currentConfiguration
+    currentConfiguration: state.mainReducer.currentConfiguration,
+    currentStateOfData: state.mainReducer.currentStateOfData
+    
   };
 }
 

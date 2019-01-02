@@ -57,7 +57,7 @@ let initialState = {
     "validatorConfigurations": [],
     "versionId": "string"
   },
-  changeOrderModeIsOn:false
+  changeOrderModeIsOn: false
 };
 
 export const initialData = {
@@ -111,9 +111,9 @@ export const initializeConfigurationToSchemaMap = () => {
 };
 
 export const fetchData = (etlName) => {
-  etlName="sdsd"; //should be removed
+  etlName = "sdsd"; //should be removed
   return (dispatch) => {
-    let currentStateOfData={
+    let currentStateOfData = {
       "catalog": "string",
       "creationDate": "yyyy-MM-dd@HH:mm:ss.SSSZ",
       "description": "string",
@@ -124,13 +124,14 @@ export const fetchData = (etlName) => {
       "updatedBy": "string",
       "versionId": "string"
     };
-    
+
     if (!etlName || etlName === "" || typeof etlName === 'undefined') {
-      let etlDataLocal=[];
-      let configurationsMap=[];
+      let etlDataLocal = [];
+      let configurationsMap = [];
       dispatch(initializeConfigurationDataMap(etlDataLocal,
           configurationsMap));
-      dispatch(initializeCurrentStateOfData(etlDataLocal,configurationsMap,currentStateOfData));
+      dispatch(initializeCurrentStateOfData(etlDataLocal, configurationsMap,
+          currentStateOfData));
     }
 
     else {
@@ -150,12 +151,11 @@ export const fetchData = (etlName) => {
 
         getAllConfigurationGroups(etlDataLocal, configurationsMap);
         createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults);
-        //initializeCurrentStateOfData(configurationsMap,currentStateOfData);
-debugger;
-        currentStateOfData.push(configurationsMap);
-        
+        currentStateOfData = initializeCurrentStateOfData(configurationsMap, currentStateOfData);
+
         console.log("configurationsMap", configurationsMap);
         console.log("jsonSchemaAndDefaults", jsonSchemaAndDefaults);
+        console.log("currentStateOfData", currentStateOfData);
         dispatch(initializeConfigurationDataMap(configurationsMap,
             jsonSchemaAndDefaults));
         dispatch(saveCurrentStateOfData(currentStateOfData));
@@ -169,7 +169,8 @@ debugger;
   };
 };
 
-function getAllConfigurationGroups(etlData, configurationsMap,currentStateOfData) {
+function getAllConfigurationGroups(etlData, configurationsMap,
+    currentStateOfData) {
   if (etlData != null) {
     if (etlData.data.entity != null) {
       for (let key in etlData.data.entity) {
@@ -183,11 +184,11 @@ function getAllConfigurationGroups(etlData, configurationsMap,currentStateOfData
   }
 }
 
-function initializeCurrentStateOfData(configurationsMap,currentStateOfData){
-  return (dispatch) => {
-    currentStateOfData.push(configurationsMap);
-    dispatch(saveCurrentStateOfData(currentStateOfData));
+function initializeCurrentStateOfData(configurationsMap, currentStateOfData) {
+  for (let configGroup in configurationsMap) {
+    currentStateOfData[configGroup] = configurationsMap[configGroup];
   }
+  return currentStateOfData;
 }
 
 function createAMapOfJsonSchemaAndDefaults(dictionaryArr,
@@ -259,13 +260,14 @@ function getAllDictionary() {
 export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
     newIndex, oldIndex) => {
   return (dispatch) => {
-  if (configGroup && configNameToChange) {
-    let configurationGroup = currentStateOfData[configGroup];
-    if (configurationGroup !== null) {
-      arrayMove(configurationGroup, newIndex, oldIndex);
-      dispatch(saveCurrentStateOfData(currentStateOfData));
+    if (configGroup && configNameToChange) {
+      let configurationGroup = currentStateOfData[configGroup];
+      if (configurationGroup !== null) {
+        arrayMove(configurationGroup, newIndex, oldIndex);
+        dispatch(saveCurrentStateOfData(currentStateOfData));
+      }
     }
-  }}
+  }
 };
 
 function arrayMove(arr, newIndex, oldIndex) {
@@ -314,10 +316,10 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
   }
 };
 
-
 function postNewConfiguration(currentStateOfData) {
   //etlName = "Comics%20US";
-  return axios.post('http://etlexporter.vip.qa.ebay.com/v1/configuration/save', currentStateOfData)
+  return axios.post('http://etlexporter.vip.qa.ebay.com/v1/configuration/save',
+      currentStateOfData)
   .then(function (response) {
     console.log(response);
   })
