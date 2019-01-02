@@ -12,38 +12,49 @@ import GeneralUtils from "../../GeneralUtils";
 class SidebarUpperLinkGroup extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      showChildren: true
+    }
   }
 
-  componentDidUpdate() {
-    //if(this.props.configToSchemaMap.size>0){
-    console.log("aaaaaaaaaaaaaaa", this.props.configurations);
-    //}
-  }
-  
+  changeVisibilityOfChildren = () => {
+    this.setState({
+      showChildren: !this.state.showChildren
+    });
+  };
+
   render() {
-    console.log("aaaaaaaaaaaaaaa", this.props.configurations);
-    if(GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap)) {
+    if (GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap)) {
       return (
           <ul>
             <li>
-              <a href="">
-                <i className="fa fa-home fa-2x"></i>
+              <a onClick={this.changeVisibilityOfChildren}>
+                <i className="fa fa-folder fa-2x"></i>
                 <span className="nav-text">
                 {this.props.text}
               </span>
               </a>
             </li>
-              {this.props.configurations.map((item, index) => (
-                  <SidebarUpperLinkChild text={this.props.configurations[index].elementName}
-                                         index={index}
-                                         schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
-                                         defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
-                  />
-              ))}
+            {(() => {
+              if (this.state.showChildren) {
+                return this.props.configurations.map((item, index) => (
+                    <SidebarUpperLinkChild
+                        text={this.props.configurations[index].elementName}
+                        index={index}
+                        schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
+                        defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
+                    />
+                ))
+              }
+            })()}
+
           </ul>
       );
     }
-    else return <span/>
+    else {
+      return <span/>
+    }
   }
 }
 
@@ -60,4 +71,5 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch)
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarUpperLinkGroup);
+export default connect(mapStateToProps, mapDispatchToProps)(
+    SidebarUpperLinkGroup);

@@ -56,7 +56,7 @@ class Editor extends Component {
         onSubmit={log("submitted")}
         formData={this.props.currentConfiguration ? this.props.jsonSchemaAndDefaults[this.props.currentConfiguration].defaultSettings : ""}
         onError={log("errors")} />*/}
-  <Form schema={this.props.currentConfiguration ? this.props.jsonSchemaAndDefaults[this.props.currentConfiguration].jsonSchema : {}}
+  <Form schema={this.props.currentConfiguration && this.props.jsonSchemaAndDefaults[this.props.currentConfiguration] && this.props.jsonSchemaAndDefaults[this.props.currentConfiguration].jsonSchema ? this.props.jsonSchemaAndDefaults[this.props.currentConfiguration].jsonSchema : {}}
         onSubmit={this.onSubmit}
         FieldTemplate={CustomFieldTemplate} />
 </div>

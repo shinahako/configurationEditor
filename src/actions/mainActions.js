@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {properties} from "../properties";
 
 let nextTodoId = 0;
 let initialState = {
@@ -36,28 +37,27 @@ let initialState = {
   },
   configurationsMap: [],
   jsonSchemaAndDefaults: [],
-  currentConfiguration: ""
-};
-export const addTodo = text => ({
-  type: 'ADD_TODO',
-  id: nextTodoId++,
-  text
-});
-
-export const setVisibilityFilter = filter => ({
-  type: 'SET_VISIBILITY_FILTER',
-  filter
-});
-
-export const toggleTodo = id => ({
-  type: 'TOGGLE_TODO',
-  id
-});
-
-export const VisibilityFilters = {
-  SHOW_ALL: 'SHOW_ALL',
-  SHOW_COMPLETED: 'SHOW_COMPLETED',
-  SHOW_ACTIVE: 'SHOW_ACTIVE'
+  currentConfiguration: "",
+  currentEtl: "Comics%20US",
+  currentStateOfData: {
+    "catalog": "string",
+    "creationDate": "yyyy-MM-dd@HH:mm:ss.SSSZ",
+    "description": "string",
+    "dispatcherConfiguration": {
+      "dispatcherSettings": {},
+      "dispatcherType": "CRUD"
+    },
+    "enricherConfigurations": [],
+    "etlName": "string",
+    "lastUpdateDate": "2019-01-02T10:29:09.819Z",
+    "locale": "string",
+    "readerConfiguration": {},
+    "status": "string",
+    "updatedBy": "string",
+    "validatorConfigurations": [],
+    "versionId": "string"
+  },
+  changeOrderModeIsOn:false
 };
 
 export const initialData = {
@@ -85,36 +85,67 @@ export const changeCurrentConfigurationEdit = (configName) => (
       configName
     });
 
+export const CHANGE_CURRENT_ETL = 'CHANGE_CURRENT_ETL';
+export const changeCurrentEtl = (newEtl) => (
+    {
+      type: CHANGE_CURRENT_ETL,
+      newEtl
+    });
+
+export const SAVE_CURRENT_STATE_OF_DATA = 'SAVE_CURRENT_STATE_OF_DATA';
+export const saveCurrentStateOfData = (newStateOfData) => (
+    {
+      type: SAVE_CURRENT_STATE_OF_DATA,
+      newStateOfData
+    });
+
+export const CHANGE_ORDER_MODE_IS_ON = 'CHANGE_ORDER_MODE_IS_ON';
+export const setIfChangeOrderModeIsOn = (isChangeOrderModeOn) => (
+    {
+      type: CHANGE_ORDER_MODE_IS_ON,
+      isChangeOrderModeOn
+    });
+
 export const initializeConfigurationToSchemaMap = () => {
 
 };
 
-export const fetchData = () => {
+export const fetchData = (etlName) => {
+  etlName="sdsd"; //should be removed
   return (dispatch) => {
-    return axios.all([getDataOfEtl(), getDictionary()])
-    .then(axios.spread(function (etlData, dictionary) {
-      console.log("etlData", etlData);
-      console.log("dictionary", dictionary);
+    if (!etlName || etlName === "" || typeof etlName === 'undefined') {
+      dispatch(initializeConfigurationDataMap([],
+          []));
+    }
 
-      let etlDataLocal = getEtlLocal();
+    else {
+      let etlNameWithoutSpaces = etlName.split(' ').join('%20');
+      return axios.all([getDataOfEtl(etlNameWithoutSpaces), getAllDictionary()])
+      .then(axios.spread(function (etlData, dictionary) {
+        console.log("etlData", etlData);
+        console.log("dictionary", dictionary);
 
-      console.log("etlDataLocal", etlDataLocal);
-      // Both requests are now complete
+        let etlDataLocal = getEtlLocal();
 
-      let configurationsMap = [];
-      let jsonSchemaAndDefaults = [];
+        //console.log("etlDataLocal", etlDataLocal);
+        // Both requests are now complete
 
-      getAllConfigurationGroups(etlDataLocal, configurationsMap);
-      createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults);
-      console.log("configurationsMap", configurationsMap);
-      console.log("jsonSchemaAndDefaults", jsonSchemaAndDefaults);
-      dispatch(initializeConfigurationDataMap(configurationsMap,
-          jsonSchemaAndDefaults));
+        let configurationsMap = [];
+        let jsonSchemaAndDefaults = [];
 
-    }))
-    .catch(error => {
-      throw(error);
-    });
+        getAllConfigurationGroups(etlDataLocal, configurationsMap);
+        createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults);
+        console.log("configurationsMap", configurationsMap);
+        console.log("jsonSchemaAndDefaults", jsonSchemaAndDefaults);
+        dispatch(initializeConfigurationDataMap(configurationsMap,
+            jsonSchemaAndDefaults));
+
+      }))
+      .catch(error => {
+        dispatch(initializeConfigurationDataMap([],
+            []));
+      });
+    }
   };
 };
 
@@ -130,25 +161,38 @@ function getAllConfigurationGroups(etlData, configurationsMap) {
   }
 }
 
-function createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults) {
-  if (dictionary != null) {
-    if (dictionary.data.entity != null) {
-      let dicEntity = dictionary.data.entity;
-      for (let i = 0; i < dicEntity.length; i++) {
-        jsonSchemaAndDefaults[dicEntity[i]["enricherName"]] = [];
-        jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"] = "";
-        jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"] = "";
-        for (let index in dicEntity[i]["links"]) {
-          if (dicEntity[i]["links"][index].rel === "Default Settings") {
-            getDataFromApi(dicEntity[i]["links"][index].href).then(response => {
-              jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"] = response.data.entity;
-            });
-          }
-          else if (dicEntity[i]["links"][index].rel
-              === "Default Settings JSON Schema") {
-            getDataFromApi(dicEntity[i]["links"][index].href).then(response => {
-              jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"] =  JSON.parse(response.data.entity);
-            });
+function createAMapOfJsonSchemaAndDefaults(dictionaryArr,
+    jsonSchemaAndDefaults) {
+  if (dictionaryArr != null) {
+    for (let dicIndex = 0; dicIndex < dictionaryArr.length; dicIndex++) {
+      if (dictionaryArr[dicIndex] != null && dictionaryArr[dicIndex].data
+          != null && dictionaryArr[dicIndex].data.entity != null) {
+        let dicEntity = dictionaryArr[dicIndex].data.entity;
+        for (let i = 0; i < dicEntity.length; i++) {
+          jsonSchemaAndDefaults[dicEntity[i]["enricherName"]] = [];
+          jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"] = "";
+          jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"] = "";
+          jsonSchemaAndDefaults[dicEntity[i]["validatorName"]] = [];
+          jsonSchemaAndDefaults[dicEntity[i]["validatorName"]]["defaultSettings"] = "";
+          jsonSchemaAndDefaults[dicEntity[i]["validatorName"]]["jsonSchema"] = "";
+          for (let index in dicEntity[i]["links"]) {
+            if (dicEntity[i]["links"][index].rel === "Default Settings") {
+              getDataFromApi(dicEntity[i]["links"][index].href).then(
+                  response => {
+                    jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"] = response.data.entity;
+                    jsonSchemaAndDefaults[dicEntity[i]["validatorName"]]["defaultSettings"] = response.data.entity;
+                  });
+            }
+            else if (dicEntity[i]["links"][index].rel
+                === "Default Settings JSON Schema") {
+              getDataFromApi(dicEntity[i]["links"][index].href).then(
+                  response => {
+                    jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"] = JSON.parse(
+                        response.data.entity);
+                    jsonSchemaAndDefaults[dicEntity[i]["validatorName"]]["jsonSchema"] = JSON.parse(
+                        response.data.entity);
+                  });
+            }
           }
         }
       }
@@ -163,15 +207,97 @@ function getDataFromApi(link) {
   })
 }
 
-
-function getDataOfEtl() {
-  let etlName = "Comics%20US";
+function getDataOfEtl(etlName) {
+  //etlName = "Comics%20US";
   return axios.get("http://etlexporter.vip.qa.ebay.com/v1/configuration/getActive?etlName="
       + etlName);
 }
 
 function getDictionary() {
   return axios.get("http://etlexporter.vip.qa.ebay.com/v1/enrichers/getAll");
+}
+
+function getAllDictionary() {
+
+//  let linksArr = ['https://jsonplaceholder.typicode.com/posts', 'https://jsonplaceholder.typicode.com/comments'];
+  let linksArr = properties.dictionaryUrls;
+  return axios.all(linksArr.map(l => axios.get(l)))
+  .then(axios.spread(function (...res) {
+    return res;
+  }));
+}
+
+export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
+    newIndex, oldIndex) => {
+  return (dispatch) => {
+  if (configGroup && configNameToChange) {
+    let configurationGroup = currentStateOfData[configGroup];
+    if (configurationGroup !== null) {
+      arrayMove(configurationGroup, newIndex, oldIndex);
+      dispatch(postNewConfiguration(currentStateOfData));
+      dispatch(saveCurrentStateOfData(currentStateOfData));
+    }
+  }}
+};
+
+function arrayMove(arr, newIndex, oldIndex) {
+  if (newIndex >= arr.length) {
+    let k = newIndex - arr.length + 1;
+    while (k--) {
+      arr.push(undefined);
+    }
+  }
+  arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+  return arr;
+}
+
+export const changeConfig = (configGroup, configNameToChange, configSettings,
+    currentStateOfData, index) => {
+  return (dispatch) => {
+    if (currentStateOfData[configGroup] !== null) {
+      let configurationGroup = currentStateOfData[configGroup];
+      if (configurationGroup.length > 0) {
+        if (configurationGroup[index] != null) {
+          if (configurationGroup[index].enricherName === configNameToChange) {
+            configurationGroup[index].settings = configSettings;
+            dispatch(postNewConfiguration(currentStateOfData));
+            dispatch(saveCurrentStateOfData(currentStateOfData));
+          }
+        }
+      }
+    }
+  }
+};
+
+export const createNewConfig = (configGroup, configNameToAdd, configSettings,
+    currentStateOfData) => {
+  return (dispatch) => {
+    if (configNameToAdd !== null && configGroup !== null) {
+      let configurationGroup = currentStateOfData[configGroup];
+      let index = configurationGroup.length;
+      configurationGroup[index] = {
+        "enricherName": "",
+        "settings": {}
+      };
+      configurationGroup[index].enricherName = configNameToAdd;
+      configurationGroup[index].settings = configSettings;
+      console.log("currentStateOfData", currentStateOfData);
+      dispatch(postNewConfiguration(currentStateOfData));
+      dispatch(saveCurrentStateOfData(currentStateOfData));
+    }
+  }
+};
+
+
+function postNewConfiguration(currentStateOfData) {
+  //etlName = "Comics%20US";
+  return axios.post('http://etlexporter.vip.qa.ebay.com/v1/configuration/save', currentStateOfData)
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 }
 
 function getEtlLocal() {

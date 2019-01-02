@@ -3,16 +3,15 @@ import '../css/App.css';
 import '../css/SidebarMenu.css';
 import {bindActionCreators} from "redux";
 import {
+  fetchData,
   initializeConfigurationToSchemaMap,
-  openRelevantRecipe,
-  fetchData
+  openRelevantRecipe
 } from '../actions/mainActions'
 import {connect} from "react-redux";
 import SidebarUpperLinkGroup from "./sidebar/SidebarUpperLinkGroup";
 import SidebarLowerLink from "./sidebar/SidebarLowerLink";
-import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 import GeneralUtils from "../GeneralUtils";
-
+import SidebarUpperSearchBar from "./sidebar/SidebarUpperSearchBar";
 
 class ConfigurationsListSideBar extends Component {
   constructor(props) {
@@ -28,12 +27,11 @@ class ConfigurationsListSideBar extends Component {
 
   render() {
     console.log("this.props.configurationsMap", this.props.configurationsMap);
-    if(GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap))
     return (
         <div>
-          <div className="area"></div>
+          <div className="area"/>
           <nav className="main-menu">
-     
+     <SidebarUpperSearchBar/>
             {(() => {
               let indents = [];
               for (let configuration in this.props.configurationsMap) {
@@ -53,7 +51,6 @@ class ConfigurationsListSideBar extends Component {
           </nav>
         </div>
     );
-    else return <span/>
   }
 }
 

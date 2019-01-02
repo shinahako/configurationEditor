@@ -26,9 +26,9 @@ class SidebarLowerLink extends Component {
         <ul className="logout">
           <li>
             <a href="#">
-              <i className="fa fa-power-off fa-2x"></i>
+              <i className="fa fa-floppy-o fa-2x"></i>
               <span className="nav-text">
-                            Logout
+                            Save work
                         </span>
             </a>
           </li>

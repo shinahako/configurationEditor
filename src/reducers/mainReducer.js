@@ -16,6 +16,21 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
         ...state,
         currentConfiguration: action.configName
       });
+    case mainActions.CHANGE_CURRENT_ETL:
+      return Object.assign({}, state, {
+        ...state,
+        currentEtl: action.newEtl
+      });
+      case mainActions.SAVE_CURRENT_STATE_OF_DATA:
+      return Object.assign({}, state, {
+        ...state,
+        currentStateOfData: action.newStateOfData
+      });      
+      case mainActions.CHANGE_ORDER_MODE_IS_ON:
+      return Object.assign({}, state, {
+        ...state,
+        changeOrderModeIsOn: action.isChangeOrderModeOn
+      });
     default:
       return state
   }
