@@ -28,6 +28,14 @@
   padding-top: 7px;
 }
 
+.clickable-icons{
+  color:rgb(153, 153, 153);
+}
+
+.clickable-icons:hover{
+  color: white;
+}
+
 .search-string{
   padding-top: 17px;
   padding-left: 29px;
@@ -40,6 +48,8 @@
 
 
 .main-menu {
+  overflow-y: auto;
+  overflow-x: hidden;
   background:#212121;
   border-right:1px solid #e5e5e5;
   position: fixed;
@@ -48,7 +58,6 @@
   height:100%;
   left:0;
   width:315px;
-  overflow:visible;
   -webkit-transition:width .05s linear;
   transition:width .05s linear;
   -webkit-transform:translateZ(0) scale(1,1);
@@ -61,7 +70,7 @@
 
 .main-menu li {
   position:relative;
-  display:block;
+  display:inline-table;
   width:300px;
 }
 

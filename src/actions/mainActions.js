@@ -313,8 +313,8 @@ export const changeConfig = (configGroup, configNameToChange, configSettings,
       let configurationGroup = currentStateOfData[configGroup];
       if (configurationGroup.length > 0) {
         if (configurationGroup[index] != null) {
-          if (configurationGroup[index].enricherName === configNameToChange) {
-            configurationGroup[index].settings = configSettings;
+          if (configurationGroup[index].elementName === configNameToChange) {
+            configurationGroup[index].elementSettings = configSettings;
             dispatch(saveCurrentStateOfData(currentStateOfData));
           }
         }
@@ -330,11 +330,11 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
       let configurationGroup = currentStateOfData[configGroup];
       let index = configurationGroup.length;
       configurationGroup[index] = {
-        "enricherName": "",
+        "elementName": "",
         "settings": {}
       };
-      configurationGroup[index].enricherName = configNameToAdd;
-      configurationGroup[index].settings = configSettings;
+      configurationGroup[index].elementName = configNameToAdd;
+      configurationGroup[index].elementSettings = configSettings;
       dispatch(saveCurrentStateOfData(currentStateOfData));
     }
   }

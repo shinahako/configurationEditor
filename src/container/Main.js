@@ -5,6 +5,8 @@ import RecipeCard from "./RecipeCard";
 import NavigationBar from "./NavigationBar";
 import ConfigurationsListSideBar from "./ConfigurationsListSideBar";
 import Editor from "./editor/Editor";
+import ConfigurationsToAddListSideBar
+  from "./ConfigAdderSideBar/ConfigurationsToAddListSideBar";
 
 class Main extends Component {
   constructor(props) {
@@ -26,6 +28,7 @@ class Main extends Component {
           </div>*/}
 
           <ConfigurationsListSideBar/>
+          <ConfigurationsToAddListSideBar/>
           <Editor/>
  {/*         {
             this.props.recipes.map(recipe =>

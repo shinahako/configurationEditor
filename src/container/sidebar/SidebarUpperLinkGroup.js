@@ -3,7 +3,8 @@ import '../../css/SidebarMenu.css';
 import {bindActionCreators} from "redux";
 import {
   initializeConfigurationToSchemaMap,
-  fetchData
+  fetchData,
+  addNewConfig
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import SidebarUpperLinkChild from "./SidebarUpperLinkChild";
@@ -24,8 +25,14 @@ class SidebarUpperLinkGroup extends Component {
     });
   };
 
+  addNewConfig = () => {
+    console.log("add new config");
+    this.props.addNewConfig(true,this.props.configGroupName);
+  };
+
   render() {
     if (GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap)) {
+      console.log("this.props.configurations",this.props.configurations);
       return (
           <ul>
             <li>
@@ -35,6 +42,8 @@ class SidebarUpperLinkGroup extends Component {
                 {this.props.configGroupName}
               </span>
               </a>
+              <i onClick={this.addNewConfig} className="fa fa-plus-square-o clickable-icons"
+                 aria-hidden="true"/>
             </li>
             {(() => {
               if (this.state.showChildren) {
@@ -69,7 +78,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     initializeConfigurationToSchemaMap,
-    fetchData
+    fetchData,
+    addNewConfig
   }, dispatch)
 };
 

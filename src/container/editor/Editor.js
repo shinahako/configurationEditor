@@ -9,6 +9,7 @@ import {
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import Form from "react-jsonschema-form";
+import {Preload} from "react-preload";
 
 const schema = {
   title: "Todo",
@@ -44,9 +45,10 @@ class Editor extends Component {
     console.log("Data submitted: ", formData);
     this.props.changeConfig(this.props.currentActiveConfigGroupName,
         this.props.currentActiveConfigName,
-        formData,
+        formData.formData,
         this.props.currentStateOfData,
         this.props.currentActiveIndex)
+    
   };
 
   render() {
@@ -67,6 +69,7 @@ class Editor extends Component {
                   formData={this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings}
                   FieldTemplate={CustomFieldTemplate}/>
           </div>
+          
 
       );
     } else {
