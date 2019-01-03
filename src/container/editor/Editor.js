@@ -53,34 +53,50 @@ class Editor extends Component {
   };
 
   render() {
-    let schema=[];
-    try{
-      debugger;
+    let schema = {};
+    let form = [];
+    let error = "";
+    try {
       schema = this.props.currentActiveConfigName
       && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName]
       && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema
           ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema
-          : {}
-    }catch(err){
-      schema=[];
+          : {};
+
+      form = this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings
+          ? this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings
+          : [];
+    } catch (err) {
+      error = err;
+      schema = {};
+      form = [];
     }
     
-    
     if (this.props.isEditingOn) {
-      return (
-          <div className={"container"}>
-            <Form schema={schema}
-                  onSubmit={this.onSubmit}
-                  formData={this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings
-                      ? this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings
-                      : []}
-                  onError={this.onError}
-                  FieldTemplate={CustomFieldTemplate}/>
+      if (error.toString() !== "") {
+        return (
+            <div className={"container"}>
+              {error.toString()}
+            </div>
 
-          </div>
+        );
+      }
 
-      );
-    } else {
+      else {
+        return (
+            <div className={"container"}>
+              <Form schema={schema}
+                    onSubmit={this.onSubmit}
+                    formData={form}
+                    onError={this.onError}
+                    FieldTemplate={CustomFieldTemplate}/>
+
+            </div>
+
+        );
+      }
+    }
+    else {
       return <span/>
     }
   }
