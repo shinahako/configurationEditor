@@ -308,6 +308,7 @@ export const saveToCurrentState = (currentStateOfData) => {
 export const changeConfig = (configGroup, configNameToChange, configSettings,
     currentStateOfData, index) => {
   return (dispatch) => {
+    debugger;
     if (currentStateOfData[configGroup] !== null) {
       let configurationGroup = currentStateOfData[configGroup];
       if (configurationGroup.length > 0) {

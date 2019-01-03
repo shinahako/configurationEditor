@@ -4,7 +4,8 @@ import '../../css/SidebarMenu.css';
 import '../../css/Editor.css';
 import {bindActionCreators} from "redux";
 import {
-  changeCurrentActiveConfiguration
+  changeCurrentActiveConfiguration,
+  changeConfig
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import Form from "react-jsonschema-form";
@@ -41,6 +42,11 @@ class Editor extends Component {
 
   onSubmit = (formData) => {
     console.log("Data submitted: ", formData);
+    this.props.changeConfig(this.props.currentActiveConfigGroupName,
+        this.props.currentActiveConfigName,
+        formData,
+        this.props.currentStateOfData,
+        this.props.currentActiveIndex)
   };
 
   render() {
@@ -71,6 +77,7 @@ class Editor extends Component {
 
 function mapStateToProps(state) {
   return {
+    currentStateOfData: state.mainReducer.currentStateOfData,
     currentActiveConfiguration: state.mainReducer.currentActiveConfiguration,
     isEditingOn: state.mainReducer.currentActiveConfiguration.editingIsOn,
     currentActiveConfigName: state.mainReducer.currentActiveConfiguration.configName,
@@ -83,7 +90,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    changeCurrentActiveConfiguration
+    changeCurrentActiveConfiguration,
+    changeConfig
   }, dispatch)
 };
 
