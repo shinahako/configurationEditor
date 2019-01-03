@@ -56,7 +56,7 @@ class Editor extends Component {
         onSubmit={log("submitted")}
         formData={this.props.currentActiveConfiguration ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfiguration].defaultSettings : ""}
         onError={log("errors")} />*/}
-  <Form schema={this.props.currentActiveConfiguration && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfiguration] && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfiguration].jsonSchema ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfiguration].jsonSchema : {}}
+  <Form schema={this.props.currentActiveConfigName && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName] && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema : {}}
         onSubmit={this.onSubmit}
         FieldTemplate={CustomFieldTemplate} />
 </div>
@@ -67,7 +67,8 @@ class Editor extends Component {
 
 function mapStateToProps(state) {
   return {
-    currentActiveConfiguration: state.mainReducer.currentActiveConfiguration,
+    currentActiveConfigName: state.mainReducer.currentActiveConfiguration.configName,
+    currentActiveConfigGroupName: state.mainReducer.currentActiveConfiguration.configGroupName,
     jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults,
   };
 }

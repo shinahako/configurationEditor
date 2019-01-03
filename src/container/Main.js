@@ -16,7 +16,6 @@ class Main extends Component {
   }
 
   render() {
-    console.log(this.props.initialState);
     return (
         <div className="Main2">
        {/*   <NavigationBar/>*/}

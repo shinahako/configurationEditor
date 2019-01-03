@@ -1,7 +1,3 @@
-import axios from 'axios';
-import {properties} from "../properties";
-import {saveCurrentStateOfData} from "../actions/mainActions";
-
 class ConfigurationMapUtils {
 
   static getAllConfigurationGroups(etlData, configurationsMap) {

@@ -1,5 +1,5 @@
 import {
-  CHANGE_CURRENT_CONFIGURATION_EDIT,
+  ADD_NEW_CONFIG,
   initialData
 } from '../actions/mainActions'
 import * as mainActions from '../actions/mainActions';
@@ -17,7 +17,10 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
     case mainActions.CHANGE_CURRENT_CONFIGURATION_EDIT:
       return Object.assign({}, state, {
         ...state,
-        currentActiveConfiguration: action.configName
+        currentActiveConfiguration: {
+          configGroupName: action.configGroupName,
+          configName: action.configName
+        }
       });
     case mainActions.CHANGE_CURRENT_ETL:
       return Object.assign({}, state, {
@@ -27,7 +30,13 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
     case mainActions.SAVE_CURRENT_STATE_OF_DATA:
       return Object.assign({}, state, {
         ...state,
-        currentStateOfData: action.newStateOfData
+        currentStateOfData: action.newStateOfData,
+        orderChangerConfig:{
+          changeOrderModeIsOn: false,
+          configGroupName:"",
+          configName:"",
+          currentIndex:null
+        }
       });
     case mainActions.CHANGE_ORDER_MODE_IS_ON:
       return Object.assign({}, state, {
@@ -50,22 +59,12 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
         ...state,
         configurationsMap: action.configurationsMap
       });    
-      case mainActions.SAVE_CHANGES_TO_ORIGINAL_DATA:
-        debugger;
+      case mainActions.ADD_NEW_CONFIG:
       return Object.assign({}, state, {
         ...state,
-        originalStateOfData: action.currentStateOfData
-      });
-    case mainActions.CANCEL_CHANGES_TO_ORIGINAL_DATA:
-      debugger;
-      return Object.assign({}, state, {
-        ...state,
-        currentStateOfData: action.originalStateOfData,
-        orderChangerConfig:{
-          changeOrderModeIsOn: false,
-          configGroupName:"",
-          configName:"",
-          currentIndex:null
+        addNewConfig:{
+          isAddNewConfigOn:action.isAddNewConfigOn,
+          configGroupName: action.configGroupName
         }
       });
     default:

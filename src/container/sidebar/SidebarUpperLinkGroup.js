@@ -31,7 +31,7 @@ class SidebarUpperLinkGroup extends Component {
             <li>
               <a onClick={this.changeVisibilityOfChildren}>
                 <i className="fa fa-folder fa-2x"/>
-                <span className="nav-text">
+                <span className="nav-text three-dots-text">
                 {this.props.configGroupName}
               </span>
               </a>

@@ -21,7 +21,7 @@ class SidebarUpperLinkGroup extends Component {
 
   openConfiguration = () => {
     if (!this.props.changeOrderModeIsOn) {
-      this.props.changeCurrentConfigurationEdit(this.props.text);
+      this.props.changeCurrentConfigurationEdit(this.props.configGroupName,this.props.configName);
     }
   };
 
@@ -41,8 +41,6 @@ class SidebarUpperLinkGroup extends Component {
     this.props.orderChangerConfig(changeOrderModeIsOn,
         configGroupName, configName, currentIndex);
     this.props.setIfChangeOrderModeIsOn(true);
-  
-
   };
 
   handleButtonRelease = () => {

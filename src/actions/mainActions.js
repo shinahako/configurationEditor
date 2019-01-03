@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {properties} from "../properties";
+import {properties} from "../properties"
 import ConfigurationMapUtils from "../Utils/ConfigurationMapUtils";
 
 let nextTodoId = 0;
@@ -33,39 +33,17 @@ let initialState = {
         "title": "Food title goes here",
         "rating": 4,
         "profileImg": "url('http://www.italianmade.com/ca/wp-content/uploads/2015/05/Rob-Gentile-Buca.jpg')"
-      },
-      {
-        "id": 5,
-        "foodImg": "https://drop.ndtv.com/albums/COOKS/chicken-dinner/chickendinner_640x480.jpg",
-        "title": "Food title goes here",
-        "rating": 4,
-        "profileImg": "url('http://www.italianmade.com/ca/wp-content/uploads/2015/05/Rob-Gentile-Buca.jpg')"
       }
     ]
   },
   configurationsMap: [],
   jsonSchemaAndDefaults: [],
-  currentActiveConfiguration: "",
+  currentActiveConfiguration: {
+    configGroupName: "",
+    configName: ""
+  },
   currentEtl: "Comics%20US",
   currentStateOfData: {
-    "catalog": "string",
-    "creationDate": "yyyy-MM-dd@HH:mm:ss.SSSZ",
-    "description": "string",
-    "dispatcherConfiguration": {
-      "dispatcherSettings": {},
-      "dispatcherType": "CRUD"
-    },
-    "enricherConfigurations": [],
-    "etlName": "string",
-    "lastUpdateDate": "2019-01-02T10:29:09.819Z",
-    "locale": "string",
-    "readerConfiguration": {},
-    "status": "string",
-    "updatedBy": "string",
-    "validatorConfigurations": [],
-    "versionId": "string"
-  },
-  originalStateOfData: {
     "catalog": "string",
     "creationDate": "yyyy-MM-dd@HH:mm:ss.SSSZ",
     "description": "string",
@@ -88,6 +66,10 @@ let initialState = {
     configGroupName: "",
     configName: "",
     currentIndex: null
+  },
+  addNewConfig:{
+    isAddNewConfigOn:false,
+    configGroupName: ""
   }
 };
 
@@ -116,9 +98,10 @@ export const setConfigurationsMap = (configurationsMap) => ({
 });
 
 export const CHANGE_CURRENT_CONFIGURATION_EDIT = 'CHANGE_CURRENT_CONFIGURATION_EDIT';
-export const changeCurrentConfigurationEdit = (configName) => (
+export const changeCurrentConfigurationEdit = (configGroupName,configName) => (
     {
       type: CHANGE_CURRENT_CONFIGURATION_EDIT,
+      configGroupName,
       configName
     });
 
@@ -154,18 +137,12 @@ export const setIfChangeOrderModeIsOn = (isChangeOrderModeOn) => (
       isChangeOrderModeOn
     });
 
-export const SAVE_CHANGES_TO_ORIGINAL_DATA = 'SAVE_CHANGES_TO_ORIGINAL_DATA';
-export const saveChangesToOriginalData = (currentStateOfData) => (
+export const ADD_NEW_CONFIG = 'ADD_NEW_CONFIG';
+export const addNewConfig = (isAddNewConfigOn,configGroupName) => (
     {
-      type: SAVE_CHANGES_TO_ORIGINAL_DATA,
-      currentStateOfData
-    });
-
-export const CANCEL_CHANGES_TO_ORIGINAL_DATA = 'CANCEL_CHANGES_TO_ORIGINAL_DATA';
-export const cancelChangesToOriginalData = (originalStateOfData) => (
-    {
-      type: CANCEL_CHANGES_TO_ORIGINAL_DATA,
-      originalStateOfData
+      type: ADD_NEW_CONFIG,
+      isAddNewConfigOn,
+      configGroupName
     });
 
 export const initializeConfigurationToSchemaMap = () => {
@@ -200,9 +177,6 @@ export const fetchData = (etlName) => {
       let etlNameWithoutSpaces = etlName.split(' ').join('%20');
       return axios.all([getDataOfEtl(etlNameWithoutSpaces), getAllDictionary()])
       .then(axios.spread(function (etlData, dictionary) {
-        console.log("etlData", etlData);
-        console.log("dictionary", dictionary);
-
         let etlDataLocal = getEtlLocal();
 
         //console.log("etlDataLocal", etlDataLocal);
@@ -216,16 +190,16 @@ export const fetchData = (etlName) => {
         }
 
         createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults);
+        
         currentStateOfData = initializeCurrentStateOfData(configurationsMap,
             currentStateOfData);
 
-        console.log("configurationsMap", configurationsMap);
-        console.log("jsonSchemaAndDefaults", jsonSchemaAndDefaults);
-        console.log("currentStateOfData", currentStateOfData);
+        console.log("!!!!configurationsMap", configurationsMap);
+        console.log("!!!!jsonSchemaAndDefaults", jsonSchemaAndDefaults);
+        console.log("!!!!currentStateOfData", currentStateOfData);
         dispatch(initializeConfigurationDataMap(configurationsMap,
             jsonSchemaAndDefaults));
         dispatch(saveCurrentStateOfData(currentStateOfData));
-        dispatch(saveChangesToOriginalData(currentStateOfData));
 
       }))
       .catch(error => {
@@ -245,33 +219,30 @@ function initializeCurrentStateOfData(configurationsMap, currentStateOfData) {
 
 function createAMapOfJsonSchemaAndDefaults(dictionaryArr,
     jsonSchemaAndDefaults) {
+  let configurationGroupNamesArr = properties.dictionaryData.configurationGroupNames;
   if (dictionaryArr != null) {
     for (let dicIndex = 0; dicIndex < dictionaryArr.length; dicIndex++) {
       if (dictionaryArr[dicIndex] != null && dictionaryArr[dicIndex].data
           != null && dictionaryArr[dicIndex].data.entity != null) {
+        let configurationGroupName = configurationGroupNamesArr[dicIndex];
+        jsonSchemaAndDefaults[configurationGroupName] = [];
         let dicEntity = dictionaryArr[dicIndex].data.entity;
         for (let i = 0; i < dicEntity.length; i++) {
-          jsonSchemaAndDefaults[dicEntity[i]["enricherName"]] = [];
-          jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"] = "";
-          jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"] = "";
-          jsonSchemaAndDefaults[dicEntity[i]["validatorName"]] = [];
-          jsonSchemaAndDefaults[dicEntity[i]["validatorName"]]["defaultSettings"] = "";
-          jsonSchemaAndDefaults[dicEntity[i]["validatorName"]]["jsonSchema"] = "";
+          jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]] = [];
+          jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["defaultSettings"] = "";
+          jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["jsonSchema"] = "";
           for (let index in dicEntity[i]["links"]) {
             if (dicEntity[i]["links"][index].rel === "Default Settings") {
               getDataFromApi(dicEntity[i]["links"][index].href).then(
                   response => {
-                    jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["defaultSettings"] = response.data.entity;
-                    jsonSchemaAndDefaults[dicEntity[i]["validatorName"]]["defaultSettings"] = response.data.entity;
+                    jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["defaultSettings"] = response.data.entity;
                   });
             }
             else if (dicEntity[i]["links"][index].rel
                 === "Default Settings JSON Schema") {
               getDataFromApi(dicEntity[i]["links"][index].href).then(
                   response => {
-                    jsonSchemaAndDefaults[dicEntity[i]["enricherName"]]["jsonSchema"] = JSON.parse(
-                        response.data.entity);
-                    jsonSchemaAndDefaults[dicEntity[i]["validatorName"]]["jsonSchema"] = JSON.parse(
+                    jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["jsonSchema"] = JSON.parse(
                         response.data.entity);
                   });
             }
@@ -296,9 +267,7 @@ function getDataOfEtl(etlName) {
 }
 
 function getAllDictionary() {
-
-//  let linksArr = ['https://jsonplaceholder.typicode.com/posts', 'https://jsonplaceholder.typicode.com/comments'];
-  let linksArr = properties.dictionaryUrls;
+  let linksArr = properties.dictionaryData.dictionaryUrls;
   return axios.all(linksArr.map(l => axios.get(l)))
   .then(axios.spread(function (...res) {
     return res;
@@ -308,7 +277,6 @@ function getAllDictionary() {
 export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
     newIndex, oldIndex) => {
   return (dispatch) => {
-    debugger;
     if (configGroup && configNameToChange) {
       let configurationGroup = currentStateOfData[configGroup];
       if (configurationGroup !== null) {
@@ -322,33 +290,23 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
   }
 };
 
-
 export const saveToCurrentState = (currentStateOfData) => {
   return (dispatch) => {
-        dispatch(saveCurrentStateOfData(currentStateOfData));
-        let configurationsMap = [];
-        ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
-            configurationsMap);
-        dispatch(setConfigurationsMap(configurationsMap));
-  }
-};
-
-
-export const cancelChanges = (originalStateOfData) => {
-  return (dispatch) => {
-    debugger;
+    dispatch(saveCurrentStateOfData(currentStateOfData));
     let configurationsMap = [];
-    ConfigurationMapUtils.getAllConfigurationGroups(originalStateOfData,
+    ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
         configurationsMap);
     dispatch(setConfigurationsMap(configurationsMap));
-    dispatch(cancelChangesToOriginalData(originalStateOfData));
   }
 };
-
 
 export const saveAllOrderChanges = (currentStateOfData) => {
   return (dispatch) => {
-    dispatch(saveToCurrentState(currentStateOfData));
+    let configurationsMap = [];
+    ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
+        configurationsMap);
+    dispatch(setConfigurationsMap(configurationsMap));
+    dispatch(saveCurrentStateOfData(currentStateOfData));
   }
 };
 
@@ -381,7 +339,6 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
       };
       configurationGroup[index].enricherName = configNameToAdd;
       configurationGroup[index].settings = configSettings;
-      console.log("currentStateOfData", currentStateOfData);
       dispatch(saveCurrentStateOfData(currentStateOfData));
     }
   }

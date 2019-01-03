@@ -6,8 +6,7 @@ import {
   initializeConfigurationToSchemaMap,
   openRelevantRecipe,
   fetchData,
-  saveAllOrderChanges,
-  cancelChanges
+  saveAllOrderChanges
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 
@@ -15,17 +14,11 @@ class SidebarLowerLink extends Component {
   constructor(props) {
     super(props);
   }
-
-  componentDidUpdate() {
-  }
-
+  
   saveChangesToOrder = () => {
-//this.props.saveAllOrderChanges(this.props.currentStateOfData);
+this.props.saveAllOrderChanges(this.props.currentStateOfData);
   };
-
-  cancelChangesToOrder = () => {
-    this.props.cancelChanges(this.props.originalStateOfData);
-  };
+  
 
   render() {
     return (
@@ -33,16 +26,6 @@ class SidebarLowerLink extends Component {
           {(() => {
             if (this.props.changeOrderModeIsOn) {
               return <span>
-                           <li>                 
-                      <span>
-                    <a onClick={() => {this.cancelChangesToOrder()}}>
-                      <i className="fa fa-floppy-o fa-2x"/>
-                      <span className="nav-text">
-                            Cancel
-                        </span>
-                    </a>
-                    </span>
-              </li>
                 <li>                 
                    <span>
                     <a onClick={() => {this.saveChangesToOrder()}}>
@@ -76,9 +59,8 @@ class SidebarLowerLink extends Component {
 
 function mapStateToProps(state) {
   return {
-    changeOrderModeIsOn: state.mainReducer.changeOrderModeIsOn,
-    currentStateOfData: state.mainReducer.currentStateOfData,
-    originalStateOfData: state.mainReducer.originalStateOfData
+    changeOrderModeIsOn: state.mainReducer.orderChangerConfig.changeOrderModeIsOn,
+    currentStateOfData: state.mainReducer.currentStateOfData
     
   };
 }
@@ -88,8 +70,7 @@ const mapDispatchToProps = (dispatch) => {
     openRelevantRecipe,
     initializeConfigurationToSchemaMap,
     fetchData,
-    saveAllOrderChanges,
-    cancelChanges
+    saveAllOrderChanges    
   }, dispatch)
 };
 
