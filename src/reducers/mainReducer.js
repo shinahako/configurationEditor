@@ -1,5 +1,4 @@
 import {
-  ADD_NEW_CONFIG,
   initialData
 } from '../actions/mainActions'
 import * as mainActions from '../actions/mainActions';
@@ -14,12 +13,14 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
         configurationsMap: action.configurationsMap,
         jsonSchemaAndDefaults: action.jsonSchemaAndDefaults
       });
-    case mainActions.CHANGE_CURRENT_CONFIGURATION_EDIT:
+    case mainActions.CHANGE_CURRENT_ACTIVE_CONFIGURATION:
       return Object.assign({}, state, {
         ...state,
         currentActiveConfiguration: {
           configGroupName: action.configGroupName,
-          configName: action.configName
+          configName: action.configName,
+          index:action.index,
+          editingIsOn:action.editingIsOn
         }
       });
     case mainActions.CHANGE_CURRENT_ETL:
@@ -44,6 +45,7 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
         changeOrderModeIsOn: action.isChangeOrderModeOn
       });
     case mainActions.ORDER_CHANGER_CONFIG:
+      debugger;
       return Object.assign({}, state, {
         ...state,
         orderChangerConfig: {

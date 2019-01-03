@@ -4,11 +4,10 @@ import '../../css/SidebarMenu.css';
 import '../../css/Editor.css';
 import {bindActionCreators} from "redux";
 import {
-  changeCurrentConfigurationEdit
+  changeCurrentActiveConfiguration
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import Form from "react-jsonschema-form";
-
 
 const schema = {
   title: "Todo",
@@ -33,7 +32,6 @@ function CustomFieldTemplate(props) {
   );
 }
 
-
 const log = (type) => console.log.bind(console, type);
 
 class Editor extends Component {
@@ -41,41 +39,51 @@ class Editor extends Component {
     super(props);
   }
 
-
-  onSubmit = (formData)=>  {
-    console.log("Data submitted: ",  formData);
-};
-
+  onSubmit = (formData) => {
+    console.log("Data submitted: ", formData);
+  };
 
   render() {
-    return (
-        
-<div className={"container"}>
-{/*  <Form schema={this.props.currentActiveConfiguration ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfiguration].jsonSchema : {}}
+    if (this.props.isEditingOn) {
+      return (
+          <div className={"container"}>
+            {/*  <Form schema={this.props.currentActiveConfiguration ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfiguration].jsonSchema : {}}
         onChange={log("changed")}
         onSubmit={log("submitted")}
         formData={this.props.currentActiveConfiguration ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfiguration].defaultSettings : ""}
         onError={log("errors")} />*/}
-  <Form schema={this.props.currentActiveConfigName && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName] && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema : {}}
-        onSubmit={this.onSubmit}
-        FieldTemplate={CustomFieldTemplate} />
-</div>
-      
-    );
+            <Form schema={this.props.currentActiveConfigName
+            && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName]
+            && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema
+                ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema
+                : {}}
+                  onSubmit={this.onSubmit}
+                  formData={this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings}
+                  FieldTemplate={CustomFieldTemplate}/>
+          </div>
+
+      );
+    } else {
+      return <span/>
+    }
   }
 }
 
 function mapStateToProps(state) {
   return {
+    currentActiveConfiguration: state.mainReducer.currentActiveConfiguration,
+    isEditingOn: state.mainReducer.currentActiveConfiguration.editingIsOn,
     currentActiveConfigName: state.mainReducer.currentActiveConfiguration.configName,
+    currentActiveIndex: state.mainReducer.currentActiveConfiguration.index,
     currentActiveConfigGroupName: state.mainReducer.currentActiveConfiguration.configGroupName,
+    configurationsMap: state.mainReducer.configurationsMap,
     jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults,
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    changeCurrentConfigurationEdit
+    changeCurrentActiveConfiguration
   }, dispatch)
 };
 

@@ -40,7 +40,9 @@ let initialState = {
   jsonSchemaAndDefaults: [],
   currentActiveConfiguration: {
     configGroupName: "",
-    configName: ""
+    configName: "",
+    index:null,
+    editingIsOn:false
   },
   currentEtl: "Comics%20US",
   currentStateOfData: {
@@ -97,12 +99,14 @@ export const setConfigurationsMap = (configurationsMap) => ({
   configurationsMap
 });
 
-export const CHANGE_CURRENT_CONFIGURATION_EDIT = 'CHANGE_CURRENT_CONFIGURATION_EDIT';
-export const changeCurrentConfigurationEdit = (configGroupName,configName) => (
+export const CHANGE_CURRENT_ACTIVE_CONFIGURATION = 'CHANGE_CURRENT_ACTIVE_CONFIGURATION';
+export const changeCurrentActiveConfiguration = (configGroupName,configName,index,editingIsOn) => (
     {
-      type: CHANGE_CURRENT_CONFIGURATION_EDIT,
+      type: CHANGE_CURRENT_ACTIVE_CONFIGURATION,
       configGroupName,
-      configName
+      configName,
+      index,
+      editingIsOn
     });
 
 export const CHANGE_CURRENT_ETL = 'CHANGE_CURRENT_ETL';
@@ -278,12 +282,13 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
     newIndex, oldIndex) => {
   return (dispatch) => {
     if (configGroup && configNameToChange) {
+      dispatch(saveToCurrentState(currentStateOfData));
       let configurationGroup = currentStateOfData[configGroup];
       if (configurationGroup !== null) {
         ConfigurationMapUtils.arrayMove(configurationGroup, newIndex, oldIndex);
         dispatch(orderChangerConfig(true,
             configGroup, configNameToChange, newIndex));
-        dispatch(saveToCurrentState(currentStateOfData));
+      
 
       }
     }
@@ -297,16 +302,6 @@ export const saveToCurrentState = (currentStateOfData) => {
     ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
         configurationsMap);
     dispatch(setConfigurationsMap(configurationsMap));
-  }
-};
-
-export const saveAllOrderChanges = (currentStateOfData) => {
-  return (dispatch) => {
-    let configurationsMap = [];
-    ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
-        configurationsMap);
-    dispatch(setConfigurationsMap(configurationsMap));
-    dispatch(saveCurrentStateOfData(currentStateOfData));
   }
 };
 

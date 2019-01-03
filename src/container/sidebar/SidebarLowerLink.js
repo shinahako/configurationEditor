@@ -6,7 +6,7 @@ import {
   initializeConfigurationToSchemaMap,
   openRelevantRecipe,
   fetchData,
-  saveAllOrderChanges
+  saveToCurrentState
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 
@@ -16,7 +16,7 @@ class SidebarLowerLink extends Component {
   }
   
   saveChangesToOrder = () => {
-this.props.saveAllOrderChanges(this.props.currentStateOfData);
+this.props.saveToCurrentState(this.props.currentStateOfData);
   };
   
 
@@ -70,7 +70,7 @@ const mapDispatchToProps = (dispatch) => {
     openRelevantRecipe,
     initializeConfigurationToSchemaMap,
     fetchData,
-    saveAllOrderChanges    
+    saveToCurrentState    
   }, dispatch)
 };
 

@@ -3,7 +3,7 @@ import '../../css/App.css';
 import '../../css/SidebarMenu.css';
 import {bindActionCreators} from "redux";
 import {
-  changeCurrentConfigurationEdit,
+  changeCurrentActiveConfiguration,
   changeOrder,
   setIfChangeOrderModeIsOn,
   orderChangerConfig
@@ -21,7 +21,8 @@ class SidebarUpperLinkGroup extends Component {
 
   openConfiguration = () => {
     if (!this.props.changeOrderModeIsOn) {
-      this.props.changeCurrentConfigurationEdit(this.props.configGroupName,this.props.configName);
+      this.props.changeCurrentActiveConfiguration(this.props.configGroupName,
+          this.props.configName,this.props.index,true);
     }
   };
 
@@ -34,7 +35,7 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   setChangeOrderModeToOn = () => {
-    let changeOrderModeIsOn=true;
+    let changeOrderModeIsOn = true;
     let configGroupName = this.props.configGroupName;
     let configName = this.props.configName;
     let currentIndex = this.props.index;
@@ -61,8 +62,8 @@ class SidebarUpperLinkGroup extends Component {
                 {this.props.configName}
               </span>
             {(() => {
-            
-              if (this.props.showArrows && this.props.index>0) {
+
+              if (this.props.showArrows && this.props.index > 0) {
                 return <OrderChangerArrow direction={"up"}
                                           index={this.props.index}
                                           configGroupName={this.props.configGroupName}
@@ -70,7 +71,8 @@ class SidebarUpperLinkGroup extends Component {
               }
             })()}
             {(() => {
-              if (this.props.showArrows && this.props.index < this.props.lengthOfConfigurations-1) {
+              if (this.props.showArrows && this.props.index
+                  < this.props.lengthOfConfigurations - 1) {
                 return <OrderChangerArrow direction={"down"}
                                           index={this.props.index}
                                           configGroupName={this.props.configGroupName}
@@ -85,21 +87,21 @@ class SidebarUpperLinkGroup extends Component {
   }
 }
 
-function mapStateToProps(state,ownProps) {
-  //console.log("state.mainReducer.orderChangerConfig",state.mainReducer.orderChangerConfig);
+function mapStateToProps(state, ownProps) {
   return {
     changeOrderModeIsOn: state.mainReducer.orderChangerConfig.changeOrderModeIsOn,
     currentStateOfData: state.mainReducer.currentStateOfData,
-    showArrows: state.mainReducer.orderChangerConfig.changeOrderModeIsOn 
-    && state.mainReducer.orderChangerConfig.configGroupName===ownProps.configGroupName
-    && state.mainReducer.orderChangerConfig.configName===ownProps.configName
-    && state.mainReducer.orderChangerConfig.currentIndex===ownProps.index
+    showArrows: state.mainReducer.orderChangerConfig.changeOrderModeIsOn
+    && state.mainReducer.orderChangerConfig.configGroupName
+    === ownProps.configGroupName
+    && state.mainReducer.orderChangerConfig.configName === ownProps.configName
+    && state.mainReducer.orderChangerConfig.currentIndex === ownProps.index
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    changeCurrentConfigurationEdit,
+    changeCurrentActiveConfiguration,
     setIfChangeOrderModeIsOn,
     changeOrder, orderChangerConfig
 

@@ -7,3 +7,10 @@
   background-color: aliceblue;
   height: 100%;
 }
+
+.area {
+  float: left;
+  background: #e2e2e2;
+  width: 100%;
+  height: 100%;
+}
