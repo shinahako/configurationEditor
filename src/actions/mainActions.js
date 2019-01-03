@@ -33,6 +33,13 @@ let initialState = {
         "title": "Food title goes here",
         "rating": 4,
         "profileImg": "url('http://www.italianmade.com/ca/wp-content/uploads/2015/05/Rob-Gentile-Buca.jpg')"
+      },
+      {
+        "id": 5,
+        "foodImg": "https://drop.ndtv.com/albums/COOKS/chicken-dinner/chickendinner_640x480.jpg",
+        "title": "Food title goes here",
+        "rating": 4,
+        "profileImg": "url('http://www.italianmade.com/ca/wp-content/uploads/2015/05/Rob-Gentile-Buca.jpg')"
       }
     ]
   },
