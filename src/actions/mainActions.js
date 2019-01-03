@@ -154,7 +154,6 @@ export const initializeConfigurationToSchemaMap = () => {
 };
 
 export const fetchData = (etlName) => {
-  etlName = "sdsd"; //should be removed
   return (dispatch) => {
     let currentStateOfData = {
       "catalog": "string",
@@ -181,16 +180,16 @@ export const fetchData = (etlName) => {
       let etlNameWithoutSpaces = etlName.split(' ').join('%20');
       return axios.all([getDataOfEtl(etlNameWithoutSpaces), getAllDictionary()])
       .then(axios.spread(function (etlData, dictionary) {
-        let etlDataLocal = getEtlLocal();
+        //let etlDataLocal = getEtlLocal();
 
         //console.log("etlDataLocal", etlDataLocal);
         // Both requests are now complete
 
         let configurationsMap = [];
         let jsonSchemaAndDefaults = [];
-        if (etlDataLocal != null) {
+        if (etlData != null) {
           ConfigurationMapUtils.getAllConfigurationGroups(
-              etlDataLocal.data.entity, configurationsMap);
+              etlData.data.entity, configurationsMap);
         }
 
         createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults);
@@ -215,11 +214,13 @@ export const fetchData = (etlName) => {
 };
 
 function initializeCurrentStateOfData(configurationsMap, currentStateOfData) {
+  return (dispatch) => {
   for (let configGroup in configurationsMap) {
     currentStateOfData[configGroup] = configurationsMap[configGroup];
   }
   return currentStateOfData;
-}
+  }
+};
 
 function createAMapOfJsonSchemaAndDefaults(dictionaryArr,
     jsonSchemaAndDefaults) {
@@ -308,7 +309,6 @@ export const saveToCurrentState = (currentStateOfData) => {
 export const changeConfig = (configGroup, configNameToChange, configSettings,
     currentStateOfData, index) => {
   return (dispatch) => {
-    debugger;
     if (currentStateOfData[configGroup] !== null) {
       let configurationGroup = currentStateOfData[configGroup];
       if (configurationGroup.length > 0) {
@@ -326,6 +326,7 @@ export const changeConfig = (configGroup, configNameToChange, configSettings,
 export const createNewConfig = (configGroup, configNameToAdd, configSettings,
     currentStateOfData) => {
   return (dispatch) => {
+    debugger;
     if (configNameToAdd !== null && configGroup !== null) {
       let configurationGroup = currentStateOfData[configGroup];
       let index = configurationGroup.length;
@@ -336,21 +337,28 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
       configurationGroup[index].elementName = configNameToAdd;
       configurationGroup[index].elementSettings = configSettings;
       dispatch(saveCurrentStateOfData(currentStateOfData));
+      let configurationsMap = [];
+      ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
+          configurationsMap);
+      dispatch(setConfigurationsMap(configurationsMap));
     }
   }
 };
 
-function postNewConfiguration(currentStateOfData) {
-  //etlName = "Comics%20US";
-  return axios.post('http://etlexporter.vip.qa.ebay.com/v1/configuration/save',
-      currentStateOfData)
-  .then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
+export const postNewConfiguration= (currentStateOfData)=> {
+  return (dispatch) => {
+    debugger;
+    return axios.post(
+        'http://etlexporter.vip.qa.ebay.com/v1/configuration/save',
+        currentStateOfData)
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+};
 
 function getEtlLocal() {
   let json = {

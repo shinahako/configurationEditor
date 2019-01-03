@@ -20,16 +20,17 @@ class ConfigurationsToAddListSideBar extends Component {
   componentDidUpdate() {
   }
 
-
   render() {
+    if(this.props.isAddNewConfigOn)
     return (
         <div id={"configAdderSideBar"}>
-          <nav className="main-menu-config-adder"  id="style-5">
-     <ConfigAdderSideBarCloser/>
-            <ConfigAdderSidebarUpperLinkGroup/>
+          <nav className="main-menu-config-adder">
+            <ConfigAdderSideBarCloser/>
+            <div className="listContent" id="style-5"><ConfigAdderSidebarUpperLinkGroup/></div>
           </nav>
         </div>
     );
+    else return <span/>
   }
 }
 
@@ -38,8 +39,9 @@ function mapStateToProps(state) {
     configurationsMap: state.mainReducer.configurationsMap,
     currentActiveConfiguration: state.mainReducer.currentActiveConfiguration,
     currentStateOfData: state.mainReducer.currentStateOfData,
-    originalStateOfData: state.mainReducer.originalStateOfData
-    
+    originalStateOfData: state.mainReducer.originalStateOfData,
+    isAddNewConfigOn: state.mainReducer.addNewConfig.isAddNewConfigOn
+
   };
 }
 
@@ -50,8 +52,6 @@ const mapDispatchToProps = (dispatch) => {
     fetchData
   }, dispatch)
 };
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     ConfigurationsToAddListSideBar);

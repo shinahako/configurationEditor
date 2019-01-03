@@ -6,10 +6,12 @@ import {
   changeCurrentActiveConfiguration,
   changeOrder,
   setIfChangeOrderModeIsOn,
-  orderChangerConfig
+  orderChangerConfig,
+  addNewConfig
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import OrderChangerArrow from "./OrderChangerArrow";
+import GeneralUtils from "../../Utils/GeneralUtils";
 
 class SidebarUpperLinkGroup extends Component {
   constructor(props) {
@@ -23,6 +25,7 @@ class SidebarUpperLinkGroup extends Component {
     if (!this.props.changeOrderModeIsOn) {
       this.props.changeCurrentActiveConfiguration(this.props.configGroupName,
           this.props.configName,this.props.index,true);
+      this.props.addNewConfig(false,"");
     }
   };
 
@@ -49,6 +52,8 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   render() {
+    
+    let readableConfigName = GeneralUtils.makeStringReadable(this.props.configName);
     return (
         <li className={"child-link"}>
           <a onClick={this.openConfiguration}
@@ -59,7 +64,7 @@ class SidebarUpperLinkGroup extends Component {
                 <span style={{fontSize: "15px"}}
                       className="fa"> {this.props.index}</span>
             <span className="nav-text three-dots-text">
-                {this.props.configName}
+              {readableConfigName}
               </span>
             {(() => {
 
@@ -103,7 +108,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     changeCurrentActiveConfiguration,
     setIfChangeOrderModeIsOn,
-    changeOrder, orderChangerConfig
+    changeOrder, orderChangerConfig,
+    addNewConfig
 
   }, dispatch)
 };

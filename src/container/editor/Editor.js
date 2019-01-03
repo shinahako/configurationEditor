@@ -34,8 +34,6 @@ function CustomFieldTemplate(props) {
   );
 }
 
-const log = (type) => console.log.bind(console, type);
-
 class Editor extends Component {
   constructor(props) {
     super(props);
@@ -48,28 +46,38 @@ class Editor extends Component {
         formData.formData,
         this.props.currentStateOfData,
         this.props.currentActiveIndex)
-    
+  };
+
+  onError = (error) => {
+    console.log(error);
   };
 
   render() {
+    let schema=[];
+    try{
+      debugger;
+      schema = this.props.currentActiveConfigName
+      && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName]
+      && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema
+          ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema
+          : {}
+    }catch(err){
+      schema=[];
+    }
+    
+    
     if (this.props.isEditingOn) {
       return (
           <div className={"container"}>
-            {/*  <Form schema={this.props.currentActiveConfiguration ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfiguration].jsonSchema : {}}
-        onChange={log("changed")}
-        onSubmit={log("submitted")}
-        formData={this.props.currentActiveConfiguration ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfiguration].defaultSettings : ""}
-        onError={log("errors")} />*/}
-            <Form schema={this.props.currentActiveConfigName
-            && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName]
-            && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema
-                ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema
-                : {}}
+            <Form schema={schema}
                   onSubmit={this.onSubmit}
-                  formData={this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings}
+                  formData={this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings
+                      ? this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings
+                      : []}
+                  onError={this.onError}
                   FieldTemplate={CustomFieldTemplate}/>
+
           </div>
-          
 
       );
     } else {

@@ -29,7 +29,7 @@ class SidebarUpperSearchBar extends Component {
   
   render() {
       return (
-          <li>
+          <li style={{width:'300px', fontFamily: "'Titillium Web', sans-serif"}}>
             <Form horizontal>
               <FormGroup controlId="searchBar">
                 <Col className={"search-string"} sm={2}>

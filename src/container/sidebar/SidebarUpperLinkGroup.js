@@ -31,6 +31,7 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   render() {
+    let readableConfigGroupName = GeneralUtils.makeStringReadable(this.props.configGroupName);
     if (GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap)) {
       console.log("this.props.configurations",this.props.configurations);
       return (
@@ -39,7 +40,7 @@ class SidebarUpperLinkGroup extends Component {
               <a onClick={this.changeVisibilityOfChildren}>
                 <i className="fa fa-folder fa-2x"/>
                 <span className="nav-text three-dots-text">
-                {this.props.configGroupName}
+                {readableConfigGroupName}
               </span>
               </a>
               <i onClick={this.addNewConfig} className="fa fa-plus-square-o clickable-icons"

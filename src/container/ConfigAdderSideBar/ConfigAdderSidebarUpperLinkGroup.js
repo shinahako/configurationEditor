@@ -20,6 +20,7 @@ class ConfigAdderSidebarUpperLinkGroup extends Component {
   };
 
   render() {
+    let readableConfigGroupName = GeneralUtils.makeStringReadable(this.props.configGroupName);
     if (GeneralUtils.checkIfMapIsNotEmpty(this.props.jsonSchemaAndDefaults) && GeneralUtils.checkIfMapIsNotEmpty(this.props.jsonSchemaAndDefaults[this.props.configGroupName])) {
       console.log("this.props.jsonSchemaAndDefaults[this.props.configGroupName]",this.props.jsonSchemaAndDefaults[this.props.configGroupName]);
       console.log("this.props.jsonSchemaAndDefaults[this.props.configGroupName]",this.props.jsonSchemaAndDefaults[this.props.configGroupName]);
@@ -29,7 +30,7 @@ class ConfigAdderSidebarUpperLinkGroup extends Component {
               <a>
                 <i className="fa fa-folder fa-2x"/>
                 <span className="nav-text three-dots-text">
-                {this.props.configGroupName}
+                {readableConfigGroupName}
               </span>
               </a>
             </li>
@@ -39,6 +40,7 @@ class ConfigAdderSidebarUpperLinkGroup extends Component {
                   indents.push( <ConfigAdderSidebarUpperLinkChild
                       configGroupName={this.props.configGroupName}
                       configName={configName}
+                      configuration={this.props.jsonSchemaAndDefaults[this.props.configGroupName][configName]}
                       lengthOfConfigurations={this.props.jsonSchemaAndDefaults[this.props.configGroupName].length}
                       schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
                       defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}

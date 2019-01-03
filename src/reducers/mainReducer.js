@@ -45,7 +45,6 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
         changeOrderModeIsOn: action.isChangeOrderModeOn
       });
     case mainActions.ORDER_CHANGER_CONFIG:
-      debugger;
       return Object.assign({}, state, {
         ...state,
         orderChangerConfig: {

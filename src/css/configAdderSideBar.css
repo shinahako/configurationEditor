@@ -109,7 +109,8 @@
   font-family: 'Titillium Web', sans-serif;
 }
 
-.main-menu-config-adder>ul.logout {
+.main-menu-config-adder>ul.bottom-link {
+  margin-top: calc(100% - 20px);
   position:absolute;
   left:0;
   bottom:0;

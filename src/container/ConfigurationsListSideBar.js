@@ -27,7 +27,9 @@ class ConfigurationsListSideBar extends Component {
         <div>
           <div className="area"/>
           <nav className="main-menu">
-     <SidebarUpperSearchBar/>
+            <SidebarUpperSearchBar/>
+            <div className="listContent" id="style-5">
+          
             {(() => {
               let indents = [];
               for (let configGroupName in this.props.configurationsMap) {
@@ -42,7 +44,7 @@ class ConfigurationsListSideBar extends Component {
               }
               return indents;
             })()}
-
+            </div>
             <SidebarLowerLink/>
           </nav>
         </div>

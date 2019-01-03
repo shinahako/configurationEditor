@@ -3,10 +3,10 @@ import '../../css/SidebarMenu.css';
 import {bindActionCreators} from "redux";
 import {
   changeCurrentEtl,
-  fetchData
+  fetchData,
+  addNewConfig
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
-import {Col, Form, FormControl, FormGroup} from "react-bootstrap";
 
 class ConfigAdderSideBarCloser extends Component {
   constructor(props) {
@@ -17,20 +17,14 @@ class ConfigAdderSideBarCloser extends Component {
     }
   }
 
-  handleKeyPress = (e)=>  {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('do validate');
-      this.props.changeCurrentEtl(e.target.value);
-      this.props.fetchData(e.target.value);
-    }
+  closeConfigurationAdderSidebar = () => {
+    this.props.addNewConfig(false,"");
   };
   
   render() {
       return (
           <li>
-            <i className="fa fa-window-close-o clickable-icons" aria-hidden="true"/>
+            <i onClick={this.closeConfigurationAdderSidebar} className="fa fa-window-close-o clickable-icons close-icon" aria-hidden="true"/>
           </li>
          
       );
@@ -45,7 +39,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     changeCurrentEtl,
-    fetchData
+    fetchData,
+    addNewConfig
   }, dispatch)
 };
 

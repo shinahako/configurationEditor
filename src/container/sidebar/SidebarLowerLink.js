@@ -6,7 +6,8 @@ import {
   initializeConfigurationToSchemaMap,
   openRelevantRecipe,
   fetchData,
-  saveToCurrentState
+  saveToCurrentState,
+  postNewConfiguration
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 
@@ -14,21 +15,29 @@ class SidebarLowerLink extends Component {
   constructor(props) {
     super(props);
   }
-  
+
   saveChangesToOrder = () => {
-this.props.saveToCurrentState(this.props.currentStateOfData);
+    this.props.saveToCurrentState(this.props.currentStateOfData);
+  };
+
+  postAllChanges= () => {
+    console.log(JSON.stringify(this.props.currentStateOfData));
+    
+   // this.props.postNewConfiguration(this.props.currentStateOfData);
   };
   
-
   render() {
     return (
-        <ul className="logout">
-          {(() => {
-            if (this.props.changeOrderModeIsOn) {
-              return <span>
+        <div className="bottom-link">
+          <ul>
+            {(() => {
+              if (this.props.changeOrderModeIsOn) {
+                return <span>
                 <li>                 
                    <span>
-                    <a onClick={() => {this.saveChangesToOrder()}}>
+                    <a onClick={() => {
+                      this.saveChangesToOrder()
+                    }}>
                       <i className="fa fa-floppy-o fa-2x"/>
                       <span className="nav-text">
                            Accept Changes
@@ -38,21 +47,24 @@ this.props.saveToCurrentState(this.props.currentStateOfData);
               </li>
    
               </span>
-            }
-            else {
-              return <li>
+              }
+              else {
+                return <li>
                  <span>
-                    <a href="#">
+                    <a onClick={() => {
+                      this.postAllChanges()
+                    }}>
                       <i className="fa fa-floppy-o fa-2x"/>
                       <span className="nav-text">
                             Save all work
                         </span>
                     </a>
                     </span>
-              </li>
-            }
-          })()}
-        </ul>
+                </li>
+              }
+            })()}
+          </ul>
+        </div>
     );
   }
 }
@@ -61,7 +73,7 @@ function mapStateToProps(state) {
   return {
     changeOrderModeIsOn: state.mainReducer.orderChangerConfig.changeOrderModeIsOn,
     currentStateOfData: state.mainReducer.currentStateOfData
-    
+
   };
 }
 
@@ -70,7 +82,8 @@ const mapDispatchToProps = (dispatch) => {
     openRelevantRecipe,
     initializeConfigurationToSchemaMap,
     fetchData,
-    saveToCurrentState    
+    saveToCurrentState,
+    postNewConfiguration
   }, dispatch)
 };
 

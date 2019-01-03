@@ -20,26 +20,9 @@ class Main extends Component {
   render() {
     return (
         <div className="Main2">
-       {/*   <NavigationBar/>*/}
-          {/*         <div>
-            <p>{this.props.count}</p>
-            <button onClick={this.props.increment}>+</button>
-            <button  onClick={this.props.decrement}>-</button>
-          </div>*/}
-
           <ConfigurationsListSideBar/>
           <ConfigurationsToAddListSideBar/>
           <Editor/>
- {/*         {
-            this.props.recipes.map(recipe =>
-                <RecipeCard
-                    id={recipe.id}
-                    title={recipe.title}
-                    rating={recipe.rating}
-                    foodImg={recipe.foodImg}
-                    profileImg={recipe.profileImg}
-                />
-            )}*/}
         </div>
     );
   }
