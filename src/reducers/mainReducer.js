@@ -68,6 +68,14 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
           configGroupName: action.configGroupName
         }
       });
+    case mainActions.SET_IS_ETL_LOADING:
+      debugger;
+      return Object.assign({}, state, {
+        ...state,
+        preLoaders: {
+          isEtlLoading: action.isEtlLoading
+        }
+      });
     default:
       return state
   }

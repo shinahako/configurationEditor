@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import '../css/App.css';
-import RecipeCard from "./RecipeCard";
-import NavigationBar from "./NavigationBar";
+import 'font-awesome/css/font-awesome.min.css';
 import ConfigurationsListSideBar from "./ConfigurationsListSideBar";
 import Editor from "./editor/Editor";
 import ConfigurationsToAddListSideBar
@@ -19,7 +18,7 @@ class Main extends Component {
 
   render() {
     return (
-        <div className="Main2">
+        <div className="main">
           <ConfigurationsListSideBar/>
           <ConfigurationsToAddListSideBar/>
           <Editor/>

@@ -21,6 +21,9 @@ class OrderChangerArrow extends Component {
   };
 
   render() {
+/*    {(() => {
+
+    })()}*/
     if(this.props.direction==="up")
     return (
         <i className="fa fa-arrow-up" aria-hidden="true" onClick={() => {this.changeOrder(this.props.index - 1)}}/>

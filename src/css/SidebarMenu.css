@@ -56,6 +56,10 @@
 .search-bar{
   padding-top: 10px;
 }
+.search-bar-preloader{
+  margin-left: -15px;
+  padding-top: 14px;
+}
 
 
 .main-menu {

@@ -41,8 +41,8 @@ let initialState = {
   currentActiveConfiguration: {
     configGroupName: "",
     configName: "",
-    index:null,
-    editingIsOn:false
+    index: null,
+    editingIsOn: false
   },
   currentEtl: "Comics%20US",
   currentStateOfData: {
@@ -69,9 +69,12 @@ let initialState = {
     configName: "",
     currentIndex: null
   },
-  addNewConfig:{
-    isAddNewConfigOn:false,
+  addNewConfig: {
+    isAddNewConfigOn: false,
     configGroupName: ""
+  },
+  preLoaders: {
+    isEtlLoading: false
   }
 };
 
@@ -100,7 +103,8 @@ export const setConfigurationsMap = (configurationsMap) => ({
 });
 
 export const CHANGE_CURRENT_ACTIVE_CONFIGURATION = 'CHANGE_CURRENT_ACTIVE_CONFIGURATION';
-export const changeCurrentActiveConfiguration = (configGroupName,configName,index,editingIsOn) => (
+export const changeCurrentActiveConfiguration = (configGroupName, configName,
+    index, editingIsOn) => (
     {
       type: CHANGE_CURRENT_ACTIVE_CONFIGURATION,
       configGroupName,
@@ -142,11 +146,18 @@ export const setIfChangeOrderModeIsOn = (isChangeOrderModeOn) => (
     });
 
 export const ADD_NEW_CONFIG = 'ADD_NEW_CONFIG';
-export const addNewConfig = (isAddNewConfigOn,configGroupName) => (
+export const addNewConfig = (isAddNewConfigOn, configGroupName) => (
     {
       type: ADD_NEW_CONFIG,
       isAddNewConfigOn,
       configGroupName
+    });
+
+export const SET_IS_ETL_LOADING = 'SET_IS_ETL_LOADING';
+export const setIfEtlIsLoading = (isEtlLoading) => (
+    {
+      type: SET_IS_ETL_LOADING,
+      isEtlLoading
     });
 
 export const initializeConfigurationToSchemaMap = () => {
@@ -191,9 +202,8 @@ export const fetchData = (etlName) => {
           ConfigurationMapUtils.getAllConfigurationGroups(
               etlData.data.entity, configurationsMap);
         }
-
         createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults);
-        
+
         currentStateOfData = initializeCurrentStateOfData(configurationsMap,
             currentStateOfData);
 
@@ -203,7 +213,6 @@ export const fetchData = (etlName) => {
         dispatch(initializeConfigurationDataMap(configurationsMap,
             jsonSchemaAndDefaults));
         dispatch(saveCurrentStateOfData(currentStateOfData));
-
       }))
       .catch(error => {
         dispatch(initializeConfigurationDataMap([],
@@ -215,48 +224,75 @@ export const fetchData = (etlName) => {
 
 function initializeCurrentStateOfData(configurationsMap, currentStateOfData) {
   return (dispatch) => {
-  for (let configGroup in configurationsMap) {
-    currentStateOfData[configGroup] = configurationsMap[configGroup];
-  }
-  return currentStateOfData;
+    for (let configGroup in configurationsMap) {
+      currentStateOfData[configGroup] = configurationsMap[configGroup];
+    }
+    return currentStateOfData;
   }
 };
 
 function createAMapOfJsonSchemaAndDefaults(dictionaryArr,
     jsonSchemaAndDefaults) {
-  let configurationGroupNamesArr = properties.dictionaryData.configurationGroupNames;
   if (dictionaryArr != null) {
+    let allDictionarySchemaLinks = [];
+    let allDictionaryDefaultLinks = [];
     for (let dicIndex = 0; dicIndex < dictionaryArr.length; dicIndex++) {
       if (dictionaryArr[dicIndex] != null && dictionaryArr[dicIndex].data
           != null && dictionaryArr[dicIndex].data.entity != null) {
-        let configurationGroupName = configurationGroupNamesArr[dicIndex];
-        jsonSchemaAndDefaults[configurationGroupName] = [];
         let dicEntity = dictionaryArr[dicIndex].data.entity;
         for (let i = 0; i < dicEntity.length; i++) {
-          jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]] = [];
-          jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["defaultSettings"] = "";
-          jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["jsonSchema"] = "";
           for (let index in dicEntity[i]["links"]) {
             if (dicEntity[i]["links"][index].rel === "Default Settings") {
-              getDataFromApi(dicEntity[i]["links"][index].href).then(
-                  response => {
-                    jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["defaultSettings"] = response.data.entity;
-                  });
+              allDictionarySchemaLinks.push(dicEntity[i]["links"][index].href);
             }
             else if (dicEntity[i]["links"][index].rel
                 === "Default Settings JSON Schema") {
-              getDataFromApi(dicEntity[i]["links"][index].href).then(
-                  response => {
-                    jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["jsonSchema"] = JSON.parse(
-                        response.data.entity);
-                  });
+              allDictionaryDefaultLinks.push(dicEntity[i]["links"][index].href);
             }
           }
         }
       }
     }
+    var allLinksContainedInDictionaries = allDictionarySchemaLinks.concat(
+        allDictionaryDefaultLinks);
+    axiosLinksArrayCall(allLinksContainedInDictionaries, dictionaryArr,
+        jsonSchemaAndDefaults, allDictionarySchemaLinks.length);
   }
 }
+
+export const axiosLinksArrayCall = (linksArr, dictionaryArr,
+    jsonSchemaAndDefaults, schemaLinksResults) => {
+  return (dispatch) => {
+    return axios.all(linksArr.map(l => axios.get(l)))
+    .then(axios.spread(function (...response) {
+      console.log("res", response);
+
+      let configurationGroupNamesArr = properties.dictionaryData.configurationGroupNames;
+      let indexInResults = 0;
+      for (let dicIndex = 0; dicIndex < dictionaryArr.length; dicIndex++) {
+        if (dictionaryArr[dicIndex] != null && dictionaryArr[dicIndex].data
+            != null && dictionaryArr[dicIndex].data.entity != null) {
+          let configurationGroupName = configurationGroupNamesArr[dicIndex];
+          jsonSchemaAndDefaults[configurationGroupName] = [];
+          let dicEntity = dictionaryArr[dicIndex].data.entity;
+
+          for (let i = 0; i < dicEntity.length; i++, indexInResults++) {
+            jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]] = [];
+            jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["defaultSettings"] = "";
+            jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["jsonSchema"] = "";
+            jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["defaultSettings"] = response[indexInResults].data.entity;
+            jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["jsonSchema"] = JSON.parse(
+                response[indexInResults + schemaLinksResults].data.entity);
+
+          }
+        }
+      }
+      dispatch(setIfEtlIsLoading(false));
+      console.log("!!!!jsonSchemaAndDefaults", jsonSchemaAndDefaults);
+      return response;
+    }));
+  }
+};
 
 function getDataFromApi(link) {
   return axios.get(link)
@@ -289,7 +325,6 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
         ConfigurationMapUtils.arrayMove(configurationGroup, newIndex, oldIndex);
         dispatch(orderChangerConfig(true,
             configGroup, configNameToChange, newIndex));
-      
 
       }
     }
@@ -345,7 +380,7 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
   }
 };
 
-export const postNewConfiguration= (currentStateOfData)=> {
+export const postNewConfiguration = (currentStateOfData) => {
   return (dispatch) => {
     debugger;
     return axios.post(
