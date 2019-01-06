@@ -10,8 +10,8 @@ export const properties = {
     ]
   },
   
-  saveUrl: "http://d-tlv-13004852:8010/v1/configuration/save",
-  etlLink: "http://d-tlv-13004852:8010/v1/configuration/getActive?etlName=",
+  saveUrl: "http://etlexporter.vip.qa.ebay.com/v1/configuration/save",
+  etlLink: "http://etlexporter.vip.qa.ebay.com/v1/configuration/getActive?etlName=",
   initialCurrentStateOfData: {
     "catalog": "string",
     "creationDate": null,

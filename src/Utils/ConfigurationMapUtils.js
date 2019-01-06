@@ -1,16 +1,25 @@
 class ConfigurationMapUtils {
 
   static getAllConfigurationGroups(etlData, configurationsMap) {
-      if (etlData!= null) {
-        let dictionaryLinksArray=[];
-        for (let key in etlData) {
-          if (key.includes("Configuration")) {
-            configurationsMap[key] = etlData[key].configuration;
-            for(let link in etlData[key].links)
-            if(link.rel==="Dictionary")
-              {dictionaryLinksArray.push(link.href);}
+    if (etlData != null) {
+      let groupNames = [];
+      let linksArray = [];
+      let dictionaryLinksArrayAndNames = {};
+      for (let key in etlData) {
+        if (key.includes("Configuration")) {
+
+          configurationsMap[key] = etlData[key].configuration;
+          for (let index in etlData[key].links) {
+            if (etlData[key].links[index].rel === "Dictionary") {
+              groupNames.push(key);
+              linksArray.push(etlData[key].links[index].href);
+            }
           }
+        }
       }
+      dictionaryLinksArrayAndNames["groupNames"] = groupNames;
+      dictionaryLinksArrayAndNames["linksArray"] = linksArray;
+      return dictionaryLinksArrayAndNames;
     }
   }
 
@@ -25,8 +34,5 @@ class ConfigurationMapUtils {
     return arr;
   }
 }
-
-
-
 
 export default ConfigurationMapUtils
