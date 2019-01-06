@@ -270,7 +270,7 @@ function getDataFromApi(link) {
 }
 
 function getDataOfEtl(etlName) {
-  return axios.get(properties.etlLinks
+  return axios.get(properties.etlLink
       + etlName);
 }
 
@@ -346,8 +346,31 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
   }
 };
 
+
+export const removeConfig = (configGroup, configNameToAdd, configSettings,
+    currentStateOfData) => {
+  return (dispatch) => {
+    if (configNameToAdd !== null && configGroup !== null) {
+      let configurationGroup = currentStateOfData[configGroup];
+      let index = configurationGroup.length;
+      configurationGroup[index] = {
+        "elementName": "",
+        "settings": {}
+      };
+      configurationGroup[index].elementName = configNameToAdd;
+      configurationGroup[index].elementSettings = configSettings;
+      dispatch(saveCurrentStateOfData(currentStateOfData));
+      let configurationsMap = [];
+      ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
+          configurationsMap);
+      dispatch(setConfigurationsMap(configurationsMap));
+    }
+  }
+};
+
 export const postNewConfiguration = (currentStateOfData) => {
   return (dispatch) => {
+    debugger;
     return axios.post(
         properties.saveUrl,
         currentStateOfData)
