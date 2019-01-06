@@ -4,12 +4,11 @@ import '../../css/SidebarMenu.css';
 import '../../css/Editor.css';
 import {bindActionCreators} from "redux";
 import {
-  changeCurrentActiveConfiguration,
-  changeConfig
+  changeConfig,
+  changeCurrentActiveConfiguration
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import Form from "react-jsonschema-form";
-import {Preload} from "react-preload";
 
 const schema = {
   title: "Todo",
@@ -53,26 +52,24 @@ class Editor extends Component {
   };
 
   render() {
+    if (this.props.isEditingOn) {
     let schema = {};
     let form = [];
     let error = "";
     try {
-      schema = this.props.currentActiveConfigName
-      && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName]
-      && this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema
-          ? this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema
-          : {};
-
-      form = this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings
-          ? this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSettings
-          : [];
+      schema = this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema;}
+    catch (err) {
+        error = err;
+        console.log("err",err);
+        schema = {};
+      }
+      try {
+      form = this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSetting;
     } catch (err) {
       error = err;
-      schema = {};
+      console.log("err",err);
       form = [];
     }
-    
-    if (this.props.isEditingOn) {
       if (error.toString() !== "") {
         return (
             <div className={"container"}>
