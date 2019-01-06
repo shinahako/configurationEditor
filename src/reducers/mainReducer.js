@@ -76,6 +76,14 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
         preLoaders: {
           isEtlLoading: action.isEtlLoading
         }
+      });    
+      case mainActions.SET_ERROR:
+      return Object.assign({}, state, {
+        ...state,
+        errorHandel:{
+          hasErrorOccurred:action.hasErrorOccurred,
+          errorMessage:action.errorMessage
+        }
       });
     default:
       return state

@@ -32,18 +32,27 @@ class SidebarUpperLinkGroup extends Component {
 
   getJsonSchemaAndDefaults = () => {
     let self = this;
-    let jsonSchemaLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].jsonSchema;
-    let defaultSettingsLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].defaultSettings;
-    axios.all([axios.get(jsonSchemaLink), axios.get(defaultSettingsLink)])
-    .then(axios.spread(function (jsonSchema, defaultSettings) {
-      self.changeCurrentActiveConfiguration(jsonSchema,defaultSettings);
-    }))
-    .catch(error => {
-    });
+    try {
+      let jsonSchemaLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].jsonSchema;
+      let defaultSettingsLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].defaultSettings;
+      axios.all([axios.get(jsonSchemaLink), axios.get(defaultSettingsLink)])
+      .then(axios.spread(function (jsonSchema, defaultSettings) {
+        self.changeCurrentActiveConfiguration(jsonSchema, defaultSettings);
+      }))
+      .catch(error => {
+        console.log();
+        
+      });
+    }
+    catch (err) {
+      
+    }
   };
 
-  changeCurrentActiveConfiguration(jsonSchema,defaultSettings){
-    this.props.changeCurrentActiveConfiguration(this.props.configGroupName,this.props.configName, this.props.index, true,JSON.parse(jsonSchema.data.entity),defaultSettings.data.entity);
+  changeCurrentActiveConfiguration(jsonSchema, defaultSettings) {
+    this.props.changeCurrentActiveConfiguration(this.props.configGroupName,
+        this.props.configName, this.props.index, true,
+        JSON.parse(jsonSchema.data.entity), defaultSettings.data.entity);
     this.props.addNewConfig(false, "");
     this.props.setIfEtlIsLoading(false);
   }
@@ -69,8 +78,6 @@ class SidebarUpperLinkGroup extends Component {
   handleButtonRelease = () => {
     clearTimeout(this.buttonPressTimer);
   };
-
-
 
   render() {
 

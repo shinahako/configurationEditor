@@ -5,10 +5,12 @@ import '../../css/Editor.css';
 import {bindActionCreators} from "redux";
 import {
   changeConfig,
-  changeCurrentActiveConfiguration
+  changeCurrentActiveConfiguration,
+  setError
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import Form from "react-jsonschema-form";
+import Error from "./Error";
 
 function CustomFieldTemplate(props) {
   const {id, classNames, label, help, required, description, errors, children} = props;
@@ -27,7 +29,7 @@ class Editor extends Component {
   constructor(props) {
     super(props);
   }
-  
+
   onSubmit = (formData) => {
     console.log("Data submitted: ", formData);
     this.props.changeConfig(this.props.currentActiveConfigGroupName,
@@ -42,48 +44,37 @@ class Editor extends Component {
   };
 
   render() {
+    let schema = {};
+    let form = [];
+    let error = "";
     if (this.props.isEditingOn) {
-      let schema = {};
-      let form = [];
-      let error = "";
-          try {
-          schema = this.props.currentActiveJsonSchema;
-          console.log(this.props.currentActiveJsonSchema);
-          }
-          catch (err) {
-            error = err;
-            console.log("err", err);
-            schema = {};
-          }
+      if (!this.props.currentActiveJsonSchema) {
+        this.props.setError(true,
+            "Couldn't get Json Schema for this configuration.");
+        return (
+            <Error/>
+
+        );
+      }
+      schema = this.props.currentActiveJsonSchema;
       try {
-        form = this.props.currentActiveDefaultConfig;
+        form = this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSetting;
       } catch (err) {
-        error = err;
         console.log("err", err);
         form = [];
       }
 
-      if (error.toString() !== "") {
-        return (
-            <div className={"container"}>
-              {error.toString()}
-            </div>
-
-        );
-      }
-
-      else {
         return (
             <div className={"container"}>
               <Form schema={schema}
                     onSubmit={this.onSubmit}
                     onError={this.onError}
+                    formData={form}
                     FieldTemplate={CustomFieldTemplate}/>
 
             </div>
 
         );
-      }
     }
     else {
       return <span/>
@@ -109,7 +100,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     changeCurrentActiveConfiguration,
-    changeConfig
+    changeConfig,
+    setError
   }, dispatch)
 };
 
