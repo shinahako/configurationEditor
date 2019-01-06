@@ -241,8 +241,7 @@ export const  initializeCurrentStateOfData = (configurationsMap, currentStateOfD
 
 function createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray,dictionaryArr,
     jsonSchemaAndDefaults) {
-  debugger;
-  let configurationGroupNamesArr = dictionaryArr.groupNames;
+  let configurationGroupNamesArr = dictionaryLinksArray.groupNames;
   if (dictionaryArr != null) {
     for (let dicIndex = 0; dicIndex < dictionaryArr.length; dicIndex++) {
       if (dictionaryArr[dicIndex] != null && dictionaryArr[dicIndex].data

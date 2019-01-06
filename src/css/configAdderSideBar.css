@@ -51,7 +51,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   margin-left: 314px;
-  background:#212121;
+  background:#2a3545;
   border-right:1px solid #e5e5e5;
   position: fixed;
   top:0;
@@ -80,14 +80,13 @@
   display:table;
   border-collapse:collapse;
   border-spacing:0;
-  color:#999;
+  color:#bdc2c9;
   font-family: arial;
   font-size: 14px;
   text-decoration:none;
   -webkit-transform:translateZ(0) scale(1,1);
   -webkit-transition:all .1s linear;
   transition:all .1s linear;
-
 }
 
 .main-menu-config-adder .nav-icon {
@@ -106,7 +105,7 @@
   display:table-cell;
   vertical-align:middle;
   width:300px;
-  font-family: 'Titillium Web', sans-serif;
+  font-family: Open Sans,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;
 }
 
 .main-menu-config-adder>ul.bottom-link {
@@ -152,14 +151,6 @@ nav ul,nav li {
   width: 100%;
   height: 100%;
 }
-@font-face {
-  font-family: 'Titillium Web';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format('woff');
-}
-
-
 
 header
 {

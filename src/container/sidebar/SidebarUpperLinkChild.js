@@ -52,7 +52,6 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   changeCurrentActiveConfiguration(jsonSchema, defaultSettings) {
-    debugger;
     this.props.changeCurrentActiveConfiguration(this.props.configGroupName,
         this.props.configName, this.props.index, true,
         JSON.parse(jsonSchema.data.entity), defaultSettings.data.entity);
@@ -93,8 +92,8 @@ class SidebarUpperLinkGroup extends Component {
              onTouchEnd={this.handleButtonRelease}
              onMouseDown={this.handleButtonPress}
              onMouseUp={this.handleButtonRelease}>
-                <span style={{fontSize: "15px"}}
-                      className="fa"> {this.props.index}</span>
+                <span style={{fontSize: "14px"}}
+                      className="fa index "> {this.props.index} -</span>
             <span className="nav-text three-dots-text">
               {readableConfigName}
               </span>
@@ -133,7 +132,7 @@ function mapStateToProps(state, ownProps) {
     === ownProps.configGroupName
     && state.mainReducer.orderChangerConfig.configName === ownProps.configName
     && state.mainReducer.orderChangerConfig.currentIndex === ownProps.index,
-    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults,
+    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults
   };
 }
 
