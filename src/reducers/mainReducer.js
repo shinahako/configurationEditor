@@ -20,7 +20,9 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
           configGroupName: action.configGroupName,
           configName: action.configName,
           index:action.index,
-          editingIsOn:action.editingIsOn
+          editingIsOn:action.editingIsOn,
+          jsonSchema:action.jsonSchema,
+          defaultConfig:action.defaultConfig
         }
       });
     case mainActions.CHANGE_CURRENT_ETL:
@@ -69,7 +71,6 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
         }
       });
     case mainActions.SET_IS_ETL_LOADING:
-      debugger;
       return Object.assign({}, state, {
         ...state,
         preLoaders: {

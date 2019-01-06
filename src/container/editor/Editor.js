@@ -10,16 +10,6 @@ import {
 import {connect} from "react-redux";
 import Form from "react-jsonschema-form";
 
-const schema = {
-  title: "Todo",
-  type: "object",
-  required: ["title"],
-  properties: {
-    title: {type: "string", title: "Title", default: "A new task"},
-    done: {type: "boolean", title: "Done?", default: false}
-  }
-};
-
 function CustomFieldTemplate(props) {
   const {id, classNames, label, help, required, description, errors, children} = props;
   return (
@@ -37,7 +27,7 @@ class Editor extends Component {
   constructor(props) {
     super(props);
   }
-
+  
   onSubmit = (formData) => {
     console.log("Data submitted: ", formData);
     this.props.changeConfig(this.props.currentActiveConfigGroupName,
@@ -53,23 +43,26 @@ class Editor extends Component {
 
   render() {
     if (this.props.isEditingOn) {
-    let schema = {};
-    let form = [];
-    let error = "";
-    try {
-      schema = this.props.jsonSchemaAndDefaults[this.props.currentActiveConfigGroupName][this.props.currentActiveConfigName].jsonSchema;}
-    catch (err) {
-        error = err;
-        console.log("err",err);
-        schema = {};
-      }
+      let schema = {};
+      let form = [];
+      let error = "";
+          try {
+          schema = this.props.currentActiveJsonSchema;
+          console.log(this.props.currentActiveJsonSchema);
+          }
+          catch (err) {
+            error = err;
+            console.log("err", err);
+            schema = {};
+          }
       try {
-      form = this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSetting;
-    } catch (err) {
-      error = err;
-      console.log("err",err);
-      form = [];
-    }
+        form = this.props.currentActiveDefaultConfig;
+      } catch (err) {
+        error = err;
+        console.log("err", err);
+        form = [];
+      }
+
       if (error.toString() !== "") {
         return (
             <div className={"container"}>
@@ -84,7 +77,6 @@ class Editor extends Component {
             <div className={"container"}>
               <Form schema={schema}
                     onSubmit={this.onSubmit}
-                    formData={form}
                     onError={this.onError}
                     FieldTemplate={CustomFieldTemplate}/>
 
@@ -107,6 +99,8 @@ function mapStateToProps(state) {
     currentActiveConfigName: state.mainReducer.currentActiveConfiguration.configName,
     currentActiveIndex: state.mainReducer.currentActiveConfiguration.index,
     currentActiveConfigGroupName: state.mainReducer.currentActiveConfiguration.configGroupName,
+    currentActiveJsonSchema: state.mainReducer.currentActiveConfiguration.jsonSchema,
+    currentActiveDefaultConfig: state.mainReducer.currentActiveConfiguration.defaultConfig,
     configurationsMap: state.mainReducer.configurationsMap,
     jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults,
   };

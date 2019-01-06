@@ -7,11 +7,13 @@ import {
   changeOrder,
   setIfChangeOrderModeIsOn,
   orderChangerConfig,
-  addNewConfig
+  addNewConfig,
+  setIfEtlIsLoading
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import OrderChangerArrow from "./OrderChangerArrow";
 import GeneralUtils from "../../Utils/GeneralUtils";
+import axios from "axios/index";
 
 class SidebarUpperLinkGroup extends Component {
   constructor(props) {
@@ -23,11 +25,28 @@ class SidebarUpperLinkGroup extends Component {
 
   openConfiguration = () => {
     if (!this.props.changeOrderModeIsOn) {
-      this.props.changeCurrentActiveConfiguration(this.props.configGroupName,
-          this.props.configName,this.props.index,true);
-      this.props.addNewConfig(false,"");
+      this.props.setIfEtlIsLoading(true);
+      this.getJsonSchemaAndDefaults();
     }
   };
+
+  getJsonSchemaAndDefaults = () => {
+    let self = this;
+    let jsonSchemaLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].jsonSchema;
+    let defaultSettingsLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].defaultSettings;
+    axios.all([axios.get(jsonSchemaLink), axios.get(defaultSettingsLink)])
+    .then(axios.spread(function (jsonSchema, defaultSettings) {
+      self.changeCurrentActiveConfiguration(jsonSchema,defaultSettings);
+    }))
+    .catch(error => {
+    });
+  };
+
+  changeCurrentActiveConfiguration(jsonSchema,defaultSettings){
+    this.props.changeCurrentActiveConfiguration(this.props.configGroupName,this.props.configName, this.props.index, true,JSON.parse(jsonSchema.data.entity),defaultSettings.data.entity);
+    this.props.addNewConfig(false, "");
+    this.props.setIfEtlIsLoading(false);
+  }
 
   handleButtonPress = () => {
     if (!this.props.changeOrderModeIsOn) {
@@ -51,9 +70,12 @@ class SidebarUpperLinkGroup extends Component {
     clearTimeout(this.buttonPressTimer);
   };
 
+
+
   render() {
-    
-    let readableConfigName = GeneralUtils.makeStringReadable(this.props.configName);
+
+    let readableConfigName = GeneralUtils.makeStringReadable(
+        this.props.configName);
     return (
         <li className={"child-link"}>
           <a onClick={this.openConfiguration}
@@ -100,7 +122,8 @@ function mapStateToProps(state, ownProps) {
     && state.mainReducer.orderChangerConfig.configGroupName
     === ownProps.configGroupName
     && state.mainReducer.orderChangerConfig.configName === ownProps.configName
-    && state.mainReducer.orderChangerConfig.currentIndex === ownProps.index
+    && state.mainReducer.orderChangerConfig.currentIndex === ownProps.index,
+    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults,
   };
 }
 
@@ -109,7 +132,8 @@ const mapDispatchToProps = (dispatch) => {
     changeCurrentActiveConfiguration,
     setIfChangeOrderModeIsOn,
     changeOrder, orderChangerConfig,
-    addNewConfig
+    addNewConfig,
+    setIfEtlIsLoading
 
   }, dispatch)
 };
