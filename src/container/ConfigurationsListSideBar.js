@@ -33,14 +33,10 @@ class ConfigurationsListSideBar extends Component {
             {(() => {
               let indents = [];
               for (let configGroupName in this.props.configurationsMap) {
-                if (Array.isArray(
-                    this.props.configurationsMap[configGroupName])) {
                   indents.push(<SidebarUpperLinkGroup configGroupName={configGroupName}
                                                       configurations={this.props.configurationsMap[configGroupName]}
-                                                      schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
-                                                      defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
                   />);
-                }
+                
               }
               return indents;
             })()}

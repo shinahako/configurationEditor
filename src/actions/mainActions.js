@@ -187,7 +187,7 @@ export const fetchData = (etlName) => {
 
     else {
       let etlNameWithoutSpaces = etlName.split(' ').join('%20');
-      return axios.all([getDataOfEtl(etlNameWithoutSpaces), getAllDictionary()])
+      return axios.all([getDataOfEtl(etlNameWithoutSpaces)])
       .then(axios.spread(function (etlData, dictionary) {
         //let etlDataLocal = getEtlLocal();
 
@@ -196,10 +196,14 @@ export const fetchData = (etlName) => {
 
         let configurationsMap = [];
         let jsonSchemaAndDefaults = [];
+        let dictionaryLinksArray=[];
         if (etlData != null) {
-          ConfigurationMapUtils.getAllConfigurationGroups(
+          dictionaryLinksArray =  ConfigurationMapUtils.getAllConfigurationGroups(
               etlData.data.entity, configurationsMap);
-        }
+          getAllDictionary(dictionaryLinksArray).then(response => {
+            debugger;
+            return response;
+          });
         createAMapOfJsonSchemaAndDefaults(dictionary, jsonSchemaAndDefaults);
         currentStateOfData = dispatch(initializeCurrentStateOfData(configurationsMap,
             currentStateOfData));
@@ -211,6 +215,7 @@ export const fetchData = (etlName) => {
         dispatch(initializeConfigurationDataMap(configurationsMap,
             jsonSchemaAndDefaults));
         dispatch(saveCurrentStateOfData(currentStateOfData));
+        }
         dispatch(setIfEtlIsLoading(false));
       }))
       .catch(error => {
@@ -274,9 +279,9 @@ function getDataOfEtl(etlName) {
       + etlName);
 }
 
-function getAllDictionary() {
-  let linksArr = properties.dictionaryData.dictionaryUrls;
-  return axios.all(linksArr.map(l => axios.get(l)))
+function getAllDictionary(dictionaryLinksArray) {
+  //let linksArr = properties.dictionaryData.dictionaryUrls;
+  return axios.all(dictionaryLinksArray.map(l => axios.get(l)))
   .then(axios.spread(function (...res) {
     return res;
   }));

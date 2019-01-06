@@ -33,6 +33,7 @@ class SidebarUpperLinkGroup extends Component {
   getJsonSchemaAndDefaults = () => {
     let self = this;
     try {
+      
       let jsonSchemaLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].jsonSchema;
       let defaultSettingsLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].defaultSettings;
       axios.all([axios.get(jsonSchemaLink), axios.get(defaultSettingsLink)])
@@ -41,6 +42,7 @@ class SidebarUpperLinkGroup extends Component {
       }))
       .catch(error => {
         console.log();
+        this.props.setIfEtlIsLoading(false);
         
       });
     }
@@ -50,6 +52,7 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   changeCurrentActiveConfiguration(jsonSchema, defaultSettings) {
+    debugger;
     this.props.changeCurrentActiveConfiguration(this.props.configGroupName,
         this.props.configName, this.props.index, true,
         JSON.parse(jsonSchema.data.entity), defaultSettings.data.entity);

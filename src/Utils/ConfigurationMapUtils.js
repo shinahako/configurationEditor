@@ -2,9 +2,13 @@ class ConfigurationMapUtils {
 
   static getAllConfigurationGroups(etlData, configurationsMap) {
       if (etlData!= null) {
+        let dictionaryLinksArray=[];
         for (let key in etlData) {
           if (key.includes("Configuration")) {
-            configurationsMap[key] = etlData[key];
+            configurationsMap[key] = etlData[key].configuration;
+            for(let link in etlData[key].links)
+            if(link.rel==="Dictionary")
+              {dictionaryLinksArray.push(link.href);}
           }
       }
     }

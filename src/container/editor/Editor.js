@@ -47,6 +47,7 @@ class Editor extends Component {
     let schema = {};
     let form = [];
     let error = "";
+    debugger;
     if (this.props.isEditingOn) {
       if (!this.props.currentActiveJsonSchema) {
         this.props.setError(true,
