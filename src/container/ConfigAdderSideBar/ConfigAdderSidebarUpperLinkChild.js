@@ -4,7 +4,8 @@ import '../../css/SidebarMenu.css';
 import {bindActionCreators} from "redux";
 import {
   changeCurrentActiveConfiguration,
-  createNewConfig
+  createNewConfig,
+  addNewConfig
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import GeneralUtils from "../../Utils/GeneralUtils";
@@ -19,6 +20,7 @@ class SidebarUpperLinkGroup extends Component {
     this.props.createNewConfig(this.props.configGroupName,
         this.props.configName, this.props.configuration.defaultSettings,
         this.props.currentStateOfData);
+    this.props.addNewConfig(false,"");
 
   };
 
@@ -48,7 +50,8 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     changeCurrentActiveConfiguration,
-    createNewConfig
+    createNewConfig,
+    addNewConfig
   }, dispatch)
 };
 

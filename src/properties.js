@@ -9,7 +9,7 @@ export const properties = {
       "http://etlexporter.vip.qa.ebay.com/v1/validators/getAll"
     ]
   },
-  
+
   saveUrl: "http://etlexporter.vip.qa.ebay.com/v1/configuration/save",
   etlLink: "http://etlexporter.vip.qa.ebay.com/v1/configuration/getActive?etlName=",
   initialCurrentStateOfData: {
@@ -20,7 +20,7 @@ export const properties = {
       "dispatcherSettings": {},
       "dispatcherType": "CRUD"
     },
-    "enricherConfigurations": [],
+    "enricherConfigurations": {"links": [], "configuration": []},
     "etlName": "string",
     "lastUpdateDate": "2019-01-02T10:29:09.819Z",
     "locale": "string",

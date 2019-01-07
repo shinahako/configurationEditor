@@ -6,6 +6,7 @@ import ConfigurationsListSideBar from "./ConfigurationsListSideBar";
 import Editor from "./editor/Editor";
 import ConfigurationsToAddListSideBar
   from "./ConfigAdderSideBar/ConfigurationsToAddListSideBar";
+import NavigationBar from "./navbar/NavigationBar";
 
 class Main extends Component {
   constructor(props) {
@@ -19,9 +20,10 @@ class Main extends Component {
   render() {
     return (
         <div className="main">
+          <NavigationBar/>
           <ConfigurationsListSideBar/>
           <ConfigurationsToAddListSideBar/>
-          <Editor/>
+         <Editor/>
         </div>
     );
   }

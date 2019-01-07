@@ -12,19 +12,6 @@ import {connect} from "react-redux";
 import Form from "react-jsonschema-form";
 import Error from "./Error";
 
-function CustomFieldTemplate(props) {
-  const {id, classNames, label, help, required, description, errors, children} = props;
-  return (
-      <div className={classNames}>
-        <label htmlFor={id}>{label}{required ? "*" : null}</label>
-        {description}
-        {children}
-        {errors}
-        {help}
-      </div>
-  );
-}
-
 class Editor extends Component {
   constructor(props) {
     super(props);
@@ -58,19 +45,19 @@ class Editor extends Component {
       }
       schema = this.props.currentActiveJsonSchema;
       try {
-        form = this.props.configurationsMap[this.props.currentActiveConfigGroupName][this.props.currentActiveIndex].elementSetting;
+        form = this.props.configurationsMap[this.props.currentActiveConfigGroupName].configuration[this.props.currentActiveIndex].elementSetting;
       } catch (err) {
         console.log("err", err);
         form = [];
       }
 
         return (
-            <div className={"container"}>
+            <div className={"editor-container"}>
+              
               <Form schema={schema}
                     onSubmit={this.onSubmit}
                     onError={this.onError}
-                    formData={form}
-                    FieldTemplate={CustomFieldTemplate}/>
+                    formData={form}/>
 
             </div>
 
@@ -93,7 +80,7 @@ function mapStateToProps(state) {
     currentActiveJsonSchema: state.mainReducer.currentActiveConfiguration.jsonSchema,
     currentActiveDefaultConfig: state.mainReducer.currentActiveConfiguration.defaultConfig,
     configurationsMap: state.mainReducer.configurationsMap,
-    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults,
+    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults
   };
 }
 

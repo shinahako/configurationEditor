@@ -7,8 +7,7 @@ class ConfigurationMapUtils {
       let dictionaryLinksArrayAndNames = {};
       for (let key in etlData) {
         if (key.includes("Configuration")) {
-
-          configurationsMap[key] = etlData[key].configuration;
+          configurationsMap[key] = etlData[key];
           for (let index in etlData[key].links) {
             if (etlData[key].links[index].rel === "Dictionary") {
               groupNames.push(key);

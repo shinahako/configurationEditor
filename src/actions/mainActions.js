@@ -190,12 +190,7 @@ export const fetchData = (etlName) => {
       return axios.get(properties.etlLink + etlNameWithoutSpaces)
       .then(etlData =>  {
         console.log("etlData", etlData);
-        debugger;
         let etlDataLocal = getEtlLocal();
-
-        //console.log("etlDataLocal", etlDataLocal);
-        // Both requests are now complete
-        
         let configurationsMap = [];
         let jsonSchemaAndDefaults = [];
         let dictionaryLinksArray=[];
@@ -208,11 +203,10 @@ export const fetchData = (etlName) => {
             createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray,dictionary, jsonSchemaAndDefaults);
             currentStateOfData = dispatch(initializeCurrentStateOfData(configurationsMap,
                 currentStateOfData));
-
+/*
             console.log("!!!!configurationsMap", configurationsMap);
             console.log("!!!!jsonSchemaAndDefaults", jsonSchemaAndDefaults);
-
-            console.log("!!!!currentStateOfData", currentStateOfData);
+            console.log("!!!!currentStateOfData", currentStateOfData);*/
             dispatch(initializeConfigurationDataMap(configurationsMap,
                 jsonSchemaAndDefaults));
             dispatch(saveCurrentStateOfData(currentStateOfData));
@@ -339,13 +333,19 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
   return (dispatch) => {
     if (configNameToAdd !== null && configGroup !== null) {
       let configurationGroup = currentStateOfData[configGroup];
-      let index = configurationGroup.length;
-      configurationGroup[index] = {
+      let index = configurationGroup.configuration.length;
+      configurationGroup.configuration[index] = {
         "elementName": "",
         "settings": {}
       };
-      configurationGroup[index].elementName = configNameToAdd;
-      configurationGroup[index].elementSettings = configSettings;
+      configurationGroup.configuration[index].elementName = configNameToAdd;
+      configurationGroup.configuration[index].elementSettings = configSettings;
+      configurationGroup.links=[
+        {
+          "rel": "Dictionary",
+          "href": "http://etlexporter.vip.qa.ebay.com/v1/enrichers/getAll"
+        }
+      ];
       dispatch(saveCurrentStateOfData(currentStateOfData));
       let configurationsMap = [];
       ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
@@ -356,18 +356,11 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
 };
 
 
-export const removeConfig = (configGroup, configNameToAdd, configSettings,
-    currentStateOfData) => {
+export const removeConfig = (configGroup, index, currentStateOfData) => {
   return (dispatch) => {
-    if (configNameToAdd !== null && configGroup !== null) {
+    if (index !== null && configGroup !== null) {
       let configurationGroup = currentStateOfData[configGroup];
-      let index = configurationGroup.length;
-      configurationGroup[index] = {
-        "elementName": "",
-        "settings": {}
-      };
-      configurationGroup[index].elementName = configNameToAdd;
-      configurationGroup[index].elementSettings = configSettings;
+      configurationGroup.configuration.splice(index,1);
       dispatch(saveCurrentStateOfData(currentStateOfData));
       let configurationsMap = [];
       ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
@@ -376,10 +369,10 @@ export const removeConfig = (configGroup, configNameToAdd, configSettings,
     }
   }
 };
+
 
 export const postNewConfiguration = (currentStateOfData) => {
   return (dispatch) => {
-    debugger;
     return axios.post(
         properties.saveUrl,
         currentStateOfData)

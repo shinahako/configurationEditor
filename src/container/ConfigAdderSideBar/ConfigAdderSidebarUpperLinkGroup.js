@@ -15,15 +15,9 @@ class ConfigAdderSidebarUpperLinkGroup extends Component {
     super(props);
   }
   
-  addNewConfig = () => {
-    console.log("add new config");
-  };
-
   render() {
     let readableConfigGroupName = GeneralUtils.makeStringReadable(this.props.configGroupName);
     if (GeneralUtils.checkIfMapIsNotEmpty(this.props.jsonSchemaAndDefaults) && GeneralUtils.checkIfMapIsNotEmpty(this.props.jsonSchemaAndDefaults[this.props.configGroupName])) {
-      console.log("this.props.jsonSchemaAndDefaults[this.props.configGroupName]",this.props.jsonSchemaAndDefaults[this.props.configGroupName]);
-      console.log("this.props.jsonSchemaAndDefaults[this.props.configGroupName]",this.props.jsonSchemaAndDefaults[this.props.configGroupName]);
       return (
           <ul>
             <li>

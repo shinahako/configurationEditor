@@ -43,8 +43,7 @@ class SidebarUpperLinkGroup extends Component {
                 {readableConfigGroupName}
               </span>
               </a>
-              <i onClick={this.addNewConfig} className="fa fa-plus-square-o clickable-icons"
-                 aria-hidden="true"/>
+              <i onClick={this.addNewConfig} className="fa fa-pencil-square-o" aria-hidden="true"/>
             </li>
             {(() => {
               if (this.state.showChildren) {
