@@ -6,7 +6,8 @@ import {bindActionCreators} from "redux";
 import {
   changeConfig,
   changeCurrentActiveConfiguration,
-  setError
+  setError,
+  addNewModifiedConfig
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import Form from "react-jsonschema-form";
@@ -23,7 +24,9 @@ class Editor extends Component {
         this.props.currentActiveConfigName,
         formData.formData,
         this.props.currentStateOfData,
-        this.props.currentActiveIndex)
+        this.props.currentActiveIndex);
+    this.props.addNewModifiedConfig(this.props.currentActiveConfigGroupName,
+        this.props.currentActiveConfigName, this.props.modifiedConfig);
   };
 
   onError = (error) => {
@@ -51,17 +54,17 @@ class Editor extends Component {
         form = [];
       }
 
-        return (
-            <div className={"editor-container"}>
-              
-              <Form schema={schema}
-                    onSubmit={this.onSubmit}
-                    onError={this.onError}
-                    formData={form}/>
+      return (
+          <div className={"editor-container"}>
 
-            </div>
+            <Form schema={schema}
+                  onSubmit={this.onSubmit}
+                  onError={this.onError}
+                  formData={form}/>
 
-        );
+          </div>
+
+      );
     }
     else {
       return <span/>
@@ -80,7 +83,8 @@ function mapStateToProps(state) {
     currentActiveJsonSchema: state.mainReducer.currentActiveConfiguration.jsonSchema,
     currentActiveDefaultConfig: state.mainReducer.currentActiveConfiguration.defaultConfig,
     configurationsMap: state.mainReducer.configurationsMap,
-    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults
+    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults,
+    modifiedConfig: state.mainReducer.modifiedConfig
   };
 }
 
@@ -88,7 +92,9 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     changeCurrentActiveConfiguration,
     changeConfig,
-    setError
+    setError,
+    addNewModifiedConfig
+
   }, dispatch)
 };
 

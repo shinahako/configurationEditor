@@ -27,13 +27,14 @@ class SidebarUpperLinkGroup extends Component {
 
   addNewConfig = () => {
     console.log("add new config");
-    this.props.addNewConfig(true,this.props.configGroupName);
+    this.props.addNewConfig(true, this.props.configGroupName);
   };
 
   render() {
-    let readableConfigGroupName = GeneralUtils.makeStringReadable(this.props.configGroupName);
+    let readableConfigGroupName = GeneralUtils.makeStringReadable(
+        this.props.configGroupName);
     if (GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap)) {
-      console.log("this.props.configurations",this.props.configurations);
+      console.log("this.props.configurations", this.props.configurations);
       return (
           <ul>
             <li>
@@ -43,7 +44,9 @@ class SidebarUpperLinkGroup extends Component {
                 {readableConfigGroupName}
               </span>
               </a>
-              <i onClick={this.addNewConfig} className="fa fa-pencil-square-o" aria-hidden="true"/>
+              <i onClick={this.addNewConfig}
+                 className="fa fa-pencil-square-o clickable-icons"
+                 aria-hidden="true"/>
             </li>
             {(() => {
               if (this.state.showChildren) {
@@ -53,8 +56,7 @@ class SidebarUpperLinkGroup extends Component {
                         configName={this.props.configurations[index].elementName}
                         index={index}
                         lengthOfConfigurations={this.props.configurations.length}
-                        schema={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
-                        defaultConfig={"http://etlexporter.vip.qa.ebay.com/v1/enrichers/getDefaultSettingsSchema?enricherName=NameNormalizationEnricher"}
+                        modified={this.props.modifiedConfig[this.props.configGroupName+this.props.configurations[index].elementName] ? true:false}
                     />
                 ))
               }
@@ -71,7 +73,8 @@ class SidebarUpperLinkGroup extends Component {
 
 function mapStateToProps(state) {
   return {
-    configurationsMap: state.mainReducer.configurationsMap
+    configurationsMap: state.mainReducer.configurationsMap,
+    modifiedConfig: state.mainReducer.modifiedConfig
   };
 }
 

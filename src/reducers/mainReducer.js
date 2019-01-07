@@ -85,6 +85,14 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
           errorMessage:action.errorMessage
         }
       });
+    case mainActions.SET_MODIFIED_CONFIGS:
+      return Object.assign({}, state, {
+        ...state,
+        modifiedConfigs:{
+          hasErrorOccurred:action.hasErrorOccurred,
+          errorMessage:action.errorMessage
+        }
+      });
     default:
       return state
   }

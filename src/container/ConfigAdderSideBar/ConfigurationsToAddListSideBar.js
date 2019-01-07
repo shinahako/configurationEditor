@@ -10,7 +10,7 @@ import {
 import {connect} from "react-redux";
 import ConfigAdderSidebarUpperLinkGroup
   from "./ConfigAdderSidebarUpperLinkGroup";
-import ConfigAdderSideBarCloser from "./ConfigAdderSideBarCloser";
+import ConfigAdderSideBarTop from "./ConfigAdderSideBarTop";
 
 class ConfigurationsToAddListSideBar extends Component {
   constructor(props) {
@@ -25,8 +25,8 @@ class ConfigurationsToAddListSideBar extends Component {
     return (
         <div id={"configAdderSideBar"}>
           <nav className="main-menu-config-adder">
-            <ConfigAdderSideBarCloser/>
-            <div className="listContent" id="style-5"><ConfigAdderSidebarUpperLinkGroup/></div>
+            <ConfigAdderSideBarTop/>
+            <div className="list-content-config-adder" id="style-5"><ConfigAdderSidebarUpperLinkGroup/></div>
           </nav>
         </div>
     );

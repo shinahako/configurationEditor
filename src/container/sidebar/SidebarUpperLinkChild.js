@@ -94,7 +94,7 @@ class SidebarUpperLinkGroup extends Component {
              onMouseUp={this.handleButtonRelease}>
                 <span style={{fontSize: "14px"}}
                       className="fa index "> {this.props.index} -</span>
-            <span className="nav-text three-dots-text">
+            <span className="nav-text three-dots-text" style={this.props.modified? {color:"red"}:{}}>
               {readableConfigName}
               </span>
             {(() => {

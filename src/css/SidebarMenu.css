@@ -40,13 +40,9 @@
 }
 
 .clickable-icons{
-  color:rgb(153, 153, 153);
+  color:#ced4da;
 }
 
-.close-icon{
-  float: right;
-  padding-top: 15px;
-}
 
 .clickable-icons:hover{
   color: white;

@@ -62,6 +62,8 @@ let initialState = {
   errorHandel:{
     hasErrorOccurred:false,
     errorMessage:""
+  },
+  modifiedConfigs:{
   }
 };
 
@@ -157,6 +159,12 @@ export const setError = (hasErrorOccurred,errorMessage) => (
       errorMessage
     });
 
+export const SET_MODIFIED_CONFIGS = 'SET_MODIFIED_CONFIGS';
+export const setModifiedConfigs = (modifiedConfig) => (
+    {
+      type: SET_MODIFIED_CONFIGS,
+      modifiedConfig: modifiedConfig
+    });
 
 export const initializeConfigurationToSchemaMap = () => {
 
@@ -223,6 +231,14 @@ export const fetchData = (etlName) => {
     }
   };
 };
+
+export const  addNewModifiedConfig = (configGroupName, configName, modifiedConfig) =>{
+  return (dispatch) => {
+    modifiedConfig["configGroupName"+"configName"]="modified";
+    dispatch(setModifiedConfigs(modifiedConfig));
+  }
+};
+
 
 export const  initializeCurrentStateOfData = (configurationsMap, currentStateOfData) =>{
   return (dispatch) => {
@@ -292,7 +308,7 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
       dispatch(saveToCurrentState(currentStateOfData));
       let configurationGroup = currentStateOfData[configGroup];
       if (configurationGroup !== null) {
-        ConfigurationMapUtils.arrayMove(configurationGroup, newIndex, oldIndex);
+        ConfigurationMapUtils.arrayMove(configurationGroup.configuration, newIndex, oldIndex);
         dispatch(orderChangerConfig(true,
             configGroup, configNameToChange, newIndex));
 

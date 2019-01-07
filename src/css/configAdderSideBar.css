@@ -28,13 +28,10 @@
   padding-top: 7px;
 }
 
-.clickable-icons{
-  color:rgb(153, 153, 153);
+.close-icon{
+  float: right;
 }
 
-.clickable-icons:hover{
-  color: white;
-}
 
 .search-string{
   padding-top: 17px;
@@ -46,6 +43,20 @@
   padding-top: 10px;
 }
 
+.list-content-config-adder{
+  height: calc(100% - 53px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-title{
+  padding-top: 15px;
+  padding-left: 20px;
+  color:#bdc2c9;
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: #bdc2c9 1px solid;
+}
 
 .main-menu-config-adder {
   overflow-y: auto;

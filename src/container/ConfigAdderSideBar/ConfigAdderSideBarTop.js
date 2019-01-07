@@ -8,7 +8,7 @@ import {
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 
-class ConfigAdderSideBarCloser extends Component {
+class ConfigAdderSideBarTop extends Component {
   constructor(props) {
     super(props);
 
@@ -23,7 +23,8 @@ class ConfigAdderSideBarCloser extends Component {
   
   render() {
       return (
-          <li>
+          <li className={"sidebar-title"}>
+            <span>Add Configuration</span>
             <i onClick={this.closeConfigurationAdderSidebar} className="fa fa-window-close-o clickable-icons close-icon" aria-hidden="true"/>
           </li>
          
@@ -44,4 +45,4 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch)
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConfigAdderSideBarCloser);
+export default connect(mapStateToProps, mapDispatchToProps)(ConfigAdderSideBarTop);
