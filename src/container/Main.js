@@ -20,7 +20,7 @@ class Main extends Component {
   render() {
     return (
         <div className="main">
-          <NavigationBar/>
+   {/*       <NavigationBar/>*/}
           <ConfigurationsListSideBar/>
           <ConfigurationsToAddListSideBar/>
          <Editor/>
