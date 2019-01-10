@@ -1,22 +1,17 @@
+import axios from "axios/index";
+
 class ServerUtils {
 
-  static checkIfMapIsNotEmpty(arr) {
-    try{
-    return Object.keys(arr).length>0;}
-    catch(err){
-      return false;
-    }
-  }
-
-  static makeStringReadable(string) {
-    try{
-      let s =string.replace(/([A-Z])/g, ' $1').trim();
-      return s.charAt(0).toUpperCase() + s.slice(1);}
-    catch(err){
-      return string;
-    }
+  static getDataFromApi(link) {
+    return axios.get("/getData", {
+      params: {
+        url: link
+      }
+    })
+    .then(response => {
+      return response;
+    })
   }
   
 }
-
 export default ServerUtils

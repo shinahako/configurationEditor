@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {properties} from "../properties"
 import ConfigurationMapUtils from "../Utils/ConfigurationMapUtils";
+import ServerUtils from "../Utils/ServerUtils";
 
 //const axios = require('axios');
 axios.defaults.withCredentials = true;
@@ -206,7 +207,7 @@ export const fetchData = (etlName) => {
 
     else {
       let etlNameWithoutSpaces = etlName.split(' ').join('%20');
-      return getDataFromApi(properties.etlLink + etlNameWithoutSpaces)
+      return ServerUtils.getDataFromApi(properties.etlLink + etlNameWithoutSpaces)
       .then(etlData => {
         console.log("etlData", etlData);
         let etlDataLocal = getEtlLocal();
@@ -297,20 +298,9 @@ function createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray, dictionaryArr,
 }
 
 
-function getDataFromApi(link) {
-  return axios.get("/getData", {
-    params: {
-      url: link
-    }
-  })
-  .then(response => {
-    return response;
-  })
-}
-
 function getAllDictionary(dictionaryLinksArray) {
   //let linksArr = properties.dictionaryData.dictionaryUrls;
-  return axios.all(dictionaryLinksArray.map(l =>getDataFromApi(l)))
+  return axios.all(dictionaryLinksArray.map(l =>ServerUtils.getDataFromApi(l)))
   .then(axios.spread(function (...res) {
     return res;
   }));

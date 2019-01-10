@@ -14,6 +14,7 @@ import {connect} from "react-redux";
 import OrderChangerArrow from "./OrderChangerArrow";
 import GeneralUtils from "../../Utils/GeneralUtils";
 import axios from "axios/index";
+import ServerUtils from "../../Utils/ServerUtils";
 
 class SidebarUpperLinkGroup extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class SidebarUpperLinkGroup extends Component {
       
       let jsonSchemaLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].jsonSchema;
       let defaultSettingsLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].defaultSettings;
-      axios.all([axios.get(jsonSchemaLink), axios.get(defaultSettingsLink)])
+      axios.all([ServerUtils.getDataFromApi(jsonSchemaLink), ServerUtils.getDataFromApi(defaultSettingsLink)])
       .then(axios.spread(function (jsonSchema, defaultSettings) {
         self.changeCurrentActiveConfiguration(jsonSchema, defaultSettings);
       }))
@@ -50,6 +51,7 @@ class SidebarUpperLinkGroup extends Component {
       
     }
   };
+  
 
   changeCurrentActiveConfiguration(jsonSchema, defaultSettings) {
     this.props.changeCurrentActiveConfiguration(this.props.configGroupName,
