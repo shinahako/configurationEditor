@@ -251,7 +251,7 @@ export const fetchData = (etlName) => {
 export const addNewModifiedConfig = (configGroupName, configName,
     modifiedConfig) => {
   return (dispatch) => {
-    modifiedConfig["configGroupName" + "configName"] = "modified";
+    modifiedConfig[configGroupName + configName] = [];
     dispatch(setModifiedConfigs(modifiedConfig));
   }
 };

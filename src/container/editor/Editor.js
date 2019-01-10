@@ -26,7 +26,7 @@ class Editor extends Component {
         this.props.currentStateOfData,
         this.props.currentActiveIndex);
     this.props.addNewModifiedConfig(this.props.currentActiveConfigGroupName,
-        this.props.currentActiveConfigName, this.props.modifiedConfig);
+        this.props.currentActiveConfigName, this.props.modifiedConfigs);
   };
 
   onError = (error) => {
@@ -73,6 +73,8 @@ class Editor extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log("state.mainReducer",state.mainReducer);
+  console.log("modifiedConfigs",state.mainReducer.modifiedConfigs);
   return {
     currentStateOfData: state.mainReducer.currentStateOfData,
     currentActiveConfiguration: state.mainReducer.currentActiveConfiguration,
@@ -84,7 +86,7 @@ function mapStateToProps(state) {
     currentActiveDefaultConfig: state.mainReducer.currentActiveConfiguration.defaultConfig,
     configurationsMap: state.mainReducer.configurationsMap,
     jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults,
-    modifiedConfig: state.mainReducer.modifiedConfig
+    modifiedConfigs: state.mainReducer.modifiedConfigs
   };
 }
 
