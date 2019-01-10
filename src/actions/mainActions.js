@@ -206,11 +206,7 @@ export const fetchData = (etlName) => {
 
     else {
       let etlNameWithoutSpaces = etlName.split(' ').join('%20');
-      return axios.get("/ping", {
-        params: {
-          foo: 'bar'
-        }
-      })
+      return getDataFromApi(properties.etlLink + etlNameWithoutSpaces)
       .then(etlData => {
         console.log("etlData", etlData);
         let etlDataLocal = getEtlLocal();
@@ -228,10 +224,9 @@ export const fetchData = (etlName) => {
             currentStateOfData = dispatch(
                 initializeCurrentStateOfData(configurationsMap,
                     currentStateOfData));
-            /*
                         console.log("!!!!configurationsMap", configurationsMap);
                         console.log("!!!!jsonSchemaAndDefaults", jsonSchemaAndDefaults);
-                        console.log("!!!!currentStateOfData", currentStateOfData);*/
+                        console.log("!!!!currentStateOfData", currentStateOfData);
             dispatch(initializeConfigurationDataMap(configurationsMap,
                 jsonSchemaAndDefaults));
             dispatch(saveCurrentStateOfData(currentStateOfData));
@@ -248,6 +243,9 @@ export const fetchData = (etlName) => {
     }
   };
 };
+
+
+
 
 export const addNewModifiedConfig = (configGroupName, configName,
     modifiedConfig) => {
@@ -298,21 +296,21 @@ function createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray, dictionaryArr,
   console.log("jsonSchemaAndDefaults", jsonSchemaAndDefaults);
 }
 
+
 function getDataFromApi(link) {
-  return axios.get(link)
+  return axios.get("/getData", {
+    params: {
+      url: link
+    }
+  })
   .then(response => {
     return response;
   })
 }
 
-function getDataOfEtl(etlName) {
-  return axios.get(properties.etlLink
-      + etlName);
-}
-
 function getAllDictionary(dictionaryLinksArray) {
   //let linksArr = properties.dictionaryData.dictionaryUrls;
-  return axios.all(dictionaryLinksArray.map(l => axios.get(l)))
+  return axios.all(dictionaryLinksArray.map(l =>getDataFromApi(l)))
   .then(axios.spread(function (...res) {
     return res;
   }));
