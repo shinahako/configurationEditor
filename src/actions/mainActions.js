@@ -2,6 +2,18 @@ import axios from 'axios';
 import {properties} from "../properties"
 import ConfigurationMapUtils from "../Utils/ConfigurationMapUtils";
 
+//const axios = require('axios');
+axios.defaults.withCredentials = true;
+const base_axios = axios.create({
+  baseURL: 'http://l-tlv-00313372:3000/',
+  headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  },
+  timeout: 10000,
+  withCredentials: true
+});
+
 let nextTodoId = 0;
 let initialState = {
   data: {
@@ -59,12 +71,11 @@ let initialState = {
   preLoaders: {
     isEtlLoading: false
   },
-  errorHandel:{
-    hasErrorOccurred:false,
-    errorMessage:""
+  errorHandel: {
+    hasErrorOccurred: false,
+    errorMessage: ""
   },
-  modifiedConfigs:{
-  }
+  modifiedConfigs: {}
 };
 
 export const initialData = {
@@ -93,7 +104,7 @@ export const setConfigurationsMap = (configurationsMap) => ({
 
 export const CHANGE_CURRENT_ACTIVE_CONFIGURATION = 'CHANGE_CURRENT_ACTIVE_CONFIGURATION';
 export const changeCurrentActiveConfiguration = (configGroupName, configName,
-    index, editingIsOn,jsonSchema,defaultConfig) => (
+    index, editingIsOn, jsonSchema, defaultConfig) => (
     {
       type: CHANGE_CURRENT_ACTIVE_CONFIGURATION,
       configGroupName,
@@ -152,7 +163,7 @@ export const setIfEtlIsLoading = (isEtlLoading) => (
     });
 
 export const SET_ERROR = 'SET_ERROR';
-export const setError = (hasErrorOccurred,errorMessage) => (
+export const setError = (hasErrorOccurred, errorMessage) => (
     {
       type: SET_ERROR,
       hasErrorOccurred: hasErrorOccurred,
@@ -192,29 +203,35 @@ export const fetchData = (etlName) => {
       dispatch(initializeCurrentStateOfData(etlDataLocal, configurationsMap,
           currentStateOfData));
     }
-    
+
     else {
       let etlNameWithoutSpaces = etlName.split(' ').join('%20');
-      return axios.get(properties.etlLink + etlNameWithoutSpaces)
-      .then(etlData =>  {
+      return axios.get("/ping", {
+        params: {
+          foo: 'bar'
+        }
+      })
+      .then(etlData => {
         console.log("etlData", etlData);
         let etlDataLocal = getEtlLocal();
         let configurationsMap = [];
         let jsonSchemaAndDefaults = [];
-        let dictionaryLinksArray=[];
-   
+        let dictionaryLinksArray = [];
+
         if (etlDataLocal != null) {
-          dictionaryLinksArray =  ConfigurationMapUtils.getAllConfigurationGroups(
+          dictionaryLinksArray = ConfigurationMapUtils.getAllConfigurationGroups(
               etlDataLocal.data.entity, configurationsMap);
           getAllDictionary(dictionaryLinksArray.linksArray).then(dictionary => {
-            console.log("dictionary",dictionary);
-            createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray,dictionary, jsonSchemaAndDefaults);
-            currentStateOfData = dispatch(initializeCurrentStateOfData(configurationsMap,
-                currentStateOfData));
-/*
-            console.log("!!!!configurationsMap", configurationsMap);
-            console.log("!!!!jsonSchemaAndDefaults", jsonSchemaAndDefaults);
-            console.log("!!!!currentStateOfData", currentStateOfData);*/
+            console.log("dictionary", dictionary);
+            createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray, dictionary,
+                jsonSchemaAndDefaults);
+            currentStateOfData = dispatch(
+                initializeCurrentStateOfData(configurationsMap,
+                    currentStateOfData));
+            /*
+                        console.log("!!!!configurationsMap", configurationsMap);
+                        console.log("!!!!jsonSchemaAndDefaults", jsonSchemaAndDefaults);
+                        console.log("!!!!currentStateOfData", currentStateOfData);*/
             dispatch(initializeConfigurationDataMap(configurationsMap,
                 jsonSchemaAndDefaults));
             dispatch(saveCurrentStateOfData(currentStateOfData));
@@ -232,15 +249,16 @@ export const fetchData = (etlName) => {
   };
 };
 
-export const  addNewModifiedConfig = (configGroupName, configName, modifiedConfig) =>{
+export const addNewModifiedConfig = (configGroupName, configName,
+    modifiedConfig) => {
   return (dispatch) => {
-    modifiedConfig["configGroupName"+"configName"]="modified";
+    modifiedConfig["configGroupName" + "configName"] = "modified";
     dispatch(setModifiedConfigs(modifiedConfig));
   }
 };
 
-
-export const  initializeCurrentStateOfData = (configurationsMap, currentStateOfData) =>{
+export const initializeCurrentStateOfData = (configurationsMap,
+    currentStateOfData) => {
   return (dispatch) => {
     for (let configGroup in configurationsMap) {
       currentStateOfData[configGroup] = configurationsMap[configGroup];
@@ -249,7 +267,7 @@ export const  initializeCurrentStateOfData = (configurationsMap, currentStateOfD
   }
 };
 
-function createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray,dictionaryArr,
+function createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray, dictionaryArr,
     jsonSchemaAndDefaults) {
   let configurationGroupNamesArr = dictionaryLinksArray.groupNames;
   if (dictionaryArr != null) {
@@ -265,21 +283,20 @@ function createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray,dictionaryArr,
           jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["jsonSchema"] = "";
           for (let index in dicEntity[i]["links"]) {
             if (dicEntity[i]["links"][index].rel === "Default Settings") {
-                    jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["defaultSettings"] = dicEntity[i]["links"][index].href;
+              jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["defaultSettings"] = dicEntity[i]["links"][index].href;
             }
             else if (dicEntity[i]["links"][index].rel
                 === "Default Settings JSON Schema") {
-                    jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["jsonSchema"] = dicEntity[i]["links"][index].href;
-      
+              jsonSchemaAndDefaults[configurationGroupName][dicEntity[i]["elementName"]]["jsonSchema"] = dicEntity[i]["links"][index].href;
+
             }
           }
         }
       }
     }
   }
-  console.log("jsonSchemaAndDefaults",jsonSchemaAndDefaults);
+  console.log("jsonSchemaAndDefaults", jsonSchemaAndDefaults);
 }
-
 
 function getDataFromApi(link) {
   return axios.get(link)
@@ -308,7 +325,8 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
       dispatch(saveToCurrentState(currentStateOfData));
       let configurationGroup = currentStateOfData[configGroup];
       if (configurationGroup !== null) {
-        ConfigurationMapUtils.arrayMove(configurationGroup.configuration, newIndex, oldIndex);
+        ConfigurationMapUtils.arrayMove(configurationGroup.configuration,
+            newIndex, oldIndex);
         dispatch(orderChangerConfig(true,
             configGroup, configNameToChange, newIndex));
 
@@ -356,7 +374,7 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
       };
       configurationGroup.configuration[index].elementName = configNameToAdd;
       configurationGroup.configuration[index].elementSettings = configSettings;
-      configurationGroup.links=[
+      configurationGroup.links = [
         {
           "rel": "Dictionary",
           "href": "http://etlexporter.vip.qa.ebay.com/v1/enrichers/getAll"
@@ -371,12 +389,11 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
   }
 };
 
-
 export const removeConfig = (configGroup, index, currentStateOfData) => {
   return (dispatch) => {
     if (index !== null && configGroup !== null) {
       let configurationGroup = currentStateOfData[configGroup];
-      configurationGroup.configuration.splice(index,1);
+      configurationGroup.configuration.splice(index, 1);
       dispatch(saveCurrentStateOfData(currentStateOfData));
       let configurationsMap = [];
       ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
@@ -385,7 +402,6 @@ export const removeConfig = (configGroup, index, currentStateOfData) => {
     }
   }
 };
-
 
 export const postNewConfiguration = (currentStateOfData) => {
   return (dispatch) => {
@@ -401,8 +417,9 @@ export const postNewConfiguration = (currentStateOfData) => {
   }
 };
 
-function getEtlLocal(){
-  return {data:{
+function getEtlLocal() {
+  return {
+    data: {
       "responseStatus": "SUCCESS",
       "entity": {
         "versionId": "5c2a2e800fdd4d11d7b6a28f",
@@ -1667,6 +1684,7 @@ function getEtlLocal(){
         "links": []
       },
       "errors": []
-    }};
+    }
+  };
 }
 
