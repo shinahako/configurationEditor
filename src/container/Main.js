@@ -7,6 +7,7 @@ import Editor from "./editor/Editor";
 import ConfigurationsToAddListSideBar
   from "./ConfigAdderSideBar/ConfigurationsToAddListSideBar";
 import NavigationBar from "./navbar/NavigationBar";
+import {Row} from "react-bootstrap";
 
 class Main extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class Main extends Component {
   render() {
     return (
         <div className="main">
-   {/*       <NavigationBar/>*/}
+          <NavigationBar/>
           <ConfigurationsListSideBar/>
           <ConfigurationsToAddListSideBar/>
          <Editor/>

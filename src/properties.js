@@ -33,8 +33,3 @@ export const properties = {
   }
 
 };
-
-/*
-
-for(var k in i.entity){ if(k.contains("Configuration")) console.log(k)}*/
-//http://d-tlv-13004852:8010/v1/configuration/getActive?etlName=Comics%20US

@@ -6,7 +6,6 @@ import * as mainActions from '../actions/mainActions';
 const mainReducer = (state = initialData.INITIAL_STATE, action) => {
   switch (action.type) {
     case mainActions.OPEN_RELEVANT_RECIPE:
-      console.log("mmhmm");
     case mainActions.INITIALIZE_CONFIGURATION_DATA_MAP:
       return Object.assign({}, state, {
         ...state,
@@ -88,6 +87,13 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
         preLoaders: {
           isEtlLoading: action.isEtlLoading
         }
+      });  
+    case mainActions.LIST_OF_ETLS_LOADING:
+      return Object.assign({}, state, {
+        ...state,
+        preLoaders: {
+          listOfEtlsAreLoading: action.listOfEtlsAreLoading
+        }
       });    
       case mainActions.SET_ERROR:
       return Object.assign({}, state, {
@@ -101,6 +107,11 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
       return Object.assign({}, state, {
         ...state,
         modifiedConfigs:action.modifiedConfig
+      });
+    case mainActions.SET_ALL_ETLS_LIST:
+      return Object.assign({}, state, {
+        ...state,
+        allEtlsList:action.allEtlsList
       });
     default:
       return state

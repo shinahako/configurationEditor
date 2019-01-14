@@ -24,14 +24,12 @@ class ConfigurationsListSideBar extends Component {
   render() {
     return (
         <div>
-          <div className="area"/>
           <nav className="main-menu">
             <SidebarUpperSearchBar/>
             <div className="listContent" id="style-5">
           
             {(() => {
               let indents = [];
-              console.log("this.props.configurationsMap",this.props.configurationsMap);
               for (let configGroupName in this.props.configurationsMap) {
                 console.log(configGroupName,this.props.configurationsMap[configGroupName].configuration);
                   indents.push(<SidebarUpperLinkGroup configGroupName={configGroupName}

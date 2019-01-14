@@ -42,7 +42,6 @@ class SidebarUpperLinkGroup extends Component {
         self.changeCurrentActiveConfiguration(jsonSchema, defaultSettings);
       }))
       .catch(error => {
-        console.log();
         this.props.setIfEtlIsLoading(false);
         
       });

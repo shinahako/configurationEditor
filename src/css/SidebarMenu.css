@@ -72,9 +72,9 @@
   background:#354052;
   border-right:1px solid #e5e5e5;
   position: fixed;
-  top:0;
+  top:52px;
   bottom:0;
-  height:100%;
+  height:calc(100% - 52px);;
   left:0;
   width:360px;
   -webkit-transition:width .05s linear;

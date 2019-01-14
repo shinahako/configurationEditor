@@ -96,8 +96,6 @@ class Editor extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log("state.mainReducer",state.mainReducer);
-  console.log("modifiedConfigs",state.mainReducer.modifiedConfigs);
   return {
     currentStateOfData: state.mainReducer.currentStateOfData,
     currentActiveConfiguration: state.mainReducer.currentActiveConfiguration,
