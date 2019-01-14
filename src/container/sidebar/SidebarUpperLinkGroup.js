@@ -19,7 +19,7 @@ class SidebarUpperLinkGroup extends Component {
     }
   }
   shouldComponentUpdate(nextProps) {
-    console.log("update",this.props.value,nextProps.value);
+    console.log("update",this.props,nextProps);
   }
 
   changeVisibilityOfChildren = () => {
@@ -37,7 +37,6 @@ class SidebarUpperLinkGroup extends Component {
     let readableConfigGroupName = GeneralUtils.makeStringReadable(
         this.props.configGroupName);
     if (GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap)) {
-      console.log("this.props.configurations", this.props.configurations);
       return (
           <ul>
             <li>

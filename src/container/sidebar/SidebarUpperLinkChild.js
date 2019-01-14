@@ -39,8 +39,6 @@ class SidebarUpperLinkGroup extends Component {
       let defaultSettingsLink = this.props.jsonSchemaAndDefaults[self.props.configGroupName][self.props.configName].defaultSettings;
       axios.all([ServerUtils.getDataFromApi(jsonSchemaLink), ServerUtils.getDataFromApi(defaultSettingsLink)])
       .then(axios.spread(function (jsonSchema, defaultSettings) {
-        console.log("jsonSchema",jsonSchema);
-        console.log("defaultSettings",defaultSettings);
         self.changeCurrentActiveConfiguration(jsonSchema, defaultSettings);
       }))
       .catch(error => {

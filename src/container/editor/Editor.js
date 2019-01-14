@@ -35,7 +35,6 @@ class Editor extends Component {
 
 
   onSubmit = (formData) => {
-    console.log("Data submitted: ", formData);
     this.props.changeConfig(this.props.currentActiveConfigGroupName,
         this.props.currentActiveConfigName,
         formData.formData,
@@ -62,7 +61,6 @@ class Editor extends Component {
 
         );
       }
-      console.log("schema",this.props.currentActiveJsonSchema);
       schema = this.props.currentActiveJsonSchema;
       try {
         form = this.props.configurationsMap[this.props.currentActiveConfigGroupName].configuration[this.props.currentActiveIndex].elementSetting;

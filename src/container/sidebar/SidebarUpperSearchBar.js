@@ -23,7 +23,6 @@ class SidebarUpperSearchBar extends Component {
     if (e.key === 'Enter') {
       e.preventDefault();
       e.stopPropagation();
-      console.log('do validate');
       this.props.setIfEtlIsLoading(true);
       this.props.changeCurrentEtl(e.target.value);
       this.props.fetchData(e.target.value);

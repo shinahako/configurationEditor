@@ -41,6 +41,18 @@ const mainReducer = (state = initialData.INITIAL_STATE, action) => {
           currentIndex:null
         }
       });
+    case mainActions.UPDATE_CURRENT_STATE_OF_DATA_AND_CONFIGURATION_MAP:
+      return Object.assign({}, state, {
+        ...state,
+        currentStateOfData: action.newStateOfData,
+        configurationsMap: action.configurationsMap,
+        orderChangerConfig:{
+          changeOrderModeIsOn: false,
+          configGroupName:"",
+          configName:"",
+          currentIndex:null
+        }
+      });
     case mainActions.CHANGE_ORDER_MODE_IS_ON:
       return Object.assign({}, state, {
         ...state,

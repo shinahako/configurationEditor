@@ -130,6 +130,14 @@ export const saveCurrentStateOfData = (newStateOfData) => (
       newStateOfData
     });
 
+export const UPDATE_CURRENT_STATE_OF_DATA_AND_CONFIGURATION_MAP = 'UPDATE_CURRENT_STATE_OF_DATA_AND_CONFIGURATION_MAP';
+export const saveCurrentStateOfDataAndConfigMap = (newStateOfData,configurationsMap) => (
+    {
+      type: UPDATE_CURRENT_STATE_OF_DATA_AND_CONFIGURATION_MAP,
+      newStateOfData,
+      configurationsMap
+    });
+
 export const ORDER_CHANGER_CONFIG = 'ORDER_CHANGER_CONFIG';
 export const orderChangerConfig = (changeOrderModeIsOn,
     configGroupName, configName, currentIndex) => (
@@ -209,7 +217,6 @@ export const fetchData = (etlName) => {
       let etlNameWithoutSpaces = etlName.split(' ').join('%20');
       return ServerUtils.getDataFromApi(properties.etlLink + etlNameWithoutSpaces)
       .then(etlData => {
-        console.log("etlData", etlData);
         let configurationsMap = [];
         let jsonSchemaAndDefaults = [];
         let dictionaryLinksArray = [];
@@ -218,7 +225,6 @@ export const fetchData = (etlName) => {
           dictionaryLinksArray = ConfigurationMapUtils.getAllConfigurationGroups(
               etlData.data.entity, configurationsMap);
           getAllDictionary(dictionaryLinksArray.linksArray).then(dictionary => {
-            console.log("dictionary", dictionary);
             createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray, dictionary,
                 jsonSchemaAndDefaults);
             currentStateOfData = dispatch(
@@ -293,7 +299,6 @@ function createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray, dictionaryArr,
       }
     }
   }
-  console.log("jsonSchemaAndDefaults", jsonSchemaAndDefaults);
 }
 
 
@@ -324,12 +329,13 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
 
 export const saveToCurrentState = (currentStateOfData) => {
   return (dispatch) => {
-    debugger;
-    dispatch(saveCurrentStateOfData(currentStateOfData));
+    const currentStateOfDataTemp = Object.assign({}, currentStateOfData);
     let configurationsMap = [];
-    ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
+    ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfDataTemp,
         configurationsMap);
-    dispatch(setConfigurationsMap(configurationsMap));
+    debugger;
+    dispatch(saveCurrentStateOfDataAndConfigMap(currentStateOfDataTemp,configurationsMap));
+  //  dispatch(setConfigurationsMap(configurationsMap));
   }
 };
 
@@ -353,7 +359,6 @@ export const changeConfig = (configGroup, configNameToChange, configSettings,
 export const createNewConfig = (configGroup, configNameToAdd, configSettings,
     currentStateOfData) => {
   return (dispatch) => {
-    debugger;
     if (configNameToAdd !== null && configGroup !== null) {
       let configurationGroup = currentStateOfData[configGroup];
       let index = configurationGroup.configuration.length;

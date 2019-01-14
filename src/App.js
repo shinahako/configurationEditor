@@ -24,7 +24,6 @@ class App extends Component {
       let params = queryString.parse(url);
       console.log(params);*/
     let params = new URLSearchParams(window.location.search);
-    console.log("params",params);
   }
 
 
