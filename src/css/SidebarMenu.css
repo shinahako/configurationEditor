@@ -21,6 +21,10 @@
   font-size:17px;
 }
 
+.fa.config-actions {
+  width: 60px;
+}
+
 .index{
   font-size: 14px;
   font-family: Open Sans,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;
@@ -32,7 +36,7 @@
 
 .three-dots-text{
   display: inline-block;
-  width: 218px !important;
+  width: 237px !important;
   white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
@@ -114,6 +118,7 @@
   font-size:18px;
 }
 
+
 .main-menu .nav-text {
   text-align: left;
   position:relative;
@@ -123,6 +128,9 @@
   font-family: Open Sans,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;
 }
 
+.main-menu .nav-text.group{
+  font-weight: bold;
+}
 
 
 .bottom-link {

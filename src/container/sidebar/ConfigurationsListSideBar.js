@@ -22,6 +22,7 @@ class ConfigurationsListSideBar extends Component {
 
 
   render() {
+    console.log("renderd2222");
     return (
         <div>
           <div className="area"/>
@@ -31,6 +32,7 @@ class ConfigurationsListSideBar extends Component {
           
             {(() => {
               let indents = [];
+              console.log("this.props.configurationsMap",this.props.configurationsMap);
               for (let configGroupName in this.props.configurationsMap) {
                   indents.push(<SidebarUpperLinkGroup configGroupName={configGroupName}
                                                       configurations={this.props.configurationsMap[configGroupName].configuration}

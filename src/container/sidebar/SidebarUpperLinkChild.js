@@ -104,9 +104,10 @@ class SidebarUpperLinkGroup extends Component {
             <span className="nav-text three-dots-text" style={this.props.modified? {color:"red"}:{}}>
               {readableConfigName}
               </span>
+            <div className={"fa config-actions"}>
             {(() => {
 
-              if (this.props.isAddNewConfigOn) {
+              if (this.props.isAddNewConfigOn && !this.props.showArrows) {
                 return <ConfigurationRemover direction={"up"}
                                           index={this.props.index}
                                           configGroupName={this.props.configGroupName}
@@ -131,7 +132,7 @@ class SidebarUpperLinkGroup extends Component {
                                           configName={this.props.configName}/>
               }
             })()}
-
+            </div>
           </a>
         </li>
 

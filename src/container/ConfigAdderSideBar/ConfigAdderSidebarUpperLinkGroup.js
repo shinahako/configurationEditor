@@ -23,7 +23,7 @@ class ConfigAdderSidebarUpperLinkGroup extends Component {
             <li>
               <a>
                 <i className="fa fa-folder fa-2x"/>
-                <span className="nav-text three-dots-text">
+                <span className="nav-text group three-dots-text">
                 {readableConfigGroupName}
               </span>
               </a>

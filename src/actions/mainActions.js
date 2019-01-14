@@ -324,6 +324,7 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
 
 export const saveToCurrentState = (currentStateOfData) => {
   return (dispatch) => {
+    debugger;
     dispatch(saveCurrentStateOfData(currentStateOfData));
     let configurationsMap = [];
     ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
@@ -337,11 +338,11 @@ export const changeConfig = (configGroup, configNameToChange, configSettings,
   return (dispatch) => {
     if (currentStateOfData[configGroup] !== null) {
       let configurationGroup = currentStateOfData[configGroup];
-      if (configurationGroup.length > 0) {
-        if (configurationGroup[index] != null) {
-          if (configurationGroup[index].elementName === configNameToChange) {
-            configurationGroup[index].elementSettings = configSettings;
-            dispatch(saveCurrentStateOfData(currentStateOfData));
+      if (configurationGroup.configuration.length > 0) {
+        if (configurationGroup.configuration[index] != null) {
+          if (configurationGroup.configuration[index].elementName === configNameToChange) {
+            configurationGroup.configuration[index].elementSetting = configSettings;
+            dispatch(saveToCurrentState(currentStateOfData));
           }
         }
       }
@@ -352,26 +353,17 @@ export const changeConfig = (configGroup, configNameToChange, configSettings,
 export const createNewConfig = (configGroup, configNameToAdd, configSettings,
     currentStateOfData) => {
   return (dispatch) => {
+    debugger;
     if (configNameToAdd !== null && configGroup !== null) {
       let configurationGroup = currentStateOfData[configGroup];
       let index = configurationGroup.configuration.length;
       configurationGroup.configuration[index] = {
         "elementName": "",
-        "settings": {}
+        "elementSetting": {}
       };
       configurationGroup.configuration[index].elementName = configNameToAdd;
-      configurationGroup.configuration[index].elementSettings = configSettings;
-      configurationGroup.links = [
-        {
-          "rel": "Dictionary",
-          "href": "http://etlexporter.vip.qa.ebay.com/v1/enrichers/getAll"
-        }
-      ];
-      dispatch(saveCurrentStateOfData(currentStateOfData));
-      let configurationsMap = [];
-      ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
-          configurationsMap);
-      dispatch(setConfigurationsMap(configurationsMap));
+      configurationGroup.configuration[index].elementSetting = configSettings;
+      dispatch(saveToCurrentState(currentStateOfData));
     }
   }
 };

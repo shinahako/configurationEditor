@@ -18,7 +18,7 @@ class Editor extends Component {
   constructor(props) {
     super(props);
   }
-
+  
   onBeforeDragStart = () => {
     /*...*/
   };
@@ -73,7 +73,7 @@ class Editor extends Component {
 
       return (
           <div className={"editor-container"}>
-            <DragDropContext
+{/*            <DragDropContext
                 onBeforeDragStart={this.onBeforeDragStart}
                 onDragStart={this.onDragStart}
                 onDragUpdate={this.onDragUpdate}
@@ -81,7 +81,7 @@ class Editor extends Component {
             >
               <div>Hello world</div>
               <div>Hello world2</div>
-            </DragDropContext>
+            </DragDropContext>*/}
             <Form schema={schema}
                   onSubmit={this.onSubmit}
                   onError={this.onError}

@@ -18,6 +18,9 @@ class SidebarUpperLinkGroup extends Component {
       showChildren: true
     }
   }
+  shouldComponentUpdate(nextProps) {
+    console.log("update",this.props.value,nextProps.value);
+  }
 
   changeVisibilityOfChildren = () => {
     this.setState({
@@ -26,12 +29,11 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   addNewConfig = () => {
-    console.log("add new config");
     this.props.addNewConfig(true, this.props.configGroupName);
   };
 
   render() {
-    console.log("renderd");
+    console.log("renderd111");
     let readableConfigGroupName = GeneralUtils.makeStringReadable(
         this.props.configGroupName);
     if (GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap)) {
@@ -41,7 +43,7 @@ class SidebarUpperLinkGroup extends Component {
             <li>
               <a onClick={this.changeVisibilityOfChildren}>
                 <i className="fa fa-folder fa-2x"/>
-                <span className="nav-text three-dots-text">
+                <span className="nav-text group three-dots-text">
                 {readableConfigGroupName}
               </span>
               </a>
@@ -51,7 +53,7 @@ class SidebarUpperLinkGroup extends Component {
             </li>
             {(() => {
               if (this.state.showChildren) {
-                 console.log("lengthOfConfigurations",this.props.configurations.length,this.props.configurations);
+                 console.log("mdified0",this.props.modifiedConfigs && this.props.modifiedConfigs[this.props.configGroupName+this.props.configurations[0].elementName] ? true:false);
                 return this.props.configurations.map((item, index) => (
                     <SidebarUpperLinkChild
                         configGroupName={this.props.configGroupName}
@@ -76,7 +78,16 @@ class SidebarUpperLinkGroup extends Component {
 function mapStateToProps(state) {
   return {
     configurationsMap: state.mainReducer.configurationsMap,
-    modifiedConfigs: state.mainReducer.modifiedConfigs
+    modifiedConfigs: state.mainReducer.modifiedConfigs,
+    currentStateOfData: state.mainReducer.currentStateOfData,
+    currentActiveConfiguration: state.mainReducer.currentActiveConfiguration,
+    isEditingOn: state.mainReducer.currentActiveConfiguration.editingIsOn,
+    currentActiveConfigName: state.mainReducer.currentActiveConfiguration.configName,
+    currentActiveIndex: state.mainReducer.currentActiveConfiguration.index,
+    currentActiveConfigGroupName: state.mainReducer.currentActiveConfiguration.configGroupName,
+    currentActiveJsonSchema: state.mainReducer.currentActiveConfiguration.jsonSchema,
+    currentActiveDefaultConfig: state.mainReducer.currentActiveConfiguration.defaultConfig,
+    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults
   };
 }
 

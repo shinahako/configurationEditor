@@ -27,6 +27,7 @@
   height: calc(100% - 53px);
   overflow-y: auto;
   overflow-x: hidden;
+  padding-left: 10px;
 }
 
 .sidebar-title{
@@ -63,7 +64,7 @@
 .main-menu-config-adder li {
   position:relative;
   display:inline-table;
-  width:300px;
+  width:360px;
 }
 
 .main-menu-config-adder li>a {
