@@ -15,6 +15,7 @@ import OrderChangerArrow from "./OrderChangerArrow";
 import GeneralUtils from "../../Utils/GeneralUtils";
 import axios from "axios/index";
 import ServerUtils from "../../Utils/ServerUtils";
+import ConfigurationRemover from "./ConfigurationRemover";
 
 class SidebarUpperLinkGroup extends Component {
   constructor(props) {
@@ -105,6 +106,15 @@ class SidebarUpperLinkGroup extends Component {
               </span>
             {(() => {
 
+              if (this.props.isAddNewConfigOn) {
+                return <ConfigurationRemover direction={"up"}
+                                          index={this.props.index}
+                                          configGroupName={this.props.configGroupName}
+                                          configName={this.props.configName}/>
+              }
+            })()}            
+            {(() => {
+
               if (this.props.showArrows && this.props.index > 0) {
                 return <OrderChangerArrow direction={"up"}
                                           index={this.props.index}
@@ -138,7 +148,8 @@ function mapStateToProps(state, ownProps) {
     === ownProps.configGroupName
     && state.mainReducer.orderChangerConfig.configName === ownProps.configName
     && state.mainReducer.orderChangerConfig.currentIndex === ownProps.index,
-    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults
+    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults,    
+    isAddNewConfigOn: state.mainReducer.addNewConfig.isAddNewConfigOn
   };
 }
 

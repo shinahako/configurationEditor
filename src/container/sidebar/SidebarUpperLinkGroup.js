@@ -51,7 +51,7 @@ class SidebarUpperLinkGroup extends Component {
             </li>
             {(() => {
               if (this.state.showChildren) {
-                 console.log("asassasa",this.props.modifiedConfigs,this.props.configGroupName,this.props.configurations);
+                 console.log("lengthOfConfigurations",this.props.configurations.length,this.props.configurations);
                 return this.props.configurations.map((item, index) => (
                     <SidebarUpperLinkChild
                         configGroupName={this.props.configGroupName}

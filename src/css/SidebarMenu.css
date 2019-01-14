@@ -8,8 +8,9 @@
 }
 
 .fa-2x {
-  font-size: 2em;
+  font-size: 19px;
 }
+
 .fa {
   position: relative;
   display: table-cell;
@@ -31,7 +32,7 @@
 
 .three-dots-text{
   display: inline-block;
-  width: 263px !important;
+  width: 218px !important;
   white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
@@ -85,7 +86,7 @@
 .main-menu li {
   position:relative;
   display:inline-table;
-  width:365px;
+  width:360px;
 }
 
 .main-menu li>a {
