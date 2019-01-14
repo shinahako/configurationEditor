@@ -90,18 +90,20 @@ class SidebarUpperLinkGroup extends Component {
         this.props.configName);
     return (
         <li className={"child-link"}>
-          <a onClick={this.openConfiguration}
+          <a 
+              
+              onClick={this.openConfiguration}
              onTouchStart={this.handleButtonPress}
              onTouchEnd={this.handleButtonRelease}
              onMouseDown={this.handleButtonPress}
              onMouseUp={this.handleButtonRelease}>
                 <span style={{fontSize: "14px"}}
                       className="fa index "> {this.props.index} -</span>
-            <span className="nav-text three-dots-text" style={this.props.modified? {color:"#8bc34a"}:{}}>
+            <span className={this.props.changeOrderModeIsOn ? "deactivate-link nav-text three-dots-text":"nav-text three-dots-text"} style={this.props.modified? {color:"#8bc34a"}:{}}>
               {readableConfigName}
               </span>
             <div className={"fa config-actions"}>
-            {(() => {
+            {(() => {//not-allowed
 
               if (this.props.isAddNewConfigOn && !this.props.showArrows) {
                 return <ConfigurationRemover direction={"up"}

@@ -71,7 +71,7 @@ let initialState = {
   },
   preLoaders: {
     isEtlLoading: false,
-    listOfEtlsAreLoading:false
+    listOfEtlsAreLoading: true
   },
   errorHandel: {
     hasErrorOccurred: false,
@@ -197,7 +197,7 @@ export const setModifiedConfigs = (modifiedConfig) => (
     });
 
 export const SET_ALL_ETLS_LIST = 'SET_ALL_ETLS_LIST';
-export const setAllEtlsList = (allEtlsList ) => (
+export const setAllEtlsList = (allEtlsList) => (
     {
       type: SET_ALL_ETLS_LIST,
       allEtlsList: allEtlsList
@@ -273,6 +273,16 @@ export const addNewModifiedConfig = (configGroupName, configName, index,
     modifiedConfig) => {
   return (dispatch) => {
     modifiedConfig[configGroupName + configName + index] = [];
+    if (!modifiedConfig[configGroupName]) {
+      modifiedConfig[configGroupName] = [];
+    }
+    if (!modifiedConfig[configGroupName][configName]) {
+      modifiedConfig[configGroupName][configName] = [];
+    }
+    if (!modifiedConfig[configGroupName][configName][index]) {
+      modifiedConfig[configGroupName][configName][index] = [];
+    }
+    console.log("modifiedConfig", modifiedConfig);
     dispatch(setModifiedConfigs(modifiedConfig));
   }
 };
@@ -280,8 +290,37 @@ export const addNewModifiedConfig = (configGroupName, configName, index,
 export const removeModifiedConfig = (configGroupName, configName, index,
     modifiedConfig) => {
   return (dispatch) => {
-    delete modifiedConfig[configGroupName + configName + index];
+    modifiedConfig && modifiedConfig[configGroupName]
+    && modifiedConfig[configGroupName][configName]
+    && modifiedConfig[configGroupName][configName][index]
+    && delete modifiedConfig[configGroupName][configName][index];
     dispatch(setModifiedConfigs(modifiedConfig));
+  }
+};
+
+export const updateModifiedConfig = (configGroupName, configName, oldIndex,
+    newIndex,
+    modifiedConfig) => {
+  return (dispatch) => {
+    debugger;
+    console.log(modifiedConfig);
+    if (modifiedConfig) {
+      {
+        console.log(modifiedConfig[configGroupName]);
+        if (modifiedConfig[configGroupName]) {
+          console.log(modifiedConfig[configGroupName][configName]);
+          if (modifiedConfig[configGroupName][configName]) {
+            console.log(modifiedConfig[configGroupName][configName][oldIndex]);
+            if (modifiedConfig[configGroupName][configName][oldIndex]) {
+              debugger;
+              delete modifiedConfig[configGroupName][configName][oldIndex];
+              modifiedConfig[configGroupName][configName][newIndex] = [];
+              dispatch(setModifiedConfigs(modifiedConfig));
+            }
+          }
+        }
+      }
+    }
   }
 };
 
@@ -291,9 +330,8 @@ export const initializeEtlsList = () => {
     ServerUtils.getDataFromApi(properties.getAllEtls)
     .then(allEtlsData => {
       let allEtlsList = {};
-      console.log("here comes the etls!!!!!!!",allEtlsData);
       for (let etlDataIndex in allEtlsData.data.entity) {
-        allEtlsList[allEtlsData.data.entity[etlDataIndex].etlName]=allEtlsData.data.entity[etlDataIndex];
+        allEtlsList[allEtlsData.data.entity[etlDataIndex].etlName] = allEtlsData.data.entity[etlDataIndex];
       }
       dispatch(setAllEtlsList(allEtlsList));
       dispatch(setIfListOfEtlsAreLoading(false));
@@ -361,11 +399,9 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
       if (configurationGroup !== null) {
         ConfigurationMapUtils.arrayMove(configurationGroup.configuration,
             newIndex, oldIndex);
-        dispatch(removeModifiedConfig(configGroup, configNameToChange, oldIndex,
+        dispatch(updateModifiedConfig(configGroup, configNameToChange, oldIndex,
+            newIndex,
             modifiedConfigs));
-        dispatch(addNewModifiedConfig(configGroup, configNameToChange, newIndex,
-            modifiedConfigs));
-
         dispatch(orderChangerConfig(true,
             configGroup, configNameToChange, newIndex));
 
@@ -423,16 +459,19 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
   }
 };
 
-export const removeConfig = (configGroup, index, currentStateOfData) => {
+export const removeConfig = (configGroup, index, currentStateOfData,
+    modifiedConfigs) => {
   return (dispatch) => {
     if (index !== null && configGroup !== null) {
       let configurationGroup = currentStateOfData[configGroup];
       configurationGroup.configuration.splice(index, 1);
-      dispatch(saveCurrentStateOfData(currentStateOfData));
-      let configurationsMap = [];
-      ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfData,
-          configurationsMap);
-      dispatch(setConfigurationsMap(configurationsMap));
+      for (let i = index; i <= configurationGroup.configuration.length; i++) {
+        debugger;
+        dispatch(updateModifiedConfig(configGroup,
+            configurationGroup.configuration[i], i + 1, i, modifiedConfigs));
+      }
+      console.log("modifiedConfigs", modifiedConfigs);
+      dispatch(saveToCurrentState(currentStateOfData));
     }
   }
 };

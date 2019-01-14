@@ -24,7 +24,7 @@ class NavigationBar extends Component {
               <img className={"icon"} src={require(
                   '../../resources/images/logo.png')}/>
               <p className={"name-of-app"}>
-                Name Of App
+                Exporter
               </p>
             </Navbar.Brand>
             <Navbar.Toggle/>
@@ -37,30 +37,29 @@ class NavigationBar extends Component {
               <NavItem eventKey={2} href="#">
                 Link
               </NavItem>*/}
-              {(() => {
-                //if (this.props.listOfEtlsAreLoading) {
-                if (true) {
-                  return <Loader
-                      type="Puff"
-                      color="#00BFFF"
-                      height="25"
-                      width="25"
-                  />
-                }
-              })()}
               <NavDropdown eventKey={3} title="ETLs"
                            id="basic-nav-dropdown">
                 {(() => {
-                  let indents = [];
-                  for (let etl in this.props.allEtlsList) {
-                    if (this.props.allEtlsList.hasOwnProperty(etl)) {
-                      console.log(etl + " -> " + this.props.allEtlsList[etl]);
-                      indents.push(<MenuItem>
-                        {etl}
-                      </MenuItem>);
-                    }
+                  if (this.props.listOfEtlsAreLoading) {
+                    return <span className={"etls-list-preloader"}>
+                      <Loader
+                        type="Puff"
+                        color="#00BFFF"
+                        height="25"
+                        width="25"
+                      /><span className={"etls-list-preloader-text"}> Loading ...</span></span>
                   }
-                  return indents;
+                  else {
+                    let indents = [];
+                    for (let etl in this.props.allEtlsList) {
+                      if (this.props.allEtlsList.hasOwnProperty(etl)) {
+                        indents.push(<MenuItem>
+                          {etl}
+                        </MenuItem>);
+                      }
+                    }
+                    return indents;
+                  }
                 })()}
 
 

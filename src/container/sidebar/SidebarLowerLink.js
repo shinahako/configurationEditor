@@ -21,8 +21,6 @@ class SidebarLowerLink extends Component {
   };
 
   postAllChanges= () => {
-    console.log(JSON.stringify(this.props.currentStateOfData));
-    debugger;
     this.props.postNewConfiguration(this.props.currentStateOfData);
   };
   

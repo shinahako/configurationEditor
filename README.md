@@ -1,3 +1,9 @@
+
+To run the application:
+1) open two consoles
+2) In the first console type: node server.js
+3) In the second console type: npm run start
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

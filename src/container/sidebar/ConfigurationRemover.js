@@ -14,7 +14,7 @@ class OrderChangerArrow extends Component {
     let configGroupName = this.props.configGroupName;
     let currentStateOfData = this.props.currentStateOfData;
     this.props.removeConfig(configGroupName, index,
-        currentStateOfData);
+        currentStateOfData,this.props.modifiedConfigs);
   };
 
   render() {
@@ -26,7 +26,8 @@ class OrderChangerArrow extends Component {
 
 function mapStateToProps(state) {
   return {
-    currentStateOfData: state.mainReducer.currentStateOfData
+    currentStateOfData: state.mainReducer.currentStateOfData,
+    modifiedConfigs: state.mainReducer.modifiedConfigs
   };
 }
 

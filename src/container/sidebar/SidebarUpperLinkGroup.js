@@ -54,7 +54,7 @@ class SidebarUpperLinkGroup extends Component {
                         configName={this.props.configurations[index].elementName}
                         index={index}
                         lengthOfConfigurations={this.props.configurations.length}
-                        modified={this.props.modifiedConfigs && this.props.modifiedConfigs[this.props.configGroupName+this.props.configurations[index].elementName+index] ? true:false}
+                        modified={this.props.modifiedConfigs && this.props.modifiedConfigs[this.props.configGroupName] && this.props.modifiedConfigs[this.props.configGroupName][this.props.configurations[index].elementName] && this.props.modifiedConfigs[this.props.configGroupName][this.props.configurations[index].elementName][index] ? true:false}
                     />
                 ))
               }

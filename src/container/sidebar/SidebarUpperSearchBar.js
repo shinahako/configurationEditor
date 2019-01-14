@@ -8,7 +8,7 @@ import {
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import {Col, Form, FormControl, FormGroup} from "react-bootstrap";
-import Loader from 'react-loader-spinner'
+import Loader from 'react-loader-spinner';
 
 class SidebarUpperSearchBar extends Component {
   constructor(props) {

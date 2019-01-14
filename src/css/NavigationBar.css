@@ -9,3 +9,12 @@
 .name-of-app{
   padding-left: 41px;
 }
+
+.etls-list-preloader{
+  padding-left: 6px;
+  display: inline-flex;
+}
+.etls-list-preloader-text{
+  padding-top: 4px;
+  padding-left: 9px;
+}

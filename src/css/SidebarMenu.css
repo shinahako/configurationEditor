@@ -7,6 +7,10 @@
   overflow-x: hidden;
 }
 
+.deactivate-link{
+  cursor: not-allowed;
+}
+
 .fa-2x {
   font-size: 19px;
 }

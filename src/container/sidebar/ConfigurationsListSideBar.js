@@ -31,7 +31,6 @@ class ConfigurationsListSideBar extends Component {
             {(() => {
               let indents = [];
               for (let configGroupName in this.props.configurationsMap) {
-                console.log(configGroupName,this.props.configurationsMap[configGroupName].configuration);
                   indents.push(<SidebarUpperLinkGroup configGroupName={configGroupName}
                                                       configurations={this.props.configurationsMap[configGroupName].configuration}
                   />);
