@@ -12,6 +12,7 @@ export const properties = {
 
   saveUrl: "http://etlexporter.vip.qa.ebay.com/v1/configuration/save",
   etlLink: "http://etlexporter.vip.qa.ebay.com/v1/configuration/getActive?etlName=",
+  getAllEtls: "http://etlexporter.vip.qa.ebay.com/v1/configuration/getAllEtls",
   initialCurrentStateOfData: {
     "catalog": "string",
     "creationDate": null,

@@ -76,7 +76,8 @@ let initialState = {
     hasErrorOccurred: false,
     errorMessage: ""
   },
-  modifiedConfigs: {}
+  modifiedConfigs: {},
+  allEtlsList:[]
 };
 
 export const initialData = {
@@ -260,6 +261,25 @@ export const addNewModifiedConfig = (configGroupName, configName,index,
   }
 };
 
+export const removeModifiedConfig = (configGroupName, configName,index,
+    modifiedConfig) => {
+  return (dispatch) => {
+    delete modifiedConfig[configGroupName + configName + index];
+    dispatch(setModifiedConfigs(modifiedConfig));
+  }
+};
+
+export const initializeEtlsList = (configurationsMap,
+    currentStateOfData) => {
+  return (dispatch) => {
+    for (let configGroup in configurationsMap) {
+      currentStateOfData[configGroup] = configurationsMap[configGroup];
+    }
+    return currentStateOfData;
+  }
+};
+
+
 export const initializeCurrentStateOfData = (configurationsMap,
     currentStateOfData) => {
   return (dispatch) => {
@@ -309,14 +329,17 @@ function getAllDictionary(dictionaryLinksArray) {
 }
 
 export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
-    newIndex, oldIndex) => {
+    newIndex, oldIndex,modifiedConfigs) => {
   return (dispatch) => {
     if (configGroup && configNameToChange) {
       dispatch(saveToCurrentState(currentStateOfData));
       let configurationGroup = currentStateOfData[configGroup];
       if (configurationGroup !== null) {
         ConfigurationMapUtils.arrayMove(configurationGroup.configuration,
-            newIndex, oldIndex);
+            newIndex, oldIndex);   
+        dispatch(removeModifiedConfig(configGroup,configNameToChange,oldIndex,modifiedConfigs));
+        dispatch(addNewModifiedConfig(configGroup,configNameToChange,newIndex,modifiedConfigs));
+     
         dispatch(orderChangerConfig(true,
             configGroup, configNameToChange, newIndex));
 
@@ -354,7 +377,7 @@ export const changeConfig = (configGroup, configNameToChange, configSettings,
   }
 };
 
-export const createNewConfig = (configGroup, configNameToAdd, configSettings,
+export const createNewConfig = (configGroup, configNameToAdd, configSettings,modifiedConfigs,
     currentStateOfData) => {
   return (dispatch) => {
     if (configNameToAdd !== null && configGroup !== null) {
@@ -366,6 +389,7 @@ export const createNewConfig = (configGroup, configNameToAdd, configSettings,
       };
       configurationGroup.configuration[index].elementName = configNameToAdd;
       configurationGroup.configuration[index].elementSetting = configSettings;
+      dispatch(addNewModifiedConfig(configGroup,configNameToAdd,index,modifiedConfigs));
       dispatch(saveToCurrentState(currentStateOfData));
     }
   }
@@ -387,9 +411,7 @@ export const removeConfig = (configGroup, index, currentStateOfData) => {
 
 export const postNewConfiguration = (currentStateOfData) => {
   return (dispatch) => {
-    return axios.post(
-        properties.saveUrl,
-        currentStateOfData)
+    return ServerUtils.postDataToApi(properties.saveUrl,currentStateOfData)
     .then(function (response) {
       console.log(response);
     })

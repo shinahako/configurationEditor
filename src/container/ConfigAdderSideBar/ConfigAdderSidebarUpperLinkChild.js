@@ -18,13 +18,9 @@ class SidebarUpperLinkGroup extends Component {
 
   addNewConfig = () => {
     this.props.createNewConfig(this.props.configGroupName,
-        this.props.configName, this.props.configuration.defaultSettings,
+        this.props.configName, this.props.configuration.defaultSettings,this.props.modifiedConfigs,
         this.props.currentStateOfData);
     this.props.addNewConfig(false, "");
-    debugger;
-    let index = this.props.configuration.configuration.length;
-    this.props.addNewModifiedConfig(this.props.configGroupName,
-        this.props.configName,index, this.props.modifiedConfigs);
 
   };
 

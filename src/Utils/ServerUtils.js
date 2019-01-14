@@ -12,6 +12,19 @@ class ServerUtils {
       return response;
     })
   }
-  
+
+  static postDataToApi(link, param) {
+    return axios.post("/postData", {
+      params: {
+        url: link,
+        param: param
+      }
+    })
+    .then(response => {
+      return response;
+    })
+  }
+
 }
+
 export default ServerUtils

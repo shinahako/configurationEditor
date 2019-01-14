@@ -48,14 +48,14 @@ class SidebarUpperLinkGroup extends Component {
             </li>
             {(() => {
               if (this.state.showChildren) {
-                 console.log("mdified0",this.props.modifiedConfigs && this.props.modifiedConfigs[this.props.configGroupName+this.props.configurations[0].elementName] ? true:false);
+                 console.log("mdified0",this.props.modifiedConfigs && this.props.modifiedConfigs[this.props.configGroupName+this.props.configurations[0].elementName+'3'] ? true:false);
                 return this.props.configurations.map((item, index) => (
                     <SidebarUpperLinkChild
                         configGroupName={this.props.configGroupName}
                         configName={this.props.configurations[index].elementName}
                         index={index}
                         lengthOfConfigurations={this.props.configurations.length}
-                        modified={this.props.modifiedConfigs && this.props.modifiedConfigs[this.props.configGroupName+this.props.configurations[index].elementName] ? true:false}
+                        modified={this.props.modifiedConfigs && this.props.modifiedConfigs[this.props.configGroupName+this.props.configurations[index].elementName+index] ? true:false}
                     />
                 ))
               }

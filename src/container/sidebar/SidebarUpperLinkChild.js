@@ -54,12 +54,12 @@ class SidebarUpperLinkGroup extends Component {
   
 
   changeCurrentActiveConfiguration(jsonSchema, defaultSettings) {
-/*    this.props.changeCurrentActiveConfiguration(this.props.configGroupName,
-        this.props.configName, this.props.index, true,
-        JSON.parse(jsonSchema.data.entity), defaultSettings.data.entity);*/
     this.props.changeCurrentActiveConfiguration(this.props.configGroupName,
         this.props.configName, this.props.index, true,
-        jsonSchema.data.entity, defaultSettings.data.entity);
+        JSON.parse(jsonSchema.data.entity), defaultSettings.data.entity);
+  /*  this.props.changeCurrentActiveConfiguration(this.props.configGroupName,
+        this.props.configName, this.props.index, true,
+        jsonSchema.data.entity, defaultSettings.data.entity);*/
     this.props.addNewConfig(false, "");
     this.props.setIfEtlIsLoading(false);
   }

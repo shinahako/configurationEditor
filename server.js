@@ -6,9 +6,13 @@ const request = require('request');
 const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 app.get('/getData', function (req, res) {
   console.log(req.query.url);
-  switch (req.query.url) {
+/*  switch (req.query.url) {
     case "http://etlexporter.vip.qa.ebay.com/v1/configuration/getActive?etlName=Comics%20US":
       console.log("1");
       res.send({
@@ -1147,15 +1151,24 @@ app.get('/getData', function (req, res) {
     default:
       res.send("");
       break;
-  }
+  }*/
 
-  /*  request(req.query.url, function (error, response, body) {
+    request(req.query.url, function (error, response, body) {
       res.send(body);
-    });*/
+    });
 });
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+
+app.post('/postData', function(req, res) {
+  let saveUrl = req.query.saveUrl;
+  let jsonToSave = req.query.param;
+  request.post({url:saveUrl, jsonToSave}, function(err,httpResponse,body){
+    res.send(body);
+  });
 });
 
 app.listen(process.env.PORT || 8080);
