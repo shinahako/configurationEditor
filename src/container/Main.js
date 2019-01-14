@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import '../css/App.css';
 import 'font-awesome/css/font-awesome.min.css';
-import ConfigurationsListSideBar from "./ConfigurationsListSideBar";
+import ConfigurationsListSideBar from "./sidebar/ConfigurationsListSideBar";
 import Editor from "./editor/Editor";
 import ConfigurationsToAddListSideBar
   from "./ConfigAdderSideBar/ConfigurationsToAddListSideBar";

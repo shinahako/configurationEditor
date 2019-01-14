@@ -18,8 +18,10 @@ class Editor extends Component {
   render() {
     if(this.props.hasErrorOccurred)
     return (
-        <div className={"container"}>
+        <div className={"editor-container"}>
           {this.props.errorMessage}
+          <img className={"sadkitty"} src={require(
+              './../../resources/images/sadkitty.jpg')}/>
         </div>);
     else return <span/>
   }

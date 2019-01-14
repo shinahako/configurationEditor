@@ -31,7 +31,7 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   render() {
-    debugger;
+    console.log("renderd");
     let readableConfigGroupName = GeneralUtils.makeStringReadable(
         this.props.configGroupName);
     if (GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap)) {
@@ -51,7 +51,6 @@ class SidebarUpperLinkGroup extends Component {
             </li>
             {(() => {
               if (this.state.showChildren) {
-                debugger;
                  console.log("asassasa",this.props.modifiedConfigs,this.props.configGroupName,this.props.configurations);
                 return this.props.configurations.map((item, index) => (
                     <SidebarUpperLinkChild

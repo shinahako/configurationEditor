@@ -1,17 +1,16 @@
 import React, {Component} from 'react';
-import '../css/App.css';
-import '../css/SidebarMenu.css';
+import '../../css/App.css';
+import '../../css/SidebarMenu.css';
 import {bindActionCreators} from "redux";
 import {
   fetchData,
   initializeConfigurationToSchemaMap,
   openRelevantRecipe
-} from '../actions/mainActions'
+} from '../../actions/mainActions'
 import {connect} from "react-redux";
-import SidebarUpperLinkGroup from "./sidebar/SidebarUpperLinkGroup";
-import SidebarLowerLink from "./sidebar/SidebarLowerLink";
-import GeneralUtils from "../Utils/GeneralUtils";
-import SidebarUpperSearchBar from "./sidebar/SidebarUpperSearchBar";
+import SidebarUpperLinkGroup from "./../sidebar/SidebarUpperLinkGroup";
+import SidebarLowerLink from "./../sidebar/SidebarLowerLink";
+import SidebarUpperSearchBar from "./../sidebar/SidebarUpperSearchBar";
 
 class ConfigurationsListSideBar extends Component {
   constructor(props) {

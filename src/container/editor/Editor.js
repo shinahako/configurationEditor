@@ -12,11 +12,27 @@ import {
 import {connect} from "react-redux";
 import Form from "react-jsonschema-form";
 import Error from "./Error";
+import {DragDropContext} from "react-beautiful-dnd";
 
 class Editor extends Component {
   constructor(props) {
     super(props);
   }
+
+  onBeforeDragStart = () => {
+    /*...*/
+  };
+
+  onDragStart = () => {
+    /*...*/
+  };
+  onDragUpdate = () => {
+    /*...*/
+  };
+  onDragEnd = () => {
+    // the only one that is required
+  };
+
 
   onSubmit = (formData) => {
     console.log("Data submitted: ", formData);
@@ -40,12 +56,13 @@ class Editor extends Component {
     if (this.props.isEditingOn) {
       if (!this.props.currentActiveJsonSchema) {
         this.props.setError(true,
-            "Couldn't get Json Schema for this configuration.");
+            "Oops! Couldn't get Json Schema for this configuration.");
         return (
             <Error/>
 
         );
       }
+      console.log("schema",this.props.currentActiveJsonSchema);
       schema = this.props.currentActiveJsonSchema;
       try {
         form = this.props.configurationsMap[this.props.currentActiveConfigGroupName].configuration[this.props.currentActiveIndex].elementSetting;
@@ -56,7 +73,15 @@ class Editor extends Component {
 
       return (
           <div className={"editor-container"}>
-
+            <DragDropContext
+                onBeforeDragStart={this.onBeforeDragStart}
+                onDragStart={this.onDragStart}
+                onDragUpdate={this.onDragUpdate}
+                onDragEnd={this.onDragEnd}
+            >
+              <div>Hello world</div>
+              <div>Hello world2</div>
+            </DragDropContext>
             <Form schema={schema}
                   onSubmit={this.onSubmit}
                   onError={this.onError}
