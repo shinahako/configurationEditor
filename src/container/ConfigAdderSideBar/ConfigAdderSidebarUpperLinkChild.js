@@ -5,7 +5,7 @@ import {bindActionCreators} from "redux";
 import {
   changeCurrentActiveConfiguration,
   createNewConfig,
-  addNewConfig
+  addNewConfig, addNewModifiedConfig
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import GeneralUtils from "../../Utils/GeneralUtils";
@@ -20,12 +20,17 @@ class SidebarUpperLinkGroup extends Component {
     this.props.createNewConfig(this.props.configGroupName,
         this.props.configName, this.props.configuration.defaultSettings,
         this.props.currentStateOfData);
-    this.props.addNewConfig(false,"");
+    this.props.addNewConfig(false, "");
+    debugger;
+    let index = this.props.configuration.configuration.length;
+    this.props.addNewModifiedConfig(this.props.configGroupName,
+        this.props.configName,index, this.props.modifiedConfigs);
 
   };
 
   render() {
-    let readableConfigName = GeneralUtils.makeStringReadable(this.props.configName);
+    let readableConfigName = GeneralUtils.makeStringReadable(
+        this.props.configName);
     return (
         <li className={"child-link"}>
           <a onClick={this.addNewConfig}>
@@ -43,7 +48,8 @@ class SidebarUpperLinkGroup extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    currentStateOfData: state.mainReducer.currentStateOfData
+    currentStateOfData: state.mainReducer.currentStateOfData,
+    modifiedConfigs: state.mainReducer.modifiedConfigs
   };
 }
 
@@ -51,7 +57,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     changeCurrentActiveConfiguration,
     createNewConfig,
-    addNewConfig
+    addNewConfig, 
+    addNewModifiedConfig
   }, dispatch)
 };
 

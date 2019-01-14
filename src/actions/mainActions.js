@@ -131,7 +131,8 @@ export const saveCurrentStateOfData = (newStateOfData) => (
     });
 
 export const UPDATE_CURRENT_STATE_OF_DATA_AND_CONFIGURATION_MAP = 'UPDATE_CURRENT_STATE_OF_DATA_AND_CONFIGURATION_MAP';
-export const saveCurrentStateOfDataAndConfigMap = (newStateOfData,configurationsMap) => (
+export const saveCurrentStateOfDataAndConfigMap = (newStateOfData,
+    configurationsMap) => (
     {
       type: UPDATE_CURRENT_STATE_OF_DATA_AND_CONFIGURATION_MAP,
       newStateOfData,
@@ -215,7 +216,8 @@ export const fetchData = (etlName) => {
 
     else {
       let etlNameWithoutSpaces = etlName.split(' ').join('%20');
-      return ServerUtils.getDataFromApi(properties.etlLink + etlNameWithoutSpaces)
+      return ServerUtils.getDataFromApi(properties.etlLink
+          + etlNameWithoutSpaces)
       .then(etlData => {
         let configurationsMap = [];
         let jsonSchemaAndDefaults = [];
@@ -230,9 +232,9 @@ export const fetchData = (etlName) => {
             currentStateOfData = dispatch(
                 initializeCurrentStateOfData(configurationsMap,
                     currentStateOfData));
-                        console.log("!!!!configurationsMap", configurationsMap);
-                        console.log("!!!!jsonSchemaAndDefaults", jsonSchemaAndDefaults);
-                        console.log("!!!!currentStateOfData", currentStateOfData);
+            console.log("!!!!configurationsMap", configurationsMap);
+            console.log("!!!!jsonSchemaAndDefaults", jsonSchemaAndDefaults);
+            console.log("!!!!currentStateOfData", currentStateOfData);
             dispatch(initializeConfigurationDataMap(configurationsMap,
                 jsonSchemaAndDefaults));
             dispatch(saveCurrentStateOfData(currentStateOfData));
@@ -250,13 +252,10 @@ export const fetchData = (etlName) => {
   };
 };
 
-
-
-
-export const addNewModifiedConfig = (configGroupName, configName,
+export const addNewModifiedConfig = (configGroupName, configName,index,
     modifiedConfig) => {
   return (dispatch) => {
-    modifiedConfig[configGroupName + configName] = [];
+    modifiedConfig[configGroupName + configName + index] = [];
     dispatch(setModifiedConfigs(modifiedConfig));
   }
 };
@@ -301,10 +300,9 @@ function createAMapOfJsonSchemaAndDefaults(dictionaryLinksArray, dictionaryArr,
   }
 }
 
-
 function getAllDictionary(dictionaryLinksArray) {
   //let linksArr = properties.dictionaryData.dictionaryUrls;
-  return axios.all(dictionaryLinksArray.map(l =>ServerUtils.getDataFromApi(l)))
+  return axios.all(dictionaryLinksArray.map(l => ServerUtils.getDataFromApi(l)))
   .then(axios.spread(function (...res) {
     return res;
   }));
@@ -327,28 +325,28 @@ export const changeOrder = (configGroup, configNameToChange, currentStateOfData,
   }
 };
 
-export const saveToCurrentState = (currentStateOfData) => {
+export const saveToCurrentState = (currentStateOfDataTemp) => {
   return (dispatch) => {
-    const currentStateOfDataTemp = Object.assign({}, currentStateOfData);
     let configurationsMap = [];
     ConfigurationMapUtils.getAllConfigurationGroups(currentStateOfDataTemp,
         configurationsMap);
-    debugger;
-    dispatch(saveCurrentStateOfDataAndConfigMap(currentStateOfDataTemp,configurationsMap));
-  //  dispatch(setConfigurationsMap(configurationsMap));
+    dispatch(saveCurrentStateOfDataAndConfigMap(currentStateOfDataTemp,
+        configurationsMap));
   }
 };
 
 export const changeConfig = (configGroup, configNameToChange, configSettings,
     currentStateOfData, index) => {
   return (dispatch) => {
-    if (currentStateOfData[configGroup] !== null) {
-      let configurationGroup = currentStateOfData[configGroup];
+    let currentStateOfDataTemp = currentStateOfData;
+    if (currentStateOfDataTemp[configGroup] !== null) {
+      let configurationGroup = currentStateOfDataTemp[configGroup];
       if (configurationGroup.configuration.length > 0) {
         if (configurationGroup.configuration[index] != null) {
-          if (configurationGroup.configuration[index].elementName === configNameToChange) {
+          if (configurationGroup.configuration[index].elementName
+              === configNameToChange) {
             configurationGroup.configuration[index].elementSetting = configSettings;
-            dispatch(saveToCurrentState(currentStateOfData));
+            dispatch(saveToCurrentState(currentStateOfDataTemp));
           }
         }
       }

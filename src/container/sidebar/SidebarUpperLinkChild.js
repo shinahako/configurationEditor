@@ -87,7 +87,6 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   render() {
-
     let readableConfigName = GeneralUtils.makeStringReadable(
         this.props.configName);
     return (
@@ -99,7 +98,7 @@ class SidebarUpperLinkGroup extends Component {
              onMouseUp={this.handleButtonRelease}>
                 <span style={{fontSize: "14px"}}
                       className="fa index "> {this.props.index} -</span>
-            <span className="nav-text three-dots-text" style={this.props.modified? {color:"red"}:{}}>
+            <span className="nav-text three-dots-text" style={this.props.modified? {color:"#8bc34a"}:{}}>
               {readableConfigName}
               </span>
             <div className={"fa config-actions"}>

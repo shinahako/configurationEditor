@@ -41,7 +41,6 @@ function mapStateToProps(state) {
     currentStateOfData: state.mainReducer.currentStateOfData,
     originalStateOfData: state.mainReducer.originalStateOfData,
     isAddNewConfigOn: state.mainReducer.addNewConfig.isAddNewConfigOn
-
   };
 }
 

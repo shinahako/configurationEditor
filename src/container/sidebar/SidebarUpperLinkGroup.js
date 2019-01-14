@@ -18,9 +18,6 @@ class SidebarUpperLinkGroup extends Component {
       showChildren: true
     }
   }
-  shouldComponentUpdate(nextProps) {
-    console.log("update",this.props,nextProps);
-  }
 
   changeVisibilityOfChildren = () => {
     this.setState({
@@ -33,7 +30,6 @@ class SidebarUpperLinkGroup extends Component {
   };
 
   render() {
-    console.log("renderd111");
     let readableConfigGroupName = GeneralUtils.makeStringReadable(
         this.props.configGroupName);
     if (GeneralUtils.checkIfMapIsNotEmpty(this.props.configurationsMap)) {
@@ -77,16 +73,7 @@ class SidebarUpperLinkGroup extends Component {
 function mapStateToProps(state) {
   return {
     configurationsMap: state.mainReducer.configurationsMap,
-    modifiedConfigs: state.mainReducer.modifiedConfigs,
-    currentStateOfData: state.mainReducer.currentStateOfData,
-    currentActiveConfiguration: state.mainReducer.currentActiveConfiguration,
-    isEditingOn: state.mainReducer.currentActiveConfiguration.editingIsOn,
-    currentActiveConfigName: state.mainReducer.currentActiveConfiguration.configName,
-    currentActiveIndex: state.mainReducer.currentActiveConfiguration.index,
-    currentActiveConfigGroupName: state.mainReducer.currentActiveConfiguration.configGroupName,
-    currentActiveJsonSchema: state.mainReducer.currentActiveConfiguration.jsonSchema,
-    currentActiveDefaultConfig: state.mainReducer.currentActiveConfiguration.defaultConfig,
-    jsonSchemaAndDefaults: state.mainReducer.jsonSchemaAndDefaults
+    modifiedConfigs: state.mainReducer.modifiedConfigs
   };
 }
 

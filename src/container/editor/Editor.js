@@ -41,7 +41,7 @@ class Editor extends Component {
         this.props.currentStateOfData,
         this.props.currentActiveIndex);
     this.props.addNewModifiedConfig(this.props.currentActiveConfigGroupName,
-        this.props.currentActiveConfigName, this.props.modifiedConfigs);
+        this.props.currentActiveConfigName,this.props.currentActiveIndex, this.props.modifiedConfigs);
   };
 
   onError = (error) => {
