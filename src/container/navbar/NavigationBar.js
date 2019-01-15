@@ -2,10 +2,7 @@ import React, {Component} from 'react';
 import '../../css/App.css';
 import '../../css/NavigationBar.css';
 import {bindActionCreators} from "redux";
-import {
-  changeOrder,
-  setIfChangeOrderModeIsOn,
-  orderChangerConfig
+import {changeCurrentEtl, setIfEtlIsLoading, fetchData
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
 import {MenuItem, Nav, Navbar, NavDropdown, NavItem} from "react-bootstrap";
@@ -15,6 +12,18 @@ class NavigationBar extends Component {
   constructor(props) {
     super(props);
   }
+
+  onClick = (e) => {
+    console.log("onClick",e);
+  };
+
+  onSelect = (eventKey,event) => {
+    console.log("onSelect",eventKey,event);
+    this.props.setIfEtlIsLoading(true);
+    this.props.changeCurrentEtl(eventKey);
+    this.props.fetchData(eventKey);
+  };
+  
 
   render() {
     return (
@@ -31,7 +40,7 @@ class NavigationBar extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-             {/* <NavItem eventKey={1} href="#">
+              {/* <NavItem eventKey={1} href="#">
                 Link
               </NavItem>
               <NavItem eventKey={2} href="#">
@@ -43,19 +52,27 @@ class NavigationBar extends Component {
                   if (this.props.listOfEtlsAreLoading) {
                     return <span className={"etls-list-preloader"}>
                       <Loader
-                        type="Puff"
-                        color="#00BFFF"
-                        height="25"
-                        width="25"
+                          type="Puff"
+                          color="#00BFFF"
+                          height="25"
+                          width="25"
                       /><span className={"etls-list-preloader-text"}> Loading ...</span></span>
                   }
                   else {
                     let indents = [];
                     for (let etl in this.props.allEtlsList) {
                       if (this.props.allEtlsList.hasOwnProperty(etl)) {
-                        indents.push(<MenuItem>
-                          {etl}
-                        </MenuItem>);
+                        indents.push(
+                            <MenuItem
+                                eventKey={etl}
+                                onClick={() => {
+                                  this.onClick()
+                                }}
+                                onSelect={(eventKey,event) => {
+                                  this.onSelect(eventKey,event)
+                                }}>
+                              {etl}
+                            </MenuItem>);
                       }
                     }
                     return indents;
@@ -94,9 +111,9 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    changeOrder,
-    setIfChangeOrderModeIsOn,
-    orderChangerConfig
+    changeCurrentEtl,
+    fetchData,
+    setIfEtlIsLoading
   }, dispatch)
 };
 

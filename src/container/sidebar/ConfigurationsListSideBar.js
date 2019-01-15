@@ -25,7 +25,7 @@ class ConfigurationsListSideBar extends Component {
     return (
         <div>
           <nav className="main-menu">
-            <SidebarUpperSearchBar/>
+            {/*<SidebarUpperSearchBar/>*/}
             <div className="listContent" id="style-5">
           
             {(() => {
