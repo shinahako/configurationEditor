@@ -23,7 +23,7 @@ class ConfigAdderSideBarTop extends Component {
   
   render() {
       return (
-          <li className={"sidebar-title"}>
+          <li className={"config-sidebar-title"}>
             <span>Add Configuration</span>
             <i onClick={this.closeConfigurationAdderSidebar} className="fa fa-window-close-o clickable-icons close-icon" aria-hidden="true"/>
           </li>

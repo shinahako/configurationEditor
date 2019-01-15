@@ -2,7 +2,7 @@
 }
 @import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);*/
 .listContent{
-  height: calc(100% - 33px);
+  height: calc(100% - 80px);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -10,6 +10,24 @@
 .deactivate-link{
   cursor: not-allowed;
 }
+
+.configurations-list-preloader{
+  float: right;
+  margin-bottom: -8px;
+  padding-right: 10px;
+}
+
+.sidebar-title {
+  padding-bottom: 10px;
+  padding-top: 15px;
+  padding-left: 20px;
+  color:#bdc2c9;
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: #bdc2c9 1px solid;
+  height: 37px;
+}
+
 
 .fa-2x {
   font-size: 19px;
@@ -73,7 +91,6 @@
 
 
 .main-menu {
-  padding-top: 10px;
   background:#354052;
   border-right:1px solid #e5e5e5;
   position: fixed;
@@ -95,7 +112,7 @@
 .main-menu li {
   position:relative;
   display:inline-table;
-  width:352px;
+  width:100%;
 }
 
 .main-menu li>a {

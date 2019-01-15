@@ -255,11 +255,12 @@ export const fetchData = (etlName) => {
             dispatch(initializeConfigurationDataMap(configurationsMap,
                 jsonSchemaAndDefaults));
             dispatch(initializeEtlsList());
+            dispatch(changeCurrentEtl(etlName));
             dispatch(saveCurrentStateOfData(currentStateOfData));
           });
-
+          dispatch(setIfEtlIsLoading(false));
         }
-        dispatch(setIfEtlIsLoading(false));
+      
       })
       .catch(error => {
         dispatch(initializeConfigurationDataMap([],
@@ -312,7 +313,6 @@ export const updateModifiedConfig = (configGroupName, configName, oldIndex,
           if (modifiedConfig[configGroupName][configName]) {
             console.log(modifiedConfig[configGroupName][configName][oldIndex]);
             if (modifiedConfig[configGroupName][configName][oldIndex]) {
-              debugger;
               delete modifiedConfig[configGroupName][configName][oldIndex];
               modifiedConfig[configGroupName][configName][newIndex] = [];
               dispatch(setModifiedConfigs(modifiedConfig));
@@ -465,10 +465,9 @@ export const removeConfig = (configGroup, index, currentStateOfData,
     if (index !== null && configGroup !== null) {
       let configurationGroup = currentStateOfData[configGroup];
       configurationGroup.configuration.splice(index, 1);
-      for (let i = index; i <= configurationGroup.configuration.length; i++) {
-        debugger;
+      for (let i = index; i < configurationGroup.configuration.length; i++) {
         dispatch(updateModifiedConfig(configGroup,
-            configurationGroup.configuration[i], i + 1, i, modifiedConfigs));
+            configurationGroup.configuration[i].elementName, i + 1, i, modifiedConfigs));
       }
       console.log("modifiedConfigs", modifiedConfigs);
       dispatch(saveToCurrentState(currentStateOfData));

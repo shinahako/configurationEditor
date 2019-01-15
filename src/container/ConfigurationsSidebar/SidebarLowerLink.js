@@ -38,7 +38,7 @@ class SidebarLowerLink extends Component {
                     }}>
                       <i className="fa fa-floppy-o fa-2x"/>
                       <span className="nav-text">
-                           Accept Changes
+                           Accept Changes to order
                         </span>
                     </a>
                    </span>

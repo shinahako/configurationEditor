@@ -53,7 +53,6 @@ class SidebarUpperSearchBar extends Component {
                     />
                   }
                 })()}
-
               </Col>
             </FormGroup>
           </Form>
