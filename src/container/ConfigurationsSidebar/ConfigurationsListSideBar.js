@@ -8,9 +8,9 @@ import {
   openRelevantRecipe
 } from '../../actions/mainActions'
 import {connect} from "react-redux";
-import SidebarUpperLinkGroup from "./../sidebar/SidebarUpperLinkGroup";
-import SidebarLowerLink from "./../sidebar/SidebarLowerLink";
-import SidebarUpperSearchBar from "./../sidebar/SidebarUpperSearchBar";
+import SidebarUpperLinkGroup from "./../ConfigurationsSidebar/SidebarUpperLinkGroup";
+import SidebarLowerLink from "./../ConfigurationsSidebar/SidebarLowerLink";
+import SidebarUpperSearchBar from "./../ConfigurationsSidebar/SidebarUpperSearchBar";
 
 class ConfigurationsListSideBar extends Component {
   constructor(props) {
@@ -27,7 +27,6 @@ class ConfigurationsListSideBar extends Component {
           <nav className="main-menu">
             {/*<SidebarUpperSearchBar/>*/}
             <div className="listContent" id="style-5">
-          
             {(() => {
               let indents = [];
               for (let configGroupName in this.props.configurationsMap) {

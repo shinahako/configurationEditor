@@ -11,7 +11,7 @@ import thunk from 'redux-thunk';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
-store.dispatch(fetchData("Comics%20US"));
+store.dispatch(fetchData(""));
 
 render(
     <Provider store={store}>

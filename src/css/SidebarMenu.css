@@ -2,7 +2,7 @@
 }
 @import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);*/
 .listContent{
-  height: calc(100% - 100px);
+  height: calc(100% - 33px);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -95,7 +95,7 @@
 .main-menu li {
   position:relative;
   display:inline-table;
-  width:360px;
+  width:352px;
 }
 
 .main-menu li>a {

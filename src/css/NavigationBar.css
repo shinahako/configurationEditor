@@ -18,3 +18,11 @@
   padding-top: 4px;
   padding-left: 9px;
 }
+
+.navbar.navbar-default .container{
+  width: 100%;
+}
+
+.navbar.navbar-default{
+  z-index: 1001;
+}

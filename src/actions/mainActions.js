@@ -224,6 +224,7 @@ export const fetchData = (etlName) => {
     if (!etlName || etlName === "" || typeof etlName === 'undefined') {
       let etlDataLocal = [];
       let configurationsMap = [];
+      dispatch(initializeEtlsList());
       dispatch(initializeConfigurationDataMap(etlDataLocal,
           configurationsMap));
       dispatch(initializeCurrentStateOfData(etlDataLocal, configurationsMap,
@@ -302,7 +303,6 @@ export const updateModifiedConfig = (configGroupName, configName, oldIndex,
     newIndex,
     modifiedConfig) => {
   return (dispatch) => {
-    debugger;
     console.log(modifiedConfig);
     if (modifiedConfig) {
       {
