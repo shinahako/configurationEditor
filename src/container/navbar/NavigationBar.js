@@ -46,7 +46,7 @@ class NavigationBar extends Component {
               <NavItem eventKey={2} href="#">
                 Link
               </NavItem>*/}
-              <NavDropdown eventKey={3} title="ETLs"
+{/*              <NavDropdown eventKey={3} title="ETLs"
                            id="basic-nav-dropdown">
                 {(() => {
                   if (this.props.listOfEtlsAreLoading) {
@@ -78,15 +78,17 @@ class NavigationBar extends Component {
                     return indents;
                   }
                 })()}
-              </NavDropdown>
+              </NavDropdown>*/}
             </Nav>
             <Nav pullRight>
+{/*
               <NavItem eventKey={1} href="#">
                 Link Right
               </NavItem>
               <NavItem eventKey={2} href="#">
                 Link Right
               </NavItem>
+*/}
             </Nav>
           </Navbar.Collapse>
         </Navbar>

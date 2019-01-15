@@ -37,7 +37,7 @@ class SideBarTop extends Component {
               <NavItem eventKey={2} href="#">
                 Link
               </NavItem>*/}
-                <NavDropdown eventKey={3} title={this.props.title ? this.props.title: "Please choose ETL"}
+                <NavDropdown eventKey={3} title={this.props.currentEtl ? this.props.currentEtl: "Please choose ETL"}
                              id="basic-nav-dropdown">
                   {(() => {
                     if (this.props.listOfEtlsAreLoading) {

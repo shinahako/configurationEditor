@@ -21,8 +21,10 @@ class ConfigurationsListSideBar extends Component {
   render() {
     return (
         <div>
-          <SideBarTop/>
+     
           <nav className="main-menu">
+            
+            <SideBarTop/>
             {/*<SidebarUpperSearchBar/>*/}
           
             <div className="listContent" id="style-5">
