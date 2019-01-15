@@ -12,7 +12,9 @@ import {
 import {connect} from "react-redux";
 import Form from "react-jsonschema-form";
 import Error from "./Error";
+import DraggablesTest from "../ConfigurationsSidebar/DraggablesTest";
 import {DragDropContext} from "react-beautiful-dnd";
+
 
 class Editor extends Component {
   constructor(props) {
@@ -71,6 +73,7 @@ class Editor extends Component {
 
       return (
           <div className={"editor-container"}>
+            <DraggablesTest/>
 {/*            <DragDropContext
                 onBeforeDragStart={this.onBeforeDragStart}
                 onDragStart={this.onDragStart}

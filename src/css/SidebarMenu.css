@@ -34,7 +34,9 @@
 }
 
 .main-menu .sidebar-title .dropdown-menu li>a{
-  color:black
+  color:#22303c;
+  margin-left: 10px;
+  font-size: 14px;
 }
 
 

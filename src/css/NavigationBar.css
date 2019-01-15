@@ -25,4 +25,6 @@
 
 .navbar.navbar-default{
   z-index: 1001;
+  position: fixed;
+  width: 100%;
 }
